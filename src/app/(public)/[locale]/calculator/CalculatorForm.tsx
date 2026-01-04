@@ -86,11 +86,11 @@ export default function CalculatorForm({ t, locale }: CalculatorFormProps) {
   };
 
   return (
-    <main className="mx-auto max-w-screen-md py-10 px-4">
-      <h1 className="mb-6 text-3xl font-bold leading-tight">
+    <main className="mx-auto max-w-screen-md py-10 px-4 text-gray-200">
+      <h1 className="mb-6 text-3xl font-bold leading-tight text-red-500">
         {t.heading}
       </h1>
-      <p className="mb-8 text-gray-700">{t.subheading}</p>
+      <p className="mb-8 text-gray-400">{t.subheading}</p>
       <form onSubmit={handleSubmit} className="grid gap-6">
         {/* Weight input */}
         <div className="grid gap-1">
@@ -102,7 +102,7 @@ export default function CalculatorForm({ t, locale }: CalculatorFormProps) {
             type="number"
             inputMode="decimal"
             step="0.01"
-            className="w-full rounded-md border border-gray-300 p-3 text-gray-900 focus:border-indigo-500 focus:outline-none"
+            className="w-full rounded-md border border-zinc-700 bg-zinc-800 p-3 text-gray-100 placeholder-gray-400 focus:border-red-600 focus:outline-none"
             value={weight}
             onChange={(e) => setWeight(e.target.value)}
             required
@@ -121,7 +121,7 @@ export default function CalculatorForm({ t, locale }: CalculatorFormProps) {
               inputMode="decimal"
               step="0.1"
               placeholder={t.form.length}
-              className="flex-1 rounded-md border border-gray-300 p-3 text-gray-900 focus:border-indigo-500 focus:outline-none"
+              className="flex-1 rounded-md border border-zinc-700 bg-zinc-800 p-3 text-gray-100 placeholder-gray-400 focus:border-red-600 focus:outline-none"
               value={length}
               onChange={(e) => setLength(e.target.value)}
               required
@@ -133,7 +133,7 @@ export default function CalculatorForm({ t, locale }: CalculatorFormProps) {
               inputMode="decimal"
               step="0.1"
               placeholder={t.form.width}
-              className="flex-1 rounded-md border border-gray-300 p-3 text-gray-900 focus:border-indigo-500 focus:outline-none"
+              className="flex-1 rounded-md border border-zinc-700 bg-zinc-800 p-3 text-gray-100 placeholder-gray-400 focus:border-red-600 focus:outline-none"
               value={width}
               onChange={(e) => setWidth(e.target.value)}
               required
@@ -145,7 +145,7 @@ export default function CalculatorForm({ t, locale }: CalculatorFormProps) {
               inputMode="decimal"
               step="0.1"
               placeholder={t.form.height}
-              className="flex-1 rounded-md border border-gray-300 p-3 text-gray-900 focus:border-indigo-500 focus:outline-none"
+              className="flex-1 rounded-md border border-zinc-700 bg-zinc-800 p-3 text-gray-100 placeholder-gray-400 focus:border-red-600 focus:outline-none"
               value={height}
               onChange={(e) => setHeight(e.target.value)}
               required
@@ -164,7 +164,7 @@ export default function CalculatorForm({ t, locale }: CalculatorFormProps) {
             type="number"
             inputMode="decimal"
             step="0.01"
-            className="w-full rounded-md border border-gray-300 p-3 text-gray-900 focus:border-indigo-500 focus:outline-none"
+            className="w-full rounded-md border border-zinc-700 bg-zinc-800 p-3 text-gray-100 placeholder-gray-400 focus:border-red-600 focus:outline-none"
             value={value}
             onChange={(e) => setValue(e.target.value)}
             required
@@ -178,7 +178,7 @@ export default function CalculatorForm({ t, locale }: CalculatorFormProps) {
           </label>
           <select
             id="service"
-            className="w-full rounded-md border border-gray-300 p-3 text-gray-900 focus:border-indigo-500 focus:outline-none"
+            className="w-full rounded-md border border-zinc-700 bg-zinc-800 p-3 text-gray-100 focus:border-red-600 focus:outline-none"
             value={service}
             onChange={(e) => setService(e.target.value as typeof service)}
             aria-label={t.form.service}
@@ -194,7 +194,7 @@ export default function CalculatorForm({ t, locale }: CalculatorFormProps) {
           <input
             id="insurance"
             type="checkbox"
-            className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+            className="h-4 w-4 rounded border-zinc-700 bg-zinc-800 text-red-600 focus:ring-red-600"
             checked={insurance}
             onChange={(e) => setInsurance(e.target.checked)}
           />
@@ -205,15 +205,15 @@ export default function CalculatorForm({ t, locale }: CalculatorFormProps) {
         {/* Submit */}
         <button
           type="submit"
-          className="inline-block rounded-md bg-indigo-600 px-6 py-3 font-semibold text-white shadow transition-colors duration-200 hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          className="inline-block rounded-md bg-red-600 px-6 py-3 font-semibold text-white shadow transition-colors duration-200 hover:bg-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
         >
           {t.form.submit}
         </button>
       </form>
       {result !== null && (
-        <div className="mt-8 rounded-md bg-gray-50 p-6 shadow-inner">
-          <h2 className="mb-2 text-xl font-semibold">{t.result.title}</h2>
-          <p className="text-lg text-gray-700">
+        <div className="mt-8 rounded-md bg-zinc-800/80 p-6 shadow-inner">
+          <h2 className="mb-2 text-xl font-semibold text-red-400">{t.result.title}</h2>
+          <p className="text-lg text-gray-200">
             {t.result.cost}: <strong>{result.toLocaleString(locale)} {t.result.currency}</strong>
           </p>
         </div>

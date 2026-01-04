@@ -41,8 +41,14 @@ export default function PublicLocaleLayout({ children, params }: PublicLocaleLay
   const dir = locale === 'fa' ? 'rtl' : 'ltr';
   return (
     <html lang={locale} dir={dir} suppressHydrationWarning>
-      {/* Setting a global class on the body for base styling. */}
-      <body className="min-h-screen bg-white text-gray-900 antialiased">
+      {/*
+        We apply a dark theme by default for the public pages.  The body
+        background is set to black and the text colour is light gray to
+        ensure sufficient contrast.  Tailwindʼs antialiased class smooths
+        text rendering.  Individual pages can still override colours using
+        utility classes.
+      */}
+      <body className="min-h-screen bg-black text-gray-200 antialiased">
         {children}
       </body>
     </html>
