@@ -1,5 +1,9 @@
-﻿import type { Locale } from './config';
+import type { Locale } from './config';
 
+/**
+ * Asynchronously load the translation dictionary for the requested locale.
+ * This uses dynamic `import()` to enable code splitting per locale.
+ */
 export async function getDictionary(locale: Locale) {
   switch (locale) {
     case 'fa':
