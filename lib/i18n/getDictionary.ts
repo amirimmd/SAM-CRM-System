@@ -1,4 +1,4 @@
-import type { Locale } from './config';
+import { FALLBACK_LOCALE, type Locale } from './config';
 
 /**
  * Asynchronously load the translation dictionary for the requested locale.
@@ -11,6 +11,6 @@ export async function getDictionary(locale: Locale) {
     case 'en':
       return (await import('./dictionaries/en.json')).default;
     default:
-      return (await import('./dictionaries/fa.json')).default;
+      return (await import(`./dictionaries/${FALLBACK_LOCALE}.json`)).default;
   }
 }
