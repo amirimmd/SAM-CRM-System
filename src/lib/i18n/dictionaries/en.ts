@@ -81,6 +81,8 @@ export const dictionary: Dictionary = {
       message: "Shipment details",
     },
     submit: "Submit request",
+    successMessage: "Request received. We'll respond within 12 hours.",
+    errorMessage: "Unable to submit right now. Please try again.",
   },
   updates: {
     title: "Daily logistics updates",
@@ -179,5 +181,24 @@ export const dictionary: Dictionary = {
         description: "Awaiting agent response",
       },
     ],
+  },
+  auth: {
+    loginTitle: "Welcome back",
+    loginSubtitle: "Secure access to shipment tracking and support channels.",
+    loginAsideTitle: "New to SAM Logistics?",
+    loginAsideBody:
+      "Create an account to unlock shipment tracking, CRM updates, and a dedicated support channel.",
+    registerTitle: "Create your account",
+    registerSubtitle: "Start managing shipments with a unified CRM workspace.",
+    registerAsideTitle: "Already have an account?",
+    registerAsideBody:
+      "Sign in to review active shipments, documents, and support messages.",
+    emailLabel: "Email address",
+    passwordLabel: "Password",
+    submitLogin: "Sign in",
+    submitRegister: "Create account",
+    statusMissingConfig: "Supabase credentials are missing.",
+    statusCheckEmail: "Check your email to confirm the new account.",
+    statusLoginSuccess: "Signed in. Redirecting to your dashboard.",
   },
 };

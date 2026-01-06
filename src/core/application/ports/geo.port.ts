@@ -1,3 +1,10 @@
-﻿export interface GeoPort {
-  resolve(req: Request): Promise<{ country?: string; city?: string }>;
+export type GeoData = {
+  country?: string;
+  region?: string;
+  city?: string;
+  ip?: string;
+};
+
+export interface GeoPort {
+  resolve(req: Request): Promise<GeoData>;
 }

@@ -12,6 +12,8 @@ export class SupabaseCrmRepository implements CrmRepository {
     await client.from("crm_events").insert({
       id: event.id,
       type: event.type,
+      session_id: event.sessionId,
+      visitor_id: event.visitorId,
       path: event.path,
       referrer: event.referrer,
       utm_source: event.utm?.utm_source,

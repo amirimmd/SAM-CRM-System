@@ -1,0 +1,50 @@
+import Link from "next/link";
+import type { Locale } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/get-dictionary";
+import { AuthPanel } from "@/ui/components/AuthPanel";
+import { Card } from "@/ui/components/Card";
+import { Container } from "@/ui/layout/Container";
+import { Section } from "@/ui/layout/Section";
+
+type PageProps = {
+  params: { locale: Locale };
+};
+
+export default async function RegisterPage({ params }: PageProps) {
+  const dictionary = await getDictionary(params.locale);
+
+  return (
+    <Section>
+      <Container className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+        <AuthPanel
+          mode="register"
+          locale={params.locale}
+          copy={{
+            title: dictionary.auth.registerTitle,
+            subtitle: dictionary.auth.registerSubtitle,
+            emailLabel: dictionary.auth.emailLabel,
+            passwordLabel: dictionary.auth.passwordLabel,
+            submitLabel: dictionary.auth.submitRegister,
+            statusMissingConfig: dictionary.auth.statusMissingConfig,
+            statusCheckEmail: dictionary.auth.statusCheckEmail,
+            statusLoginSuccess: dictionary.auth.statusLoginSuccess,
+          }}
+        />
+        <Card className="space-y-4 bg-[var(--mist-100)]">
+          <h2 className="text-xl font-semibold text-[var(--ink-900)]">
+            {dictionary.auth.registerAsideTitle}
+          </h2>
+          <p className="text-sm text-[var(--ink-500)]">
+            {dictionary.auth.registerAsideBody}
+          </p>
+          <Link
+            href={`/${params.locale}/auth/login`}
+            className="text-sm font-semibold text-[var(--ink-900)] underline-offset-4 hover:underline"
+          >
+            {dictionary.auth.submitLogin}
+          </Link>
+        </Card>
+      </Container>
+    </Section>
+  );
+}

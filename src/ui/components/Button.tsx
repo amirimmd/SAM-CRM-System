@@ -12,6 +12,16 @@ const VARIANT_STYLES: Record<NonNullable<ButtonProps["variant"]>, string> = {
   ghost: "text-[var(--ink-700)] hover:text-[var(--ink-900)] hover:bg-white/60",
 };
 
+const BASE_STYLES =
+  "inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2";
+
+export function buttonClasses(
+  variant: NonNullable<ButtonProps["variant"]>,
+  className?: string
+) {
+  return cn(BASE_STYLES, VARIANT_STYLES[variant], className);
+}
+
 export function Button({
   variant = "primary",
   className,
@@ -21,11 +31,7 @@ export function Button({
   return (
     <button
       type={type}
-      className={cn(
-        "inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2",
-        VARIANT_STYLES[variant],
-        className
-      )}
+      className={buttonClasses(variant, className)}
       {...props}
     />
   );

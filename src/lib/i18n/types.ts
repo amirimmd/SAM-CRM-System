@@ -52,6 +52,8 @@ export type Dictionary = {
       message: string;
     };
     submit: string;
+    successMessage: string;
+    errorMessage: string;
   };
   updates: {
     title: string;
@@ -82,5 +84,22 @@ export type Dictionary = {
     title: string;
     subtitle: string;
     cards: { title: string; value: string; description: string }[];
+  };
+  auth: {
+    loginTitle: string;
+    loginSubtitle: string;
+    loginAsideTitle: string;
+    loginAsideBody: string;
+    registerTitle: string;
+    registerSubtitle: string;
+    registerAsideTitle: string;
+    registerAsideBody: string;
+    emailLabel: string;
+    passwordLabel: string;
+    submitLogin: string;
+    submitRegister: string;
+    statusMissingConfig: string;
+    statusCheckEmail: string;
+    statusLoginSuccess: string;
   };
 };

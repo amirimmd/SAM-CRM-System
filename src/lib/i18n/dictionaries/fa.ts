@@ -81,6 +81,8 @@ export const dictionary: Dictionary = {
       message: "جزئیات محموله",
     },
     submit: "ارسال درخواست",
+    successMessage: "درخواست دریافت شد. ظرف ۱۲ ساعت پاسخ می‌دهیم.",
+    errorMessage: "امکان ارسال وجود ندارد. لطفا دوباره تلاش کنید.",
   },
   updates: {
     title: "به‌روزرسانی‌های روزانه لجستیک",
@@ -179,5 +181,24 @@ export const dictionary: Dictionary = {
         description: "در انتظار پاسخ اپراتور",
       },
     ],
+  },
+  auth: {
+    loginTitle: "خوش آمدید",
+    loginSubtitle: "دسترسی امن به رهگیری مرسوله و کانال‌های پشتیبانی.",
+    loginAsideTitle: "تازه با SAM Logistics آشنا شدید؟",
+    loginAsideBody:
+      "برای دسترسی به رهگیری مرسوله‌ها، به‌روزرسانی‌های CRM و کانال پشتیبانی اختصاصی حساب بسازید.",
+    registerTitle: "ایجاد حساب کاربری",
+    registerSubtitle: "مدیریت مرسوله‌ها در یک فضای CRM یکپارچه.",
+    registerAsideTitle: "قبلا حساب دارید؟",
+    registerAsideBody:
+      "برای بررسی مرسوله‌های فعال، اسناد و پیام‌های پشتیبانی وارد شوید.",
+    emailLabel: "آدرس ایمیل",
+    passwordLabel: "رمز عبور",
+    submitLogin: "ورود",
+    submitRegister: "ایجاد حساب",
+    statusMissingConfig: "اطلاعات اتصال Supabase موجود نیست.",
+    statusCheckEmail: "برای تایید حساب جدید ایمیل خود را بررسی کنید.",
+    statusLoginSuccess: "ورود انجام شد. انتقال به داشبورد.",
   },
 };

@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/i18n/types";
 import { cn } from "@/lib/utils/cn";
-import { Button } from "@/ui/components/Button";
+import { LinkButton } from "@/ui/components/LinkButton";
 import { Container } from "@/ui/layout/Container";
 import { LocaleSwitch } from "@/ui/components/LocaleSwitch";
 
@@ -54,10 +54,14 @@ export function MarketingHeader({ locale, nav, cta }: MarketingHeaderProps) {
         </nav>
         <div className={cn("flex items-center gap-3", isRtl && "flex-row-reverse")}>
           <LocaleSwitch />
-          <Button variant="secondary" className="hidden md:inline-flex">
+          <LinkButton
+            href={`/${locale}/contact`}
+            variant="secondary"
+            className="hidden md:inline-flex"
+          >
             {cta.ctaSecondary}
-          </Button>
-          <Button>{cta.ctaPrimary}</Button>
+          </LinkButton>
+          <LinkButton href={`/${locale}/request`}>{cta.ctaPrimary}</LinkButton>
         </div>
       </Container>
     </header>

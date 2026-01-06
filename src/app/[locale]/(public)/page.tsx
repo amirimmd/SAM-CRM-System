@@ -1,7 +1,7 @@
 import type { Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { Badge } from "@/ui/components/Badge";
-import { Button } from "@/ui/components/Button";
+import { LinkButton } from "@/ui/components/LinkButton";
 import { Card } from "@/ui/components/Card";
 import { Container } from "@/ui/layout/Container";
 import { Section } from "@/ui/layout/Section";
@@ -28,10 +28,12 @@ export default async function HomePage({ params }: PageProps) {
                 {dictionary.home.subtitle}
               </p>
               <div className="flex flex-wrap gap-3">
-                <Button>{dictionary.common.ctaPrimary}</Button>
-                <Button variant="secondary">
+                <LinkButton href={`/${params.locale}/request`}>
+                  {dictionary.common.ctaPrimary}
+                </LinkButton>
+                <LinkButton variant="secondary" href={`/${params.locale}/contact`}>
                   {dictionary.common.ctaSecondary}
-                </Button>
+                </LinkButton>
               </div>
               <div className="flex items-center gap-4 text-sm text-[var(--ink-500)]">
                 <div className="rounded-full bg-white px-4 py-2 text-[var(--ink-900)] shadow-sm">
@@ -67,9 +69,13 @@ export default async function HomePage({ params }: PageProps) {
               Capture every touchpoint, segment by region, and build workflows
               that keep customers informed.
             </p>
-            <Button variant="secondary" className="border-white/30 text-white">
+            <LinkButton
+              variant="secondary"
+              className="border-white/30 text-white"
+              href={`/${params.locale}/services`}
+            >
               {dictionary.common.learnMore}
-            </Button>
+            </LinkButton>
           </Card>
           <div className="grid gap-4 sm:grid-cols-2">
             {dictionary.services.cards.map((card) => (

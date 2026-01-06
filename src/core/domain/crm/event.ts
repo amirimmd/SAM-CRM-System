@@ -1,6 +1,8 @@
 export type CrmEvent = {
   id: string;
   type: string;
+  sessionId?: string;
+  visitorId?: string;
   path?: string;
   referrer?: string;
   utm?: {

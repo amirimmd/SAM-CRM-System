@@ -1,27 +1,25 @@
 import type { CrmRepository } from "@/core/application/ports/crm.repository";
-import type { GeoAdapter } from "@/core/application/ports/geo.adapter";
+import type { GeoPort } from "@/core/application/ports/geo.port";
 import type { CrmEvent } from "@/core/domain/crm/event";
+import { createId } from "@/core/application/utils/id";
 
-type TrackEventPayload = Partial<Pick<CrmEvent, "type" | "path" | "referrer" | "utm">>;
-
-function buildId() {
-  if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
-    return crypto.randomUUID();
-  }
-  return `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-}
+type TrackEventPayload = Partial<
+  Pick<CrmEvent, "type" | "path" | "referrer" | "utm" | "sessionId" | "visitorId">
+>;
 
 export class CrmService {
   constructor(
-    private readonly geoAdapter: GeoAdapter,
+    private readonly geoAdapter: GeoPort,
     private readonly repository: CrmRepository
   ) {}
 
   async trackEvent(request: Request, payload: TrackEventPayload) {
     const geo = await this.geoAdapter.resolve(request);
     const event: CrmEvent = {
-      id: buildId(),
+      id: createId(),
       type: payload.type ?? "page_view",
+      sessionId: payload.sessionId,
+      visitorId: payload.visitorId,
       path: payload.path,
       referrer: payload.referrer,
       utm: payload.utm,

@@ -1,10 +1,8 @@
 import type { Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { Badge } from "@/ui/components/Badge";
-import { Button } from "@/ui/components/Button";
 import { Card } from "@/ui/components/Card";
-import { Input } from "@/ui/forms/Input";
-import { Textarea } from "@/ui/forms/Textarea";
+import { RequestForm } from "@/ui/components/RequestForm";
 import { Container } from "@/ui/layout/Container";
 import { Section } from "@/ui/layout/Section";
 
@@ -27,17 +25,15 @@ export default async function RequestPage({ params }: PageProps) {
             <p className="text-[var(--ink-500)]">{dictionary.request.subtitle}</p>
           </div>
           <Card className="space-y-4">
-            <div className="grid gap-4 sm:grid-cols-2">
-              <Input placeholder={dictionary.request.fields.name} />
-              <Input placeholder={dictionary.request.fields.email} />
-              <Input placeholder={dictionary.request.fields.company} />
-              <Input placeholder={dictionary.request.fields.cargo} />
-            </div>
-            <Textarea
-              rows={5}
-              placeholder={dictionary.request.fields.message}
+            <RequestForm
+              locale={params.locale}
+              copy={{
+                fields: dictionary.request.fields,
+                submit: dictionary.request.submit,
+                successMessage: dictionary.request.successMessage,
+                errorMessage: dictionary.request.errorMessage,
+              }}
             />
-            <Button>{dictionary.request.submit}</Button>
           </Card>
         </div>
         <Card className="space-y-4 bg-[var(--ink-900)] text-white">

@@ -25,11 +25,28 @@ export default async function CalculatorPage({ params }: PageProps) {
             <p className="text-[var(--ink-500)]">{dictionary.calculator.subtitle}</p>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
-            <Input placeholder={dictionary.calculator.fields.weight} />
-            <Input placeholder={dictionary.calculator.fields.volume} />
-            <Input placeholder={dictionary.calculator.fields.origin} />
-            <Input placeholder={dictionary.calculator.fields.destination} />
-            <Input placeholder={dictionary.calculator.fields.insurance} />
+            {[
+              { id: "weight", label: dictionary.calculator.fields.weight, type: "number" },
+              { id: "volume", label: dictionary.calculator.fields.volume, type: "number" },
+              { id: "origin", label: dictionary.calculator.fields.origin, type: "text" },
+              {
+                id: "destination",
+                label: dictionary.calculator.fields.destination,
+                type: "text",
+              },
+              { id: "insurance", label: dictionary.calculator.fields.insurance, type: "text" },
+            ].map((field) => (
+              <label key={field.id} className="space-y-2 text-sm font-semibold">
+                <span className="text-[var(--ink-700)]">{field.label}</span>
+                <Input
+                  id={field.id}
+                  name={field.id}
+                  type={field.type}
+                  inputMode={field.type === "number" ? "decimal" : undefined}
+                  placeholder={field.label}
+                />
+              </label>
+            ))}
           </div>
         </div>
         <Card className="space-y-4">

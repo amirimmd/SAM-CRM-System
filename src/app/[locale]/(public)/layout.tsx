@@ -20,7 +20,7 @@ export default async function PublicLayout({ children, params }: LayoutProps) {
         nav={dictionary.nav}
         cta={dictionary.common}
       />
-      {children}
+      <main>{children}</main>
       <MarketingFooter locale={params.locale} nav={dictionary.nav} />
     </div>
   );
