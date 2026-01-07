@@ -1,3 +1,4 @@
+// Settings page: account and alerts overview.
 import type { Locale } from "@/lib/i18n/config";
 import { Card } from "@/ui/components/Card";
 import { DashboardShell } from "@/ui/layout/DashboardShell";
@@ -14,19 +15,19 @@ export default function SettingsPage({ params }: PageProps) {
       subtitle="Manage access, notifications, and profile details."
     >
       <div className="grid gap-4 lg:grid-cols-[1fr_1fr]">
-        <Card className="space-y-3">
-          <p className="text-sm font-semibold text-[var(--ink-900)]">
+        <Card className="glass-panel space-y-3">
+          <p className="text-sm font-semibold text-white">
             Account information
           </p>
-          <p className="text-sm text-[var(--ink-500)]">Mostafa Trading LLC</p>
-          <p className="text-sm text-[var(--ink-500)]">admin@samlogistics.com</p>
+          <p className="text-sm text-[var(--navy-100)]">Mostafa Trading LLC</p>
+          <p className="text-sm text-[var(--navy-100)]">admin@samlogistics.com</p>
         </Card>
-        <Card className="space-y-3">
-          <p className="text-sm font-semibold text-[var(--ink-900)]">Alerts</p>
-          <p className="text-sm text-[var(--ink-500)]">
+        <Card className="glass-panel space-y-3">
+          <p className="text-sm font-semibold text-white">Alerts</p>
+          <p className="text-sm text-[var(--navy-100)]">
             Shipment updates · Enabled
           </p>
-          <p className="text-sm text-[var(--ink-500)]">
+          <p className="text-sm text-[var(--navy-100)]">
             Document reminders · Enabled
           </p>
         </Card>

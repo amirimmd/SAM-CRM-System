@@ -1,19 +1,21 @@
 import { cn } from "@/lib/utils/cn";
 
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: "primary" | "secondary" | "ghost";
+  variant?: "primary" | "secondary" | "ghost" | "danger";
 };
 
 const VARIANT_STYLES: Record<NonNullable<ButtonProps["variant"]>, string> = {
   primary:
-    "bg-[var(--ink-900)] text-white hover:bg-[var(--ink-800)] focus-visible:outline-[var(--ink-900)]",
+    "bg-[var(--navy-900)] text-white hover:bg-[var(--navy-800)] focus-visible:outline-[var(--navy-900)] shadow-[0_15px_40px_-20px_rgba(0,0,0,0.6)]",
   secondary:
-    "border border-[var(--ink-200)] bg-white text-[var(--ink-800)] hover:border-[var(--ink-700)] hover:text-[var(--ink-900)]",
-  ghost: "text-[var(--ink-700)] hover:text-[var(--ink-900)] hover:bg-white/60",
+    "border border-[rgba(255,255,255,0.18)] bg-[rgba(255,255,255,0.06)] text-[var(--navy-50)] hover:border-[rgba(255,255,255,0.32)] hover:bg-[rgba(255,255,255,0.14)]",
+  ghost: "text-[var(--navy-100)] hover:text-[var(--navy-50)] hover:bg-[rgba(255,255,255,0.05)]",
+  danger:
+    "bg-[var(--danger-500)] text-white hover:bg-[#d93b61] focus-visible:outline-[var(--danger-500)] shadow-[0_15px_40px_-20px_rgba(239,71,111,0.7)]",
 };
 
 const BASE_STYLES =
-  "inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2";
+  "inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-60";
 
 export function buttonClasses(
   variant: NonNullable<ButtonProps["variant"]>,

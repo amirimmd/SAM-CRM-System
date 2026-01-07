@@ -1,3 +1,4 @@
+// Calculator page: quote inputs with accent card.
 import type { Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { Badge } from "@/ui/components/Badge";
@@ -15,14 +16,12 @@ export default async function CalculatorPage({ params }: PageProps) {
 
   return (
     <Section>
-      <Container className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr]">
+      <Container className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] text-white">
         <div className="space-y-6">
           <div className="space-y-3">
             <Badge>{dictionary.nav.calculator}</Badge>
-            <h1 className="text-3xl font-semibold text-[var(--ink-900)]">
-              {dictionary.calculator.title}
-            </h1>
-            <p className="text-[var(--ink-500)]">{dictionary.calculator.subtitle}</p>
+            <h1 className="text-3xl font-semibold">{dictionary.calculator.title}</h1>
+            <p className="text-[var(--navy-100)]">{dictionary.calculator.subtitle}</p>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             {[
@@ -37,7 +36,7 @@ export default async function CalculatorPage({ params }: PageProps) {
               { id: "insurance", label: dictionary.calculator.fields.insurance, type: "text" },
             ].map((field) => (
               <label key={field.id} className="space-y-2 text-sm font-semibold">
-                <span className="text-[var(--ink-700)]">{field.label}</span>
+                <span className="text-[var(--navy-100)]">{field.label}</span>
                 <Input
                   id={field.id}
                   name={field.id}
@@ -49,14 +48,14 @@ export default async function CalculatorPage({ params }: PageProps) {
             ))}
           </div>
         </div>
-        <Card className="space-y-4">
-          <p className="text-xs uppercase tracking-[0.2em] text-[var(--ink-500)]">
+        <Card className="glass-panel space-y-4">
+          <p className="text-xs uppercase tracking-[0.2em] text-[var(--navy-200)]">
             {dictionary.calculator.estimateLabel}
           </p>
-          <p className="text-3xl font-semibold text-[var(--ink-900)]">
+          <p className="text-3xl font-semibold text-white">
             USD 1,200 - 1,800
           </p>
-          <p className="text-sm text-[var(--ink-500)]">
+          <p className="text-sm text-[var(--navy-100)]">
             Estimates update when shipment data is confirmed by our logistics team.
           </p>
         </Card>

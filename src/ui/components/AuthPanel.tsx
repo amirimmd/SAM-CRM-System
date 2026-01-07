@@ -65,16 +65,16 @@ export function AuthPanel({ mode, locale, copy }: AuthPanelProps) {
   }
 
   return (
-    <Card className="space-y-4">
+    <Card className="glass-panel space-y-4">
       <div className="space-y-2">
-        <h1 className="text-2xl font-semibold text-[var(--ink-900)]">
+        <h1 className="text-2xl font-semibold text-white">
           {copy.title}
         </h1>
-        <p className="text-sm text-[var(--ink-500)]">{copy.subtitle}</p>
+        <p className="text-sm text-[var(--navy-100)]">{copy.subtitle}</p>
       </div>
       <form className="space-y-4" onSubmit={handleSubmit}>
         <label className="space-y-2 text-sm font-semibold">
-          <span className="text-[var(--ink-700)]">{copy.emailLabel}</span>
+          <span className="text-[var(--navy-100)]">{copy.emailLabel}</span>
           <Input
             type="email"
             name="email"
@@ -86,7 +86,7 @@ export function AuthPanel({ mode, locale, copy }: AuthPanelProps) {
           />
         </label>
         <label className="space-y-2 text-sm font-semibold">
-          <span className="text-[var(--ink-700)]">{copy.passwordLabel}</span>
+          <span className="text-[var(--navy-100)]">{copy.passwordLabel}</span>
           <Input
             type="password"
             name="password"
@@ -102,7 +102,7 @@ export function AuthPanel({ mode, locale, copy }: AuthPanelProps) {
         </Button>
       </form>
       {status ? (
-        <p role="status" className="text-sm text-[var(--ink-500)]">
+        <p role="status" className="text-sm text-[var(--navy-100)]">
           {status}
         </p>
       ) : null}

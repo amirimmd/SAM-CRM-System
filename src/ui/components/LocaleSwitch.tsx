@@ -27,7 +27,7 @@ export function LocaleSwitch({ className }: LocaleSwitchProps) {
     <Link
       href={href}
       className={cn(
-        "rounded-full border border-[var(--ink-200)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--ink-700)]",
+        "rounded-full border border-[rgba(255,255,255,0.12)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--navy-100)] hover:text-white",
         className
       )}
     >

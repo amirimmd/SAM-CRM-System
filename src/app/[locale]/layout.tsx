@@ -1,19 +1,7 @@
 import type { Metadata } from "next";
-import { Sora, Vazirmatn } from "next/font/google";
 import type { Locale } from "@/lib/i18n/config";
-import { SUPPORTED_LOCALES, getLocaleDir } from "@/lib/i18n/config";
+import { SUPPORTED_LOCALES } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
-import "../globals.css";
-
-const sora = Sora({
-  variable: "--font-sans-en",
-  subsets: ["latin"],
-});
-
-const vazirmatn = Vazirmatn({
-  variable: "--font-sans-fa",
-  subsets: ["arabic"],
-});
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -48,16 +36,9 @@ export async function generateMetadata({
 }
 
 export default function LocaleLayout({ children, params }: LayoutProps) {
-  const direction = getLocaleDir(params.locale);
-
   return (
-    <html
-      lang={params.locale}
-      dir={direction}
-      data-locale={params.locale}
-      className={`${sora.variable} ${vazirmatn.variable}`}
-    >
-      <body className="antialiased">{children}</body>
-    </html>
+    <div data-locale={params.locale} className="min-h-screen bg-[var(--navy-1000)]">
+      {children}
+    </div>
   );
 }

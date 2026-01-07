@@ -34,8 +34,9 @@ SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
 ## Routing overview
 
 - Public marketing: `src/app/[locale]/(public)`
+- Marketing pages include: Home, Services, Pricing, Calculator, Tracking, Blog, About, Contact, SEO Landing
 - Customer dashboard: `src/app/[locale]/(dashboard)`
-- Admin panel: `src/app/[locale]/(dashboard)/admin`
+- Admin panel: `src/app/[locale]/(dashboard)/admin` (+ analytics workspace)
 - Auth pages: `src/app/[locale]/(public)/auth`
 - CRM event API: `src/app/api/crm/events`
 - Lead capture API: `src/app/api/crm/leads`

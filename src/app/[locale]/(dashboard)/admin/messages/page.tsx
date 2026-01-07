@@ -1,3 +1,4 @@
+// Admin messaging center.
 import type { Locale } from "@/lib/i18n/config";
 import { Card } from "@/ui/components/Card";
 import { DashboardShell } from "@/ui/layout/DashboardShell";
@@ -14,7 +15,7 @@ export default function AdminMessagesPage({ params }: PageProps) {
       subtitle="Manage support conversations and response queues."
       variant="admin"
     >
-      <Card className="space-y-4">
+      <Card className="glass-panel space-y-4">
         {[
           {
             customer: "Mira Home",
@@ -29,13 +30,13 @@ export default function AdminMessagesPage({ params }: PageProps) {
         ].map((item) => (
           <div
             key={item.customer}
-            className="rounded-2xl border border-[var(--ink-200)] bg-white p-4"
+            className="rounded-2xl border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.04)] p-4"
           >
-            <div className="flex items-center justify-between text-sm font-semibold text-[var(--ink-900)]">
+            <div className="flex items-center justify-between text-sm font-semibold text-white">
               <span>{item.customer}</span>
-              <span className="text-xs text-[var(--ink-500)]">{item.status}</span>
+              <span className="text-xs text-[var(--navy-200)]">{item.status}</span>
             </div>
-            <p className="mt-2 text-sm text-[var(--ink-600)]">{item.summary}</p>
+            <p className="mt-2 text-sm text-[var(--navy-100)]">{item.summary}</p>
           </div>
         ))}
       </Card>

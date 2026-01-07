@@ -5,11 +5,16 @@ export const dictionary: Dictionary = {
     home: "خانه",
     services: "خدمات",
     calculator: "محاسبه هزینه",
+    pricing: "قیمت‌گذاری",
+    tracking: "پیگیری",
+    about: "درباره ما",
     request: "درخواست حمل",
     updates: "به‌روزرسانی‌ها",
     brands: "برندها",
     blog: "بینش‌ها",
     contact: "تماس",
+    landing: "صفحه فرود",
+    login: "ورود",
     dashboard: "داشبورد",
     admin: "مدیریت",
   },
@@ -55,6 +60,34 @@ export const dictionary: Dictionary = {
       {
         title: "گمرک و تطابق",
         description: "بررسی اسناد و آمادگی مقرراتی.",
+      },
+    ],
+  },
+  pricing: {
+    title: "قیمت‌گذاری شفاف",
+    subtitle: "پلن‌های قابل پیش‌بینی با SLA و پاسخ سریع.",
+    tiers: [
+      {
+        name: "رشد",
+        price: "از ۱۲۰۰$ هر مسیر",
+        features: [
+          "مسیرهای هوایی و دریایی اولویت‌دار",
+          "خط زمانی ردیابی مرسوله",
+          "سرنخ و CRM پایه",
+          "پشتیبانی ایمیل ۱۲/۵",
+        ],
+        cta: "شروع استعلام",
+      },
+      {
+        name: "سازمانی",
+        price: "سفارشی",
+        features: [
+          "میز عملیات اختصاصی",
+          "بازبینی گمرک و تطابق",
+          "گزارش BI و فضای تحلیل",
+          "پشتیبانی ۲۴/۷ چندزبانه",
+        ],
+        cta: "گفتگو با فروش",
       },
     ],
   },
@@ -105,6 +138,15 @@ export const dictionary: Dictionary = {
       },
     ],
   },
+  tracking: {
+    title: "پیگیری مرسوله",
+    subtitle: "شفافیت خط زمانی در هر حرکت.",
+    shipments: [
+      { id: "SAM-2043", route: "شنژن → دبی", status: "در حال حمل", eta: "۱۹ آگوست", progress: 72 },
+      { id: "SAM-1982", route: "نینگبو → هامبورگ", status: "بررسی گمرک", eta: "۲۲ آگوست", progress: 58 },
+      { id: "SAM-1901", route: "گوانگژو → لاگوس", status: "رزرو شده", eta: "۲۷ آگوست", progress: 32 },
+    ],
+  },
   brands: {
     title: "همکار برندهای جهانی",
     subtitle: "شراکت با خرده‌فروشی، تولید و فناوری.",
@@ -139,6 +181,22 @@ export const dictionary: Dictionary = {
       { label: "تلفن", value: "+86 20 0000 0000" },
       { label: "ویچت", value: "SAM-Logistics" },
     ],
+  },
+  about: {
+    title: "ساخته شده در گوانگژو، فعال در جهان.",
+    subtitle: "پلتفرم فرمان لجستیک برای سرعت، تطابق و سرویس.",
+    pillars: [
+      { title: "عملیات دقیق", description: "SLA مشخص، ردیابی فعال و تحویل بدون وقفه." },
+      { title: "داده‌محور", description: "تله‌متری CRM، بینش جغرافیایی و گزارش صادراتی." },
+      { title: "امنیت محور", description: "RLS، ذخیره‌سازی ایمن و فرآیندهای حسابرسی‌پذیر." },
+    ],
+  },
+  landing: {
+    title: "حمل چین به جهان با دید CRM.",
+    subtitle: "لجستیک هوایی و دریایی با تحلیل رفتار، پیام‌رسانی و محتوا.",
+    bullets: ["SLA ۲ ساعته تیکت سازمانی", "راهنمای گمرک", "لحظه‌نگار وضعیت", "جریان امن اسناد"],
+    ctaPrimary: "شروع ارسال",
+    ctaSecondary: "مشاهده تحلیل",
   },
   dashboard: {
     title: "داشبورد مشتری",

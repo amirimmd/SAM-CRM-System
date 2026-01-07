@@ -15,7 +15,7 @@ export default async function LoginPage({ params }: PageProps) {
 
   return (
     <Section>
-      <Container className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+      <Container className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr] text-white">
         <AuthPanel
           mode="login"
           locale={params.locale}
@@ -30,16 +30,12 @@ export default async function LoginPage({ params }: PageProps) {
             statusLoginSuccess: dictionary.auth.statusLoginSuccess,
           }}
         />
-        <Card className="space-y-4 bg-[var(--mist-100)]">
-          <h2 className="text-xl font-semibold text-[var(--ink-900)]">
-            {dictionary.auth.loginAsideTitle}
-          </h2>
-          <p className="text-sm text-[var(--ink-500)]">
-            {dictionary.auth.loginAsideBody}
-          </p>
+        <Card className="glass-panel space-y-4">
+          <h2 className="text-xl font-semibold text-white">{dictionary.auth.loginAsideTitle}</h2>
+          <p className="text-sm text-[var(--navy-100)]">{dictionary.auth.loginAsideBody}</p>
           <Link
             href={`/${params.locale}/auth/register`}
-            className="text-sm font-semibold text-[var(--ink-900)] underline-offset-4 hover:underline"
+            className="text-sm font-semibold text-white underline-offset-4 hover:underline"
           >
             {dictionary.auth.submitRegister}
           </Link>

@@ -6,5 +6,10 @@ type LayoutProps = {
 };
 
 export default function DashboardLayout({ children }: LayoutProps) {
-  return <div className="min-h-screen bg-[var(--mist-100)]">{children}</div>;
+  return (
+    <div className="min-h-screen bg-[var(--navy-1000)] text-white">
+      <div className="light-sheen" />
+      {children}
+    </div>
+  );
 }

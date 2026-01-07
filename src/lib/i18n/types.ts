@@ -3,11 +3,16 @@ export type Dictionary = {
     home: string;
     services: string;
     calculator: string;
+    pricing: string;
+    tracking: string;
+    about: string;
     request: string;
     updates: string;
     brands: string;
     blog: string;
     contact: string;
+    landing: string;
+    login: string;
     dashboard: string;
     admin: string;
   };
@@ -28,6 +33,11 @@ export type Dictionary = {
     title: string;
     subtitle: string;
     cards: { title: string; description: string }[];
+  };
+  pricing: {
+    title: string;
+    subtitle: string;
+    tiers: { name: string; price: string; features: string[]; cta: string }[];
   };
   calculator: {
     title: string;
@@ -60,6 +70,11 @@ export type Dictionary = {
     subtitle: string;
     items: { title: string; description: string; date: string }[];
   };
+  tracking: {
+    title: string;
+    subtitle: string;
+    shipments: { id: string; route: string; status: string; eta: string; progress: number }[];
+  };
   brands: {
     title: string;
     subtitle: string;
@@ -74,6 +89,18 @@ export type Dictionary = {
     title: string;
     subtitle: string;
     channels: { label: string; value: string }[];
+  };
+  about: {
+    title: string;
+    subtitle: string;
+    pillars: { title: string; description: string }[];
+  };
+  landing: {
+    title: string;
+    subtitle: string;
+    bullets: string[];
+    ctaPrimary: string;
+    ctaSecondary: string;
   };
   dashboard: {
     title: string;

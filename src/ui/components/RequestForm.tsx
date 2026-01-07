@@ -75,7 +75,7 @@ export function RequestForm({ locale, copy }: RequestFormProps) {
     <form className="space-y-4" onSubmit={handleSubmit}>
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="space-y-2 text-sm font-semibold">
-          <span className="text-[var(--ink-700)]">{copy.fields.name}</span>
+          <span className="text-[var(--navy-100)]">{copy.fields.name}</span>
           <Input
             id="request-name"
             name="name"
@@ -88,7 +88,7 @@ export function RequestForm({ locale, copy }: RequestFormProps) {
           />
         </label>
         <label className="space-y-2 text-sm font-semibold">
-          <span className="text-[var(--ink-700)]">{copy.fields.email}</span>
+          <span className="text-[var(--navy-100)]">{copy.fields.email}</span>
           <Input
             id="request-email"
             name="email"
@@ -101,7 +101,7 @@ export function RequestForm({ locale, copy }: RequestFormProps) {
           />
         </label>
         <label className="space-y-2 text-sm font-semibold">
-          <span className="text-[var(--ink-700)]">{copy.fields.company}</span>
+          <span className="text-[var(--navy-100)]">{copy.fields.company}</span>
           <Input
             id="request-company"
             name="company"
@@ -113,7 +113,7 @@ export function RequestForm({ locale, copy }: RequestFormProps) {
           />
         </label>
         <label className="space-y-2 text-sm font-semibold">
-          <span className="text-[var(--ink-700)]">{copy.fields.cargo}</span>
+          <span className="text-[var(--navy-100)]">{copy.fields.cargo}</span>
           <Input
             id="request-cargo"
             name="cargo"
@@ -125,7 +125,7 @@ export function RequestForm({ locale, copy }: RequestFormProps) {
         </label>
       </div>
       <label className="space-y-2 text-sm font-semibold">
-        <span className="text-[var(--ink-700)]">{copy.fields.message}</span>
+        <span className="text-[var(--navy-100)]">{copy.fields.message}</span>
         <Textarea
           rows={5}
           name="message"
@@ -143,7 +143,7 @@ export function RequestForm({ locale, copy }: RequestFormProps) {
         </p>
       ) : null}
       {status === "error" ? (
-        <p role="status" className="text-sm text-[var(--ink-500)]">
+        <p role="status" className="text-sm text-[var(--navy-100)]">
           {copy.errorMessage}
         </p>
       ) : null}

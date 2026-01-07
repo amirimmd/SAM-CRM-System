@@ -5,11 +5,16 @@ export const dictionary: Dictionary = {
     home: "Home",
     services: "Services",
     calculator: "Cost Calculator",
+    pricing: "Pricing",
+    tracking: "Tracking",
+    about: "About",
     request: "Shipping Request",
     updates: "Updates",
     brands: "Brands",
     blog: "Insights",
     contact: "Contact",
+    landing: "Landing",
+    login: "Login",
     dashboard: "Dashboard",
     admin: "Admin",
   },
@@ -55,6 +60,34 @@ export const dictionary: Dictionary = {
       {
         title: "Customs & compliance",
         description: "Documentation checks and regulatory readiness.",
+      },
+    ],
+  },
+  pricing: {
+    title: "Pricing built for clarity",
+    subtitle: "Predictable tiers with conversion-ready quotes and SLA-backed response times.",
+    tiers: [
+      {
+        name: "Growth",
+        price: "From $1,200 / lane",
+        features: [
+          "Priority air & sea lanes",
+          "Shipment tracking timeline",
+          "Lead capture & CRM basics",
+          "Email support 12/5",
+        ],
+        cta: "Start quote",
+      },
+      {
+        name: "Enterprise",
+        price: "Custom",
+        features: [
+          "Dedicated operations desk",
+          "Customs & compliance reviews",
+          "BI exports & analytics workspace",
+          "24/7 multilingual support",
+        ],
+        cta: "Talk to sales",
       },
     ],
   },
@@ -105,6 +138,15 @@ export const dictionary: Dictionary = {
       },
     ],
   },
+  tracking: {
+    title: "Shipment tracking",
+    subtitle: "Timeline-based transparency across every move.",
+    shipments: [
+      { id: "SAM-2043", route: "Shenzhen → Dubai", status: "In transit", eta: "Aug 19", progress: 72 },
+      { id: "SAM-1982", route: "Ningbo → Hamburg", status: "Customs review", eta: "Aug 22", progress: 58 },
+      { id: "SAM-1901", route: "Guangzhou → Lagos", status: "Booked", eta: "Aug 27", progress: 32 },
+    ],
+  },
   brands: {
     title: "Trusted by global brands",
     subtitle: "Partnerships across retail, manufacturing, and tech.",
@@ -139,6 +181,27 @@ export const dictionary: Dictionary = {
       { label: "Phone", value: "+86 20 0000 0000" },
       { label: "WeChat", value: "SAM-Logistics" },
     ],
+  },
+  about: {
+    title: "Built in Guangzhou. Operating globally.",
+    subtitle: "A logistics command platform engineered for speed, compliance, and service.",
+    pillars: [
+      { title: "Operational excellence", description: "SLA-backed desks, proactive tracking, and resilient handoffs." },
+      { title: "Data rigor", description: "CRM telemetry, geo insights, and exportable analytics." },
+      { title: "Security first", description: "RLS policies, hardened storage, and audit-friendly processes." },
+    ],
+  },
+  landing: {
+    title: "China-to-world freight with CRM-grade visibility.",
+    subtitle: "Air, sea, and multimodal logistics with behavior analytics, messaging, and content built-in.",
+    bullets: [
+      "2h SLA on enterprise tickets",
+      "Customs guidance included",
+      "Real-time milestones",
+      "Secure document flows",
+    ],
+    ctaPrimary: "Launch a shipment",
+    ctaSecondary: "View analytics",
   },
   dashboard: {
     title: "Customer dashboard",
