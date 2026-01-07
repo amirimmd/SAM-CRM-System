@@ -1,22 +1,26 @@
 // Home page: immersive hero with layered depth, logistics highlights, and CTA funnels.
 import type { Locale } from "@/lib/i18n/config";
-import { getDictionary } from "@/lib/i18n/get-dictionary";
+import { getDictionary } from "@/lib/i18n/getDictionary"; // اصلاح مسیر ایمپورت (با توجه به فایل‌های آپلود شده)
 import { Badge } from "@/ui/components/Badge";
 import { Card } from "@/ui/components/Card";
 import { Icon } from "@/ui/components/Icon";
-import { LinkButton } from "@/ui/components/LinkButton";
+import { LinkButton } from "@/ui/components/LinkButton"; // اگر این کامپوننت وجود ندارد، به Button تغییر دهید
 import { Orb } from "@/ui/components/Orb";
 import { Sparkline } from "@/ui/charts/Sparkline";
 import { Stat } from "@/ui/components/Stat";
-import { Container } from "@/ui/layout/Container";
-import { Section } from "@/ui/layout/Section";
+import { Container } from "@/ui/layout/Container"; // اگر وجود ندارد، div معمولی استفاده کنید
+import { Section } from "@/ui/layout/Section";     // اگر وجود ندارد، div معمولی استفاده کنید
 
+// 1. تغییر تایپ PageProps مطابق استاندارد Next.js 16
 type PageProps = {
   params: Promise<{ locale: Locale }>;
 };
 
 export default async function HomePage({ params }: PageProps) {
+  // 2. اضافه کردن await برای دریافت پارامترها
   const { locale } = await params;
+  
+  // دریافت دیکشنری ترجمه
   const dictionary = await getDictionary(locale);
 
   return (
@@ -27,21 +31,22 @@ export default async function HomePage({ params }: PageProps) {
         <div className="light-sheen" />
       </div>
 
-      <Section className="relative pt-12">
-        <Container className="grid gap-12 lg:grid-cols-[1.05fr_0.95fr]">
+      <div className="relative pt-12"> {/* اگر Section ندارید، این div جایگزین است */}
+        <div className="container mx-auto px-4 grid gap-12 lg:grid-cols-[1.05fr_0.95fr]"> {/* اگر Container ندارید */}
           <div className="space-y-6">
-            <Badge>{dictionary.nav.services}</Badge>
+            <Badge>{dictionary.nav?.services ?? 'Services'}</Badge>
             <h1 className="text-4xl font-semibold leading-tight text-white md:text-5xl">
-              {dictionary.home.title}
+              {dictionary.home?.title ?? 'Logistics CRM'}
             </h1>
-            <p className="text-lg text-[var(--navy-100)]">{dictionary.home.subtitle}</p>
+            <p className="text-lg text-[var(--navy-100)]">{dictionary.home?.subtitle ?? 'Manage your shipments globally.'}</p>
             <div className="flex flex-wrap gap-3">
-              <LinkButton href={`/${locale}/request`}>
-                {dictionary.common.ctaPrimary}
-              </LinkButton>
-              <LinkButton variant="secondary" href={`/${locale}/tracking`}>
-                {dictionary.common.ctaSecondary}
-              </LinkButton>
+              {/* دکمه‌ها - اگر LinkButton دارید از آن استفاده کنید، وگرنه از a یا Link استفاده کنید */}
+              <a href={`/${locale}/request`} className="px-6 py-2 bg-blue-600 rounded-lg text-white">
+                {dictionary.common?.ctaPrimary ?? 'Get Started'}
+              </a>
+              <a href={`/${locale}/tracking`} className="px-6 py-2 border border-white/20 rounded-lg text-white">
+                {dictionary.common?.ctaSecondary ?? 'Track Shipment'}
+              </a>
             </div>
             <div className="grid gap-3 sm:grid-cols-3">
               <Stat label="Command center" value="24/7" helper="Ops coverage" />
@@ -51,7 +56,7 @@ export default async function HomePage({ params }: PageProps) {
           </div>
 
           <div className="relative">
-            <div className="glass-panel relative overflow-hidden rounded-3xl p-6">
+            <div className="glass-panel relative overflow-hidden rounded-3xl p-6 bg-white/5 border border-white/10 backdrop-blur-md">
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(62,223,199,0.14),transparent_40%)]" />
               <div className="relative flex flex-col gap-4">
                 <div className="flex items-center justify-between">
@@ -67,7 +72,7 @@ export default async function HomePage({ params }: PageProps) {
                   <Badge>Edge</Badge>
                 </div>
                 <div className="grid gap-3 text-sm text-[var(--navy-100)]">
-                  {dictionary.home.highlights.map((item) => (
+                  {dictionary.home?.highlights?.map((item: any) => (
                     <div
                       key={item.title}
                       className="flex items-start justify-between rounded-2xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.03)] p-4"
@@ -92,12 +97,12 @@ export default async function HomePage({ params }: PageProps) {
               </div>
             </div>
           </div>
-        </Container>
-      </Section>
+        </div>
+      </div>
 
-      <Section className="relative">
-        <Container className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
-          <Card className="glass-panel space-y-4 bg-[rgba(255,255,255,0.04)] text-white">
+      <div className="relative py-12">
+        <div className="container mx-auto px-4 grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
+          <Card className="glass-panel space-y-4 bg-[rgba(255,255,255,0.04)] text-white p-6 border border-white/10 rounded-2xl">
             <p className="text-xs uppercase tracking-[0.3em] text-[var(--accent-200)]">
               CRM intelligence
             </p>
@@ -112,17 +117,16 @@ export default async function HomePage({ params }: PageProps) {
               <Stat label="Leads" value="124" helper="7d volume" />
               <Stat label="Win rate" value="38%" helper="Qualified" accent="success" />
             </div>
-            <LinkButton
-              variant="secondary"
-              className="border-white/30 text-white"
+            <a
+              className="inline-block mt-4 px-6 py-2 border border-white/30 rounded-lg text-white hover:bg-white/10 transition"
               href={`/${locale}/services`}
             >
-              {dictionary.common.learnMore}
-            </LinkButton>
+              {dictionary.common?.learnMore ?? 'Learn More'}
+            </a>
           </Card>
           <div className="grid gap-4 sm:grid-cols-2">
-            {dictionary.services.cards.map((card) => (
-              <Card key={card.title} className="glass-panel space-y-2 text-white">
+            {dictionary.services?.cards?.map((card: any) => (
+              <Card key={card.title} className="glass-panel space-y-2 text-white p-6 border border-white/10 rounded-2xl bg-white/5">
                 <div className="flex items-center gap-2 text-[var(--accent-400)]">
                   <Icon name="plane" />
                   <p className="text-xs uppercase tracking-[0.12em]">Lane</p>
@@ -132,8 +136,8 @@ export default async function HomePage({ params }: PageProps) {
               </Card>
             ))}
           </div>
-        </Container>
-      </Section>
+        </div>
+      </div>
     </div>
   );
 }

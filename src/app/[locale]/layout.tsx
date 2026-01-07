@@ -1,46 +1,56 @@
-import type { Metadata } from "next";
-import type { Locale } from "@/lib/i18n/config";
-import { SUPPORTED_LOCALES } from "@/lib/i18n/config";
-import { getDictionary } from "@/lib/i18n/get-dictionary";
+import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+import { siteConfig } from '@/lib/config/site';
+import { DEFAULT_LOCALE, isSupportedLocale, type Locale } from '@/lib/i18n/config';
+import { getDictionary } from '@/lib/i18n/getDictionary';
+import '@/app/globals.css';
 
-type LayoutProps = {
+// 1. تعریف تایپ جدید برای params (به صورت Promise)
+type Props = {
   children: React.ReactNode;
-  params: Promise<{ locale: Locale }>;
+  params: Promise<{ locale: string }>;
 };
 
-export const dynamicParams = false;
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  // 2. اضافه کردن await
+  const { locale } = await params;
+  
+  if (!isSupportedLocale(locale)) {
+    return {};
+  }
 
-export async function generateStaticParams() {
-  return SUPPORTED_LOCALES.map((locale) => ({ locale }));
-}
+  const dict = await getDictionary(locale);
+  const localizedBrand = siteConfig.branding.name[locale] ?? siteConfig.branding.name[DEFAULT_LOCALE];
+  const title = dict?.site?.title ?? siteConfig.seo.title[locale] ?? siteConfig.seo.title[DEFAULT_LOCALE];
+  const description = dict?.site?.description ?? siteConfig.seo.description[locale] ?? siteConfig.seo.description[DEFAULT_LOCALE];
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ locale: Locale }>;
-}): Promise<Metadata> {
-  const awaitedParams = await params;
-  const dictionary = await getDictionary(awaitedParams.locale);
   return {
     title: {
-      default: "SAM Logistics & CRM",
-      template: "%s | SAM Logistics & CRM",
+      default: title,
+      template: `%s | ${localizedBrand}`,
     },
-    description: dictionary.home.subtitle,
-    alternates: {
-      languages: {
-        en: "/en",
-        fa: "/fa",
-      },
+    description,
+    icons: {
+      icon: '/favicon.ico',
     },
   };
 }
 
-export default async function LocaleLayout({ children, params }: LayoutProps) {
-  const awaitedParams = await params;
+export default async function LocaleLayout({ children, params }: Props) {
+  // 3. اضافه کردن await در کامپوننت اصلی
+  const { locale } = await params;
+
+  if (!isSupportedLocale(locale)) {
+    notFound();
+  }
+
+  const dir = locale === 'fa' ? 'rtl' : 'ltr';
+
   return (
-    <div data-locale={awaitedParams.locale} className="min-h-screen bg-[var(--navy-1000)]">
-      {children}
-    </div>
+    <html lang={locale} dir={dir} className="h-full">
+      <body className={`h-full font-sans antialiased`}>
+        {children}
+      </body>
+    </html>
   );
 }
