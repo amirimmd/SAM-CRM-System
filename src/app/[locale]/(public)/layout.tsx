@@ -6,22 +6,23 @@ import { MarketingFooter } from "@/ui/layout/MarketingFooter";
 
 type LayoutProps = {
   children: React.ReactNode;
-  params: { locale: Locale };
+  params: Promise<{ locale: Locale }>;
 };
 
 export default async function PublicLayout({ children, params }: LayoutProps) {
-  const dictionary = await getDictionary(params.locale);
+  const { locale } = await params;
+  const dictionary = await getDictionary(locale);
 
   return (
     <div className="min-h-screen bg-[var(--sand-50)]">
       <CrmTracker />
       <MarketingHeader
-        locale={params.locale}
+        locale={locale}
         nav={dictionary.nav}
         cta={dictionary.common}
       />
       <main>{children}</main>
-      <MarketingFooter locale={params.locale} nav={dictionary.nav} />
+      <MarketingFooter locale={locale} nav={dictionary.nav} />
     </div>
   );
 }

@@ -12,11 +12,12 @@ import { Container } from "@/ui/layout/Container";
 import { Section } from "@/ui/layout/Section";
 
 type PageProps = {
-  params: { locale: Locale };
+  params: Promise<{ locale: Locale }>;
 };
 
 export default async function HomePage({ params }: PageProps) {
-  const dictionary = await getDictionary(params.locale);
+  const { locale } = await params;
+  const dictionary = await getDictionary(locale);
 
   return (
     <div className="relative overflow-hidden bg-[var(--navy-1000)] text-white">
@@ -35,10 +36,10 @@ export default async function HomePage({ params }: PageProps) {
             </h1>
             <p className="text-lg text-[var(--navy-100)]">{dictionary.home.subtitle}</p>
             <div className="flex flex-wrap gap-3">
-              <LinkButton href={`/${params.locale}/request`}>
+              <LinkButton href={`/${locale}/request`}>
                 {dictionary.common.ctaPrimary}
               </LinkButton>
-              <LinkButton variant="secondary" href={`/${params.locale}/tracking`}>
+              <LinkButton variant="secondary" href={`/${locale}/tracking`}>
                 {dictionary.common.ctaSecondary}
               </LinkButton>
             </div>
@@ -114,7 +115,7 @@ export default async function HomePage({ params }: PageProps) {
             <LinkButton
               variant="secondary"
               className="border-white/30 text-white"
-              href={`/${params.locale}/services`}
+              href={`/${locale}/services`}
             >
               {dictionary.common.learnMore}
             </LinkButton>

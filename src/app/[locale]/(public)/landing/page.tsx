@@ -8,11 +8,12 @@ import { Container } from "@/ui/layout/Container";
 import { Section } from "@/ui/layout/Section";
 
 type PageProps = {
-  params: { locale: Locale };
+  params: Promise<{ locale: Locale }>;
 };
 
 export default async function LandingPage({ params }: PageProps) {
-  const dictionary = await getDictionary(params.locale);
+  const { locale } = await params;
+  const dictionary = await getDictionary(locale);
 
   return (
     <Section>
@@ -30,10 +31,8 @@ export default async function LandingPage({ params }: PageProps) {
             ))}
           </div>
           <div className="flex gap-3">
-            <LinkButton href={`/${params.locale}/request`}>
-              {dictionary.landing.ctaPrimary}
-            </LinkButton>
-            <LinkButton variant="secondary" href={`/${params.locale}/tracking`}>
+            <LinkButton href={`/${locale}/request`}>{dictionary.landing.ctaPrimary}</LinkButton>
+            <LinkButton variant="secondary" href={`/${locale}/tracking`}>
               {dictionary.landing.ctaSecondary}
             </LinkButton>
           </div>

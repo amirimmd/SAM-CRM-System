@@ -8,11 +8,12 @@ import { Container } from "@/ui/layout/Container";
 import { Section } from "@/ui/layout/Section";
 
 type PageProps = {
-  params: { locale: Locale };
+  params: Promise<{ locale: Locale }>;
 };
 
 export default async function RequestPage({ params }: PageProps) {
-  const dictionary = await getDictionary(params.locale);
+  const { locale } = await params;
+  const dictionary = await getDictionary(locale);
 
   return (
     <Section>
@@ -25,7 +26,7 @@ export default async function RequestPage({ params }: PageProps) {
           </div>
           <Card className="space-y-4">
             <RequestForm
-              locale={params.locale}
+              locale={locale}
               copy={{
                 fields: dictionary.request.fields,
                 submit: dictionary.request.submit,

@@ -8,13 +8,14 @@ import { Sparkline } from "@/ui/charts/Sparkline";
 import { Stat } from "@/ui/components/Stat";
 
 type PageProps = {
-  params: { locale: Locale };
+  params: Promise<{ locale: Locale }>;
 };
 
-export default function AdminAnalyticsPage({ params }: PageProps) {
+export default async function AdminAnalyticsPage({ params }: PageProps) {
+  const { locale } = await params;
   return (
     <DashboardShell
-      locale={params.locale}
+      locale={locale}
       title="Analytics workspace"
       subtitle="Country and city reports, traffic funnel, and behavioral signals."
       variant="admin"

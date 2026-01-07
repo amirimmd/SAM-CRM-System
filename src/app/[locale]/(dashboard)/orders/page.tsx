@@ -6,13 +6,14 @@ import { DashboardShell } from "@/ui/layout/DashboardShell";
 import { DataTable } from "@/ui/tables/DataTable";
 
 type PageProps = {
-  params: { locale: Locale };
+  params: Promise<{ locale: Locale }>;
 };
 
-export default function OrdersPage({ params }: PageProps) {
+export default async function OrdersPage({ params }: PageProps) {
+  const { locale } = await params;
   return (
     <DashboardShell
-      locale={params.locale}
+      locale={locale}
       title="Order history"
       subtitle="Confirmed bookings with invoices and documentation."
     >

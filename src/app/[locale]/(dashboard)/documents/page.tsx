@@ -4,13 +4,14 @@ import { Card } from "@/ui/components/Card";
 import { DashboardShell } from "@/ui/layout/DashboardShell";
 
 type PageProps = {
-  params: { locale: Locale };
+  params: Promise<{ locale: Locale }>;
 };
 
-export default function DocumentsPage({ params }: PageProps) {
+export default async function DocumentsPage({ params }: PageProps) {
+  const { locale } = await params;
   return (
     <DashboardShell
-      locale={params.locale}
+      locale={locale}
       title="Documents"
       subtitle="Secure upload and retrieval of shipping documentation."
     >

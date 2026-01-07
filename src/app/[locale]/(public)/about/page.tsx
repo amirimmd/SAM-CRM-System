@@ -7,11 +7,12 @@ import { Container } from "@/ui/layout/Container";
 import { Section } from "@/ui/layout/Section";
 
 type PageProps = {
-  params: { locale: Locale };
+  params: Promise<{ locale: Locale }>;
 };
 
 export default async function AboutPage({ params }: PageProps) {
-  const dictionary = await getDictionary(params.locale);
+  const { locale } = await params;
+  const dictionary = await getDictionary(locale);
 
   return (
     <Section>

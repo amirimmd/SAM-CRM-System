@@ -2,10 +2,11 @@ import type { Locale } from "@/lib/i18n/config";
 
 type LayoutProps = {
   children: React.ReactNode;
-  params: { locale: Locale };
+  params: Promise<{ locale: Locale }>;
 };
 
-export default function DashboardLayout({ children }: LayoutProps) {
+export default async function DashboardLayout({ children, params }: LayoutProps) {
+  await params;
   return (
     <div className="min-h-screen bg-[var(--navy-1000)] text-white">
       <div className="light-sheen" />

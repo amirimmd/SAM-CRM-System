@@ -5,7 +5,7 @@ import { getDictionary } from "@/lib/i18n/get-dictionary";
 
 type LayoutProps = {
   children: React.ReactNode;
-  params: { locale: Locale };
+  params: Promise<{ locale: Locale }>;
 };
 
 export const dynamicParams = false;
@@ -17,9 +17,10 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: { locale: Locale };
+  params: Promise<{ locale: Locale }>;
 }): Promise<Metadata> {
-  const dictionary = await getDictionary(params.locale);
+  const awaitedParams = await params;
+  const dictionary = await getDictionary(awaitedParams.locale);
   return {
     title: {
       default: "SAM Logistics & CRM",
@@ -35,9 +36,10 @@ export async function generateMetadata({
   };
 }
 
-export default function LocaleLayout({ children, params }: LayoutProps) {
+export default async function LocaleLayout({ children, params }: LayoutProps) {
+  const awaitedParams = await params;
   return (
-    <div data-locale={params.locale} className="min-h-screen bg-[var(--navy-1000)]">
+    <div data-locale={awaitedParams.locale} className="min-h-screen bg-[var(--navy-1000)]">
       {children}
     </div>
   );

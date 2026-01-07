@@ -4,13 +4,14 @@ import { Card } from "@/ui/components/Card";
 import { DashboardShell } from "@/ui/layout/DashboardShell";
 
 type PageProps = {
-  params: { locale: Locale };
+  params: Promise<{ locale: Locale }>;
 };
 
-export default function AdminSystemPage({ params }: PageProps) {
+export default async function AdminSystemPage({ params }: PageProps) {
+  const { locale } = await params;
   return (
     <DashboardShell
-      locale={params.locale}
+      locale={locale}
       title="System configuration"
       subtitle="Security, integrations, and compliance settings."
       variant="admin"

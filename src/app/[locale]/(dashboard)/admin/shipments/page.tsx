@@ -5,13 +5,14 @@ import { DashboardShell } from "@/ui/layout/DashboardShell";
 import { DataTable } from "@/ui/tables/DataTable";
 
 type PageProps = {
-  params: { locale: Locale };
+  params: Promise<{ locale: Locale }>;
 };
 
-export default function AdminShipmentsPage({ params }: PageProps) {
+export default async function AdminShipmentsPage({ params }: PageProps) {
+  const { locale } = await params;
   return (
     <DashboardShell
-      locale={params.locale}
+      locale={locale}
       title="Shipment management"
       subtitle="Status control and operational updates."
       variant="admin"

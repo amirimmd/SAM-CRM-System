@@ -9,15 +9,16 @@ import { BarChart } from "@/ui/charts/BarChart";
 import { GeoHeat } from "@/ui/charts/GeoHeat";
 
 type PageProps = {
-  params: { locale: Locale };
+  params: Promise<{ locale: Locale }>;
 };
 
 export default async function AdminPage({ params }: PageProps) {
-  const dictionary = await getDictionary(params.locale);
+  const { locale } = await params;
+  const dictionary = await getDictionary(locale);
 
   return (
     <DashboardShell
-      locale={params.locale}
+      locale={locale}
       title={dictionary.admin.title}
       subtitle={dictionary.admin.subtitle}
       variant="admin"

@@ -7,18 +7,19 @@ import { Container } from "@/ui/layout/Container";
 import { Section } from "@/ui/layout/Section";
 
 type PageProps = {
-  params: { locale: Locale };
+  params: Promise<{ locale: Locale }>;
 };
 
 export default async function LoginPage({ params }: PageProps) {
-  const dictionary = await getDictionary(params.locale);
+  const { locale } = await params;
+  const dictionary = await getDictionary(locale);
 
   return (
     <Section>
       <Container className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr] text-white">
         <AuthPanel
           mode="login"
-          locale={params.locale}
+          locale={locale}
           copy={{
             title: dictionary.auth.loginTitle,
             subtitle: dictionary.auth.loginSubtitle,
@@ -34,7 +35,7 @@ export default async function LoginPage({ params }: PageProps) {
           <h2 className="text-xl font-semibold text-white">{dictionary.auth.loginAsideTitle}</h2>
           <p className="text-sm text-[var(--navy-100)]">{dictionary.auth.loginAsideBody}</p>
           <Link
-            href={`/${params.locale}/auth/register`}
+            href={`/${locale}/auth/register`}
             className="text-sm font-semibold text-white underline-offset-4 hover:underline"
           >
             {dictionary.auth.submitRegister}

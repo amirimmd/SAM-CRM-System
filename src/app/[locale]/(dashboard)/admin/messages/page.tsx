@@ -4,13 +4,14 @@ import { Card } from "@/ui/components/Card";
 import { DashboardShell } from "@/ui/layout/DashboardShell";
 
 type PageProps = {
-  params: { locale: Locale };
+  params: Promise<{ locale: Locale }>;
 };
 
-export default function AdminMessagesPage({ params }: PageProps) {
+export default async function AdminMessagesPage({ params }: PageProps) {
+  const { locale } = await params;
   return (
     <DashboardShell
-      locale={params.locale}
+      locale={locale}
       title="Messaging center"
       subtitle="Manage support conversations and response queues."
       variant="admin"

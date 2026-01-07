@@ -4,13 +4,14 @@ import { Card } from "@/ui/components/Card";
 import { DashboardShell } from "@/ui/layout/DashboardShell";
 
 type PageProps = {
-  params: { locale: Locale };
+  params: Promise<{ locale: Locale }>;
 };
 
-export default function AdminContentPage({ params }: PageProps) {
+export default async function AdminContentPage({ params }: PageProps) {
+  const { locale } = await params;
   return (
     <DashboardShell
-      locale={params.locale}
+      locale={locale}
       title="Content management"
       subtitle="Marketing pages, media, and SEO assets."
       variant="admin"

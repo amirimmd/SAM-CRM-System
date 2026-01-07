@@ -6,15 +6,16 @@ import { Timeline } from "@/ui/components/Timeline";
 import { DashboardShell } from "@/ui/layout/DashboardShell";
 
 type PageProps = {
-  params: { locale: Locale; id: string };
+  params: Promise<{ locale: Locale; id: string }>;
 };
 
-export default function ShipmentDetailPage({ params }: PageProps) {
-  const shipmentId = params.id.toUpperCase();
+export default async function ShipmentDetailPage({ params }: PageProps) {
+  const { locale, id } = await params;
+  const shipmentId = id.toUpperCase();
 
   return (
     <DashboardShell
-      locale={params.locale}
+      locale={locale}
       title={`Shipment ${shipmentId}`}
       subtitle="Detail view with milestone history and documents."
     >

@@ -5,13 +5,14 @@ import { Badge } from "@/ui/components/Badge";
 import { DashboardShell } from "@/ui/layout/DashboardShell";
 
 type PageProps = {
-  params: { locale: Locale };
+  params: Promise<{ locale: Locale }>;
 };
 
-export default function MessagesPage({ params }: PageProps) {
+export default async function MessagesPage({ params }: PageProps) {
+  const { locale } = await params;
   return (
     <DashboardShell
-      locale={params.locale}
+      locale={locale}
       title="Support messages"
       subtitle="Secure conversations with your logistics coordinator."
     >

@@ -9,11 +9,12 @@ import { Container } from "@/ui/layout/Container";
 import { Section } from "@/ui/layout/Section";
 
 type PageProps = {
-  params: { locale: Locale };
+  params: Promise<{ locale: Locale }>;
 };
 
 export default async function ServicesPage({ params }: PageProps) {
-  const dictionary = await getDictionary(params.locale);
+  const { locale } = await params;
+  const dictionary = await getDictionary(locale);
 
   return (
     <Section>
@@ -33,7 +34,7 @@ export default async function ServicesPage({ params }: PageProps) {
               <h2 className="text-lg font-semibold">{card.title}</h2>
               <p className="text-sm text-[var(--navy-100)]">{card.description}</p>
               <div className="stroke-dash" />
-              <LinkButton variant="ghost" href={`/${params.locale}/pricing`}>
+              <LinkButton variant="ghost" href={`/${locale}/pricing`}>
                 {dictionary.common.learnMore}
               </LinkButton>
             </Card>

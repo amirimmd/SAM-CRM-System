@@ -9,11 +9,12 @@ import { Container } from "@/ui/layout/Container";
 import { Section } from "@/ui/layout/Section";
 
 type PageProps = {
-  params: { locale: Locale };
+  params: Promise<{ locale: Locale }>;
 };
 
 export default async function PricingPage({ params }: PageProps) {
-  const dictionary = await getDictionary(params.locale);
+  const { locale } = await params;
+  const dictionary = await getDictionary(locale);
 
   return (
     <Section>
@@ -50,7 +51,7 @@ export default async function PricingPage({ params }: PageProps) {
                   </li>
                 ))}
               </ul>
-              <LinkButton href={`/${params.locale}/request`}>{tier.cta}</LinkButton>
+              <LinkButton href={`/${locale}/request`}>{tier.cta}</LinkButton>
             </Card>
           ))}
         </div>

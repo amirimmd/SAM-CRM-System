@@ -8,15 +8,16 @@ import { DashboardShell } from "@/ui/layout/DashboardShell";
 import { DataTable } from "@/ui/tables/DataTable";
 
 type PageProps = {
-  params: { locale: Locale };
+  params: Promise<{ locale: Locale }>;
 };
 
 export default async function DashboardPage({ params }: PageProps) {
-  const dictionary = await getDictionary(params.locale);
+  const { locale } = await params;
+  const dictionary = await getDictionary(locale);
 
   return (
     <DashboardShell
-      locale={params.locale}
+      locale={locale}
       title={dictionary.dashboard.title}
       subtitle={dictionary.dashboard.subtitle}
     >

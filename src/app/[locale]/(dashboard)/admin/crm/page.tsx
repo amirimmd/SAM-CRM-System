@@ -4,13 +4,14 @@ import { Card } from "@/ui/components/Card";
 import { DashboardShell } from "@/ui/layout/DashboardShell";
 
 type PageProps = {
-  params: { locale: Locale };
+  params: Promise<{ locale: Locale }>;
 };
 
-export default function AdminCrmPage({ params }: PageProps) {
+export default async function AdminCrmPage({ params }: PageProps) {
+  const { locale } = await params;
   return (
     <DashboardShell
-      locale={params.locale}
+      locale={locale}
       title="CRM analytics"
       subtitle="Behavior insights, traffic, and conversion signals."
       variant="admin"

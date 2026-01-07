@@ -6,13 +6,14 @@ import { StatusPill } from "@/ui/components/StatusPill";
 import { DashboardShell } from "@/ui/layout/DashboardShell";
 
 type PageProps = {
-  params: { locale: Locale };
+  params: Promise<{ locale: Locale }>;
 };
 
-export default function ShipmentsPage({ params }: PageProps) {
+export default async function ShipmentsPage({ params }: PageProps) {
+  const { locale } = await params;
   return (
     <DashboardShell
-      locale={params.locale}
+      locale={locale}
       title="Shipment tracking"
       subtitle="Timeline-based visibility for every active load."
     >

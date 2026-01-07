@@ -7,13 +7,14 @@ import { Input } from "@/ui/forms/Input";
 import { Select } from "@/ui/forms/Select";
 
 type PageProps = {
-  params: { locale: Locale };
+  params: Promise<{ locale: Locale }>;
 };
 
-export default function AdminUsersPage({ params }: PageProps) {
+export default async function AdminUsersPage({ params }: PageProps) {
+  const { locale } = await params;
   return (
     <DashboardShell
-      locale={params.locale}
+      locale={locale}
       title="User management"
       subtitle="Roles, access levels, and active sessions."
       variant="admin"
