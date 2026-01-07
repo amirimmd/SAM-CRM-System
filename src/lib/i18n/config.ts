@@ -1,15 +1,13 @@
-export const SUPPORTED_LOCALES = ["en", "fa"] as const;
+export const SUPPORTED_LOCALES = ['fa', 'en'] as const;
+
 export type Locale = (typeof SUPPORTED_LOCALES)[number];
 
-export const DEFAULT_LOCALE: Locale = "en";
-export const LOCALE_COOKIE_NAME = "locale";
+export const DEFAULT_LOCALE: Locale = 'fa';
+export const FALLBACK_LOCALE: Locale = 'fa';
 
-const RTL_LOCALES = new Set<Locale>(["fa"]);
+// این خط جدید را اضافه کنید 👇
+export const LOCALE_COOKIE_NAME = 'NEXT_LOCALE';
 
-export function isSupportedLocale(value: string): value is Locale {
-  return (SUPPORTED_LOCALES as readonly string[]).includes(value);
-}
-
-export function getLocaleDir(locale: Locale) {
-  return RTL_LOCALES.has(locale) ? "rtl" : "ltr";
+export function isSupportedLocale(locale: string): locale is Locale {
+  return SUPPORTED_LOCALES.includes(locale as Locale);
 }
