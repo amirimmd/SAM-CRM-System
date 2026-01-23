@@ -1,7 +1,7 @@
 import type { Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { CrmTracker } from "@/ui/components/CrmTracker";
-import { MarketingHeader } from "@/ui/layout/MarketingHeader";
+import { Navigation } from "@/ui/components/Navigation";
 import { MarketingFooter } from "@/ui/layout/MarketingFooter";
 
 type LayoutProps = {
@@ -14,13 +14,9 @@ export default async function PublicLayout({ children, params }: LayoutProps) {
   const dictionary = await getDictionary(locale);
 
   return (
-    <div className="min-h-screen bg-[var(--sand-50)]">
+    <div className="min-h-screen bg-[var(--navy-1000)] text-white">
       <CrmTracker />
-      <MarketingHeader
-        locale={locale}
-        nav={dictionary.nav}
-        cta={dictionary.common}
-      />
+      <Navigation locale={locale} nav={dictionary.nav} cta={dictionary.common} />
       <main>{children}</main>
       <MarketingFooter locale={locale} nav={dictionary.nav} />
     </div>

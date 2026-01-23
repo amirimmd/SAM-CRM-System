@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
-import { Sora, Vazirmatn } from "next/font/google";
+import { Inter, Vazirmatn } from "next/font/google";
 import {
   DEFAULT_LOCALE,
   LOCALE_COOKIE_NAME,
@@ -9,7 +9,7 @@ import {
 } from "@/lib/i18n/config";
 import "./globals.css";
 
-const sora = Sora({
+const inter = Inter({
   variable: "--font-sans-en",
   subsets: ["latin"],
 });
@@ -38,7 +38,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       lang={locale}
       dir={direction}
       data-locale={locale}
-      className={`${sora.variable} ${vazirmatn.variable}`}
+      className={`${inter.variable} ${vazirmatn.variable}`}
     >
       <body className="antialiased">{children}</body>
     </html>

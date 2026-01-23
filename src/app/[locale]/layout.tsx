@@ -1,56 +1,49 @@
-import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
-import { siteConfig } from '@/lib/config/site';
-import { DEFAULT_LOCALE, isSupportedLocale, type Locale } from '@/lib/i18n/config';
-import { getDictionary } from '@/lib/i18n/getDictionary';
-import '@/app/globals.css';
+import type { Metadata } from "next";
+import { DEFAULT_LOCALE, SUPPORTED_LOCALES, isSupportedLocale } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/get-dictionary";
 
-// 1. تعریف تایپ جدید برای params (به صورت Promise)
-type Props = {
+type LayoutProps = {
   children: React.ReactNode;
   params: Promise<{ locale: string }>;
 };
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  // 2. اضافه کردن await
-  const { locale } = await params;
-  
-  if (!isSupportedLocale(locale)) {
-    return {};
-  }
+export const dynamicParams = false;
 
-  const dict = await getDictionary(locale);
-  const localizedBrand = siteConfig.branding.name[locale] ?? siteConfig.branding.name[DEFAULT_LOCALE];
-  const title = dict?.site?.title ?? siteConfig.seo.title[locale] ?? siteConfig.seo.title[DEFAULT_LOCALE];
-  const description = dict?.site?.description ?? siteConfig.seo.description[locale] ?? siteConfig.seo.description[DEFAULT_LOCALE];
+export async function generateStaticParams() {
+  return SUPPORTED_LOCALES.map((locale) => ({ locale }));
+}
 
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale: rawLocale } = await params;
+  const locale = isSupportedLocale(rawLocale) ? rawLocale : DEFAULT_LOCALE;
+  const dictionary = await getDictionary(locale);
   return {
     title: {
-      default: title,
-      template: `%s | ${localizedBrand}`,
+      default: "SAM Logistics & CRM",
+      template: "%s | SAM Logistics & CRM",
     },
-    description,
-    icons: {
-      icon: '/favicon.ico',
+    description:
+      dictionary.home?.subtitle ??
+      "Bilingual logistics platform with CRM, tracking, and enterprise-grade operations.",
+    alternates: {
+      languages: {
+        en: "/en",
+        fa: "/fa",
+      },
     },
   };
 }
 
-export default async function LocaleLayout({ children, params }: Props) {
-  // 3. اضافه کردن await در کامپوننت اصلی
-  const { locale } = await params;
-
-  if (!isSupportedLocale(locale)) {
-    notFound();
-  }
-
-  const dir = locale === 'fa' ? 'rtl' : 'ltr';
-
+export default async function LocaleLayout({ children, params }: LayoutProps) {
+  const { locale: rawLocale } = await params;
+  const locale = isSupportedLocale(rawLocale) ? rawLocale : DEFAULT_LOCALE;
   return (
-    <html lang={locale} dir={dir} className="h-full">
-      <body className={`h-full font-sans antialiased`}>
-        {children}
-      </body>
-    </html>
+    <div data-locale={locale} className="min-h-screen bg-[var(--navy-1000)]">
+      {children}
+    </div>
   );
 }

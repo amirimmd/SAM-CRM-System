@@ -1,52 +1,52 @@
-// Home page: immersive hero with layered depth, logistics highlights, and CTA funnels.
-import type { Locale } from "@/lib/i18n/config";
-import { getDictionary } from "@/lib/i18n/getDictionary"; // اصلاح مسیر ایمپورت (با توجه به فایل‌های آپلود شده)
+// Home page: immersive hero, stats, services, and trust signals.
+import { DEFAULT_LOCALE, isSupportedLocale, type Locale } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { Badge } from "@/ui/components/Badge";
 import { Card } from "@/ui/components/Card";
 import { Icon } from "@/ui/components/Icon";
-import { LinkButton } from "@/ui/components/LinkButton"; // اگر این کامپوننت وجود ندارد، به Button تغییر دهید
+import { LinkButton } from "@/ui/components/LinkButton";
 import { Orb } from "@/ui/components/Orb";
 import { Sparkline } from "@/ui/charts/Sparkline";
 import { Stat } from "@/ui/components/Stat";
-import { Container } from "@/ui/layout/Container"; // اگر وجود ندارد، div معمولی استفاده کنید
-import { Section } from "@/ui/layout/Section";     // اگر وجود ندارد، div معمولی استفاده کنید
+import { Container } from "@/ui/layout/Container";
+import { Section } from "@/ui/layout/Section";
 
-// 1. تغییر تایپ PageProps مطابق استاندارد Next.js 16
 type PageProps = {
-  params: Promise<{ locale: Locale }>;
+  params: Promise<{ locale: string }>;
 };
 
 export default async function HomePage({ params }: PageProps) {
-  // 2. اضافه کردن await برای دریافت پارامترها
-  const { locale } = await params;
-  
-  // دریافت دیکشنری ترجمه
+  const { locale: rawLocale } = await params;
+  const locale: Locale = isSupportedLocale(rawLocale) ? rawLocale : DEFAULT_LOCALE;
   const dictionary = await getDictionary(locale);
+  const highlights = dictionary.home?.highlights ?? [];
 
   return (
     <div className="relative overflow-hidden bg-[var(--navy-1000)] text-white">
       <div className="absolute inset-0">
-        <Orb size={480} blur={80} className="absolute -left-10 -top-24 opacity-80" />
-        <Orb size={380} blur={70} className="absolute right-0 top-10 opacity-70" />
+        <Orb size={520} blur={90} className="absolute -left-20 -top-24 opacity-80" />
+        <Orb size={380} blur={70} className="absolute right-0 top-16 opacity-70" />
         <div className="light-sheen" />
       </div>
 
-      <div className="relative pt-12"> {/* اگر Section ندارید، این div جایگزین است */}
-        <div className="container mx-auto px-4 grid gap-12 lg:grid-cols-[1.05fr_0.95fr]"> {/* اگر Container ندارید */}
+      <Section className="relative pt-12">
+        <Container className="grid gap-12 lg:grid-cols-[1.05fr_0.95fr]">
           <div className="space-y-6">
-            <Badge>{dictionary.nav?.services ?? 'Services'}</Badge>
+            <Badge>{dictionary.nav?.services ?? "Services"}</Badge>
             <h1 className="text-4xl font-semibold leading-tight text-white md:text-5xl">
-              {dictionary.home?.title ?? 'Logistics CRM'}
+              {dictionary.home?.title ?? "Global logistics, built for enterprise."}
             </h1>
-            <p className="text-lg text-[var(--navy-100)]">{dictionary.home?.subtitle ?? 'Manage your shipments globally.'}</p>
+            <p className="text-lg text-[var(--navy-100)]">
+              {dictionary.home?.subtitle ??
+                "Premium freight operations, CRM visibility, and intelligent tracking."}
+            </p>
             <div className="flex flex-wrap gap-3">
-              {/* دکمه‌ها - اگر LinkButton دارید از آن استفاده کنید، وگرنه از a یا Link استفاده کنید */}
-              <a href={`/${locale}/request`} className="px-6 py-2 bg-blue-600 rounded-lg text-white">
-                {dictionary.common?.ctaPrimary ?? 'Get Started'}
-              </a>
-              <a href={`/${locale}/tracking`} className="px-6 py-2 border border-white/20 rounded-lg text-white">
-                {dictionary.common?.ctaSecondary ?? 'Track Shipment'}
-              </a>
+              <LinkButton href={`/${locale}/request`}>
+                {dictionary.common?.ctaPrimary ?? "Start a shipment"}
+              </LinkButton>
+              <LinkButton variant="secondary" href={`/${locale}/tracking`}>
+                {dictionary.common?.ctaSecondary ?? "Track shipment"}
+              </LinkButton>
             </div>
             <div className="grid gap-3 sm:grid-cols-3">
               <Stat label="Command center" value="24/7" helper="Ops coverage" />
@@ -56,8 +56,8 @@ export default async function HomePage({ params }: PageProps) {
           </div>
 
           <div className="relative">
-            <div className="glass-panel relative overflow-hidden rounded-3xl p-6 bg-white/5 border border-white/10 backdrop-blur-md">
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(62,223,199,0.14),transparent_40%)]" />
+            <Card className="relative overflow-hidden rounded-3xl p-6">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(62,223,199,0.18),transparent_45%)]" />
               <div className="relative flex flex-col gap-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
@@ -72,18 +72,22 @@ export default async function HomePage({ params }: PageProps) {
                   <Badge>Edge</Badge>
                 </div>
                 <div className="grid gap-3 text-sm text-[var(--navy-100)]">
-                  {dictionary.home?.highlights?.map((item: any) => (
-                    <div
-                      key={item.title}
-                      className="flex items-start justify-between rounded-2xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.03)] p-4"
-                    >
-                      <div className="space-y-1">
-                        <p className="text-sm font-semibold text-white">{item.title}</p>
-                        <p className="text-xs text-[var(--navy-200)]">{item.description}</p>
-                      </div>
-                      <span className="sparkle" />
-                    </div>
-                  ))}
+                  {highlights.length > 0
+                    ? highlights.map((item) => (
+                        <div
+                          key={item.title}
+                          className="flex items-start justify-between rounded-2xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.03)] p-4 transition hover:-translate-y-1"
+                        >
+                          <div className="space-y-1">
+                            <p className="text-sm font-semibold text-white">{item.title}</p>
+                            <p className="text-xs text-[var(--navy-200)]">
+                              {item.description}
+                            </p>
+                          </div>
+                          <span className="sparkle" />
+                        </div>
+                      ))
+                    : null}
                 </div>
                 <div className="rounded-2xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.03)] p-4">
                   <div className="flex items-center justify-between">
@@ -95,14 +99,32 @@ export default async function HomePage({ params }: PageProps) {
                   <Sparkline points={[12, 16, 14, 18, 22, 21, 25]} />
                 </div>
               </div>
-            </div>
+            </Card>
           </div>
-        </div>
-      </div>
+        </Container>
+      </Section>
 
-      <div className="relative py-12">
-        <div className="container mx-auto px-4 grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
-          <Card className="glass-panel space-y-4 bg-[rgba(255,255,255,0.04)] text-white p-6 border border-white/10 rounded-2xl">
+      <Section>
+        <Container className="grid gap-6 md:grid-cols-3">
+          {[
+            { label: "Active lanes", value: "48", helper: "Asia, MENA, EU" },
+            { label: "Documents processed", value: "6.2K", helper: "Last 30 days" },
+            { label: "Avg. dwell time", value: "1.8d", helper: "Origin ports" },
+          ].map((item) => (
+            <Card key={item.label} className="text-white">
+              <p className="text-xs uppercase tracking-[0.2em] text-[var(--navy-200)]">
+                {item.label}
+              </p>
+              <p className="mt-2 text-3xl font-semibold">{item.value}</p>
+              <p className="mt-1 text-sm text-[var(--navy-100)]">{item.helper}</p>
+            </Card>
+          ))}
+        </Container>
+      </Section>
+
+      <Section>
+        <Container className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
+          <Card className="space-y-4">
             <p className="text-xs uppercase tracking-[0.3em] text-[var(--accent-200)]">
               CRM intelligence
             </p>
@@ -117,16 +139,16 @@ export default async function HomePage({ params }: PageProps) {
               <Stat label="Leads" value="124" helper="7d volume" />
               <Stat label="Win rate" value="38%" helper="Qualified" accent="success" />
             </div>
-            <a
-              className="inline-block mt-4 px-6 py-2 border border-white/30 rounded-lg text-white hover:bg-white/10 transition"
-              href={`/${locale}/services`}
-            >
-              {dictionary.common?.learnMore ?? 'Learn More'}
-            </a>
+            <LinkButton variant="secondary" href={`/${locale}/services`}>
+              {dictionary.common?.learnMore ?? "Learn more"}
+            </LinkButton>
           </Card>
           <div className="grid gap-4 sm:grid-cols-2">
-            {dictionary.services?.cards?.map((card: any) => (
-              <Card key={card.title} className="glass-panel space-y-2 text-white p-6 border border-white/10 rounded-2xl bg-white/5">
+            {dictionary.services?.cards?.map((card) => (
+              <Card
+                key={card.title}
+                className="space-y-2 transition hover:-translate-y-1"
+              >
                 <div className="flex items-center gap-2 text-[var(--accent-400)]">
                   <Icon name="plane" />
                   <p className="text-xs uppercase tracking-[0.12em]">Lane</p>
@@ -136,8 +158,32 @@ export default async function HomePage({ params }: PageProps) {
               </Card>
             ))}
           </div>
-        </div>
-      </div>
+        </Container>
+      </Section>
+
+      <Section>
+        <Container className="space-y-6">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <p className="text-xs uppercase tracking-[0.3em] text-[var(--accent-200)]">
+                Trusted by
+              </p>
+              <h2 className="text-2xl font-semibold">Global supply chain teams</h2>
+            </div>
+            <Badge>Enterprise references available</Badge>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {["Hanzo Trade", "Mira Home", "NovaTech", "Atlas Supply"].map((brand) => (
+              <div
+                key={brand}
+                className="flex items-center justify-center rounded-2xl border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.04)] px-6 py-8 text-sm font-semibold text-[var(--navy-100)]"
+              >
+                {brand}
+              </div>
+            ))}
+          </div>
+        </Container>
+      </Section>
     </div>
   );
 }
