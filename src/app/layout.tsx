@@ -1,9 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Vazirmatn } from "next/font/google";
 import "./globals.css";
 import { siteConfig } from "@/lib/config/site";
+import { cn } from "@/lib/utils";
 
-// Performance: Using 'swap' ensures text is visible instantly (Low LCP)
+// English Fonts (Geist - Vercel Standard)
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -13,6 +14,13 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: "swap",
+});
+
+// Persian Font (Vazirmatn - Clean & Professional)
+const vazirmatn = Vazirmatn({
+  variable: "--font-vazirmatn",
+  subsets: ["arabic", "latin"],
   display: "swap",
 });
 
@@ -27,7 +35,6 @@ export const metadata: Metadata = {
   },
 };
 
-// Mobile Optimization: Crucial for Mobile-First Indexing
 export const viewport: Viewport = {
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "white" },
@@ -35,7 +42,7 @@ export const viewport: Viewport = {
   ],
   width: "device-width",
   initialScale: 1,
-  maximumScale: 5, // Accessibility requirement
+  maximumScale: 5,
 };
 
 export default function RootLayout({
@@ -46,7 +53,12 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} min-h-screen bg-background font-sans antialiased`}
+        className={cn(
+          "min-h-screen bg-background font-sans antialiased",
+          geistSans.variable,
+          geistMono.variable,
+          vazirmatn.variable
+        )}
       >
         {children}
       </body>
