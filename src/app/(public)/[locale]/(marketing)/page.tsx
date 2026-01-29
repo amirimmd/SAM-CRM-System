@@ -11,6 +11,7 @@ export default async function MarketingPage({
   params: Promise<{ locale: Locale }>;
 }) {
   const { locale } = await params;
+  const dict = await getDictionary(locale); // dict fetched but currently unused, keeping for future
   const isRtl = locale === 'fa';
   const Arrow = isRtl ? ArrowLeft : ArrowRight;
 
@@ -133,7 +134,7 @@ export default async function MarketingPage({
                   tag={isRtl ? 'تولید ویژه' : 'Signature Series'}
                   title={isRtl ? 'سیستم صوتی حرفه‌ای گلد' : 'Professional Gold Audio System'}
                   desc={isRtl ? 'کیفیت صدای بی‌نظیر با طراحی صنعتی لوکس و قطعات طلاکاری شده برای دوام ابدی.' : 'Unmatched sound quality with luxury industrial design and gold-plated components for eternal durability.'}
-                  image="/products/audio-system.jpg" 
+                  image="/products/audio-system.webp" 
                   price="$Custom Quote"
                 />
             </div>
@@ -145,7 +146,7 @@ export default async function MarketingPage({
                       size="small"
                       tag={isRtl ? 'دقت بالا' : 'High Precision'}
                       title={isRtl ? 'ساب‌ووفر صنعتی' : 'Industrial Subwoofer'}
-                      image="/products/valve.jpg" // Placeholder
+                      image="/hero/hero-bg.avif" // Using placeholder image for now
                       price="$2,450"
                     />
                 </div>
@@ -155,7 +156,7 @@ export default async function MarketingPage({
                       size="small"
                       tag={isRtl ? 'جدید' : 'New Arrival'}
                       title={isRtl ? 'آمپلی‌فایر کلاس A' : 'Class-A Amplifier'}
-                      image="/products/turbine.jpg" // Placeholder
+                      image="/hero/hero-bg.avif" // Using placeholder image for now
                       price="$1,890"
                     />
                 </div>
@@ -227,7 +228,6 @@ export default async function MarketingPage({
                   {isRtl ? 'مورد اعتماد بزرگان صنعت' : 'TRUSTED BY INDUSTRY LEADERS'}
               </p>
               <div className="flex flex-wrap justify-center gap-12 md:gap-24 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
-                  {/* Logos would go here - using text placeholders for now */}
                   <span className="text-2xl font-black text-white">SIEMENS</span>
                   <span className="text-2xl font-black text-white">GE</span>
                   <span className="text-2xl font-black text-white">BOSCH</span>
@@ -240,18 +240,12 @@ export default async function MarketingPage({
   );
 }
 
-// Components
-function ChevronRightIcon(props: any) { return <ChevronRight {...props} /> }
-function ChevronLeftIcon(props: any) { return <ChevronRight {...props} className="rotate-180" /> }
-
 function ProductCard({ title, desc, price, image, tag, size = 'small' }: any) {
   return (
     <div className="group relative w-full h-full overflow-hidden rounded-3xl bg-zinc-900 border border-white/5 transition-all duration-500 hover:border-yellow-500/30 hover:shadow-2xl hover:shadow-yellow-900/20">
       
       {/* Background Image with Zoom Effect */}
       <div className="absolute inset-0 z-0">
-         {/* Note: In a real app, use a valid src. These are placeholders. */}
-         {/* The 'bond.jpg' refers to the generated image above */}
          <Image 
             src={image} 
             alt={title}
