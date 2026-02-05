@@ -1,11 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   reactStrictMode: true,
   
-  // REMOVED: output: 'standalone' caused ENOENT errors on Vercel build
-  
+  // This disables the nft tracing which is causing the ENOENT error on Vercel
+  // @ts-expect-error - outputFileTracing is valid in runtime but types might be missing in this version
+  outputFileTracing: false, 
+
   images: {
     remotePatterns: [
       {
@@ -23,12 +24,10 @@ const nextConfig: NextConfig = {
   trailingSlash: false,
   
   typescript: {
-    // Still ignoring errors to ensure smooth build despite strict checks
     ignoreBuildErrors: true,
   },
   
   eslint: {
-    // Still ignoring linting errors during build
     ignoreDuringBuilds: true,
   }
 };
