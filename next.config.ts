@@ -3,8 +3,9 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   reactStrictMode: true,
+  // This helps with deployment issues on Vercel sometimes by creating a standalone build
+  output: 'standalone', 
   images: {
-    // Vercel optimized image domains can be added here if you use external images
     remotePatterns: [
       {
         protocol: 'https',
@@ -17,13 +18,7 @@ const nextConfig: NextConfig = {
     ],
     formats: ['image/avif', 'image/webp'],
   },
-  // Ensure trailing slashes are handled consistently
   trailingSlash: false,
-  // Disable ESLint during build to prevent deployment failure due to config issues
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  // Disable TypeScript type checking during build (optional, if you have TS errors)
   typescript: {
     ignoreBuildErrors: true,
   },
