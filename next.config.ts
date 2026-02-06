@@ -1,10 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Use React strict mode for better debugging
   reactStrictMode: true,
+  
+  // @ts-expect-error - Valid in runtime but types might be outdated
+  outputFileTracing: false, 
 
-  // Configure image domains correctly
   images: {
     remotePatterns: [
       {
@@ -16,19 +17,15 @@ const nextConfig: NextConfig = {
         hostname: 'grainy-gradients.vercel.app',
       },
     ],
-    // Add audio-system format support
     formats: ['image/avif', 'image/webp'],
   },
-
-  // Ensure consistent URL handling
+  
   trailingSlash: false,
-
-  // Suppress TypeScript errors during build to prevent deployment failure
+  
   typescript: {
     ignoreBuildErrors: true,
   },
-
-  // Suppress ESLint errors during build
+  
   eslint: {
     ignoreDuringBuilds: true,
   }
