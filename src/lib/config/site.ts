@@ -1,52 +1,51 @@
-import type { Locale } from '../i18n/config';
+import type { Locale } from "@/lib/i18n/config";
 
-type LocalizedField = Record<Locale, string>;
-
-interface SiteSeoDefaults {
-  title: LocalizedField;
-  description: LocalizedField;
-  keywords: LocalizedField;
-  baseUrl: string;
-  image: string;
-}
-
-interface SiteBranding {
-  name: LocalizedField;
+interface SiteConfig {
+  name: string;
+  description: string;
+  url: string;
+  ogImage: string;
+  keywords: string[];
+  links?: Record<string, string>;
   colors: {
     primary: string;
     secondary: string;
     accent: string;
   };
+  seo: {
+    baseUrl: string;
+    title: string;
+    description: string;
+    keywords: string[];
+    image: string;
+  };
 }
 
-export const siteConfig: { branding: SiteBranding; seo: SiteSeoDefaults } = {
-  branding: {
-    name: {
-      fa: 'سام لجستیک',
-      en: 'SAM Logistics',
-    },
-    colors: {
-      primary: '#2563eb',
-      secondary: '#0ea5e9',
-      accent: '#f59e0b',
-    },
+const baseUrl = "https://sam-logistics.example.com";
+const defaultDescription =
+  "Enterprise-grade logistics and CRM platform for global shipping operations.";
+
+export const siteConfig = {
+  name: "SAM Logistics",
+  description: defaultDescription,
+  url: baseUrl,
+  ogImage: "/social-card.png",
+  keywords: ["logistics", "freight", "crm", "supply chain", "sam logistics"],
+  links: {
+    github: "https://github.com/amirimmd/SAM-CRM-System",
+  },
+  colors: {
+    primary: "#d4af37",
+    secondary: "#0b0b0b",
+    accent: "#f5c451",
   },
   seo: {
-    title: {
-      fa: 'پلتفرم لجستیک و CRM سام',
-      en: 'SAM Logistics CRM Platform',
-    },
-    description: {
-      fa: 'سام پلتفرم مدیریت حمل و لجستیک با پشتیبانی چندزبانه است.',
-      en: 'SAM is a multilingual platform for logistics and CRM operations.',
-    },
-    keywords: {
-      fa: 'لجستیک, مدیریت حمل, CRM, سام',
-      en: 'logistics, freight, crm, sam logistics',
-    },
-    baseUrl: 'https://sam-logistics.example.com',
-    image: '/social-card.png',
+    baseUrl,
+    title: "SAM Logistics CRM Platform",
+    description: defaultDescription,
+    keywords: ["logistics", "freight", "crm", "supply chain", "sam logistics"],
+    image: "/social-card.png",
   },
-};
+} satisfies SiteConfig;
 
-export const defaultLanguageCode: Locale = 'fa';
+export const defaultLanguageCode: Locale = "fa";

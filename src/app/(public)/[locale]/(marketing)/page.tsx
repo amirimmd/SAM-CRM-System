@@ -1,17 +1,23 @@
-import { getDictionary } from '@/lib/i18n/getDictionary';
 import type { Locale } from '@/lib/i18n/config';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowRight, ArrowLeft, ShieldCheck, Zap, Globe2, ChevronRight, Star, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, ArrowLeft, ShieldCheck, Zap, Globe2, Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-export default async function MarketingPage({
+const productImages = {
+  hero: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1600&q=80',
+  subwoofer:
+    'https://images.unsplash.com/photo-1489515217757-5fd1be406fef?auto=format&fit=crop&w=1200&q=80',
+  amplifier:
+    'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1200&q=80',
+};
+
+export default function MarketingPage({
   params,
 }: {
-  params: Promise<{ locale: Locale }>;
+  params: { locale: Locale };
 }) {
-  const { locale } = await params;
-  const dict = await getDictionary(locale); // dict fetched but currently unused, keeping for future
+  const { locale } = params;
   const isRtl = locale === 'fa';
   const Arrow = isRtl ? ArrowLeft : ArrowRight;
 
@@ -27,6 +33,7 @@ export default async function MarketingPage({
                 src="/hero/hero-bg.avif"
                 alt="Industrial Background"
                 fill
+                sizes="100vw"
                 className="object-cover opacity-30"
                 priority
              />
@@ -134,7 +141,7 @@ export default async function MarketingPage({
                   tag={isRtl ? 'تولید ویژه' : 'Signature Series'}
                   title={isRtl ? 'سیستم صوتی حرفه‌ای گلد' : 'Professional Gold Audio System'}
                   desc={isRtl ? 'کیفیت صدای بی‌نظیر با طراحی صنعتی لوکس و قطعات طلاکاری شده برای دوام ابدی.' : 'Unmatched sound quality with luxury industrial design and gold-plated components for eternal durability.'}
-                  image="/products/audio-system.webp" 
+                  image={productImages.hero}
                   price="$Custom Quote"
                 />
             </div>
@@ -146,7 +153,7 @@ export default async function MarketingPage({
                       size="small"
                       tag={isRtl ? 'دقت بالا' : 'High Precision'}
                       title={isRtl ? 'ساب‌ووفر صنعتی' : 'Industrial Subwoofer'}
-                      image="/hero/hero-bg.avif" // Using placeholder image for now
+                      image={productImages.subwoofer}
                       price="$2,450"
                     />
                 </div>
@@ -156,7 +163,7 @@ export default async function MarketingPage({
                       size="small"
                       tag={isRtl ? 'جدید' : 'New Arrival'}
                       title={isRtl ? 'آمپلی‌فایر کلاس A' : 'Class-A Amplifier'}
-                      image="/hero/hero-bg.avif" // Using placeholder image for now
+                      image={productImages.amplifier}
                       price="$1,890"
                     />
                 </div>
@@ -240,7 +247,22 @@ export default async function MarketingPage({
   );
 }
 
-function ProductCard({ title, desc, price, image, tag, size = 'small' }: any) {
+type ProductCardSize = 'small' | 'large';
+
+interface ProductCardProps {
+  title: string;
+  desc?: string;
+  price: string;
+  image: string;
+  tag: string;
+  size?: ProductCardSize;
+}
+
+function ProductCard({ title, desc, price, image, tag, size = 'small' }: ProductCardProps) {
+  const imageSizes =
+    size === 'large'
+      ? '(min-width: 1024px) 60vw, 100vw'
+      : '(min-width: 1024px) 30vw, 100vw';
   return (
     <div className="group relative w-full h-full overflow-hidden rounded-3xl bg-zinc-900 border border-white/5 transition-all duration-500 hover:border-yellow-500/30 hover:shadow-2xl hover:shadow-yellow-900/20">
       
@@ -250,6 +272,7 @@ function ProductCard({ title, desc, price, image, tag, size = 'small' }: any) {
             src={image} 
             alt={title}
             fill
+            sizes={imageSizes}
             className="object-cover transition-transform duration-700 group-hover:scale-110"
          />
          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-90 group-hover:opacity-80 transition-opacity" />
