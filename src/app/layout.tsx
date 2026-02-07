@@ -4,7 +4,7 @@ import "./globals.css";
 import { siteConfig } from "@/lib/config/site";
 import { cn } from "@/lib/utils";
 
-// English Fonts (Geist - Vercel Standard)
+// English Fonts
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -17,15 +17,15 @@ const geistMono = Geist_Mono({
   display: "swap",
 });
 
-// Persian Font (Vazirmatn - Clean & Professional)
+// Persian Font (Vazirmatn)
 const vazirmatn = Vazirmatn({
   variable: "--font-vazirmatn",
   subsets: ["arabic", "latin"],
   display: "swap",
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteConfig.url),
   title: {
     default: siteConfig.name,
     template: `%s | ${siteConfig.name}`,
@@ -33,27 +33,6 @@ export const metadata: Metadata = {
   description: siteConfig.description,
   icons: {
     icon: "/favicon.ico",
-  },
-  openGraph: {
-    title: siteConfig.name,
-    description: siteConfig.description,
-    url: siteConfig.url,
-    siteName: siteConfig.name,
-    images: [
-      {
-        url: siteConfig.ogImage,
-        width: 1200,
-        height: 630,
-        alt: siteConfig.name,
-      },
-    ],
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: siteConfig.name,
-    description: siteConfig.description,
-    images: [siteConfig.ogImage],
   },
 };
 
@@ -79,7 +58,10 @@ export default function RootLayout({
           "min-h-screen bg-background font-sans antialiased",
           geistSans.variable,
           geistMono.variable,
-          vazirmatn.variable
+          vazirmatn.variable,
+          // Default font based on context, handled by dir attribute usually,
+          // but we add vazirmatn class globally to ensure Persian chars are rendered nicely
+          "font-vazirmatn" 
         )}
       >
         {children}
