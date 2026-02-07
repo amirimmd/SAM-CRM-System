@@ -1,10 +1,6 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-farsi: var(--font-vazirmatn);
-
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -29,77 +25,53 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
   
-  /* Custom Animations */
-  --animate-shimmer: shimmer 2s linear infinite;
-  
-  @keyframes shimmer {
-    from { background-position: 0 0; }
-    to { background-position: -200% 0; }
-  }
+  /* FONTS */
+  --font-sans: var(--font-geist-sans), var(--font-vazirmatn), ui-sans-serif, system-ui;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular;
+  --font-vazirmatn: var(--font-vazirmatn), ui-sans-serif, system-ui;
 }
 
 @layer base {
   :root {
-    /* Luxury Dark & Gold Theme */
     --background: hsl(0 0% 100%);
     --foreground: hsl(20 14.3% 4.1%);
-    
     --card: hsl(0 0% 100%);
     --card-foreground: hsl(20 14.3% 4.1%);
- 
     --popover: hsl(0 0% 100%);
     --popover-foreground: hsl(20 14.3% 4.1%);
- 
-    /* GOLD Primary */
-    --primary: hsl(45 93% 47%); /* Rich Gold */
-    --primary-foreground: hsl(26 83.3% 14.1%); /* Dark Brown/Black text on gold */
- 
+    --primary: hsl(45 93% 47%);
+    --primary-foreground: hsl(26 83.3% 14.1%);
     --secondary: hsl(60 4.8% 95.9%);
     --secondary-foreground: hsl(24 9.8% 10%);
- 
     --muted: hsl(60 4.8% 95.9%);
     --muted-foreground: hsl(25 5.3% 44.7%);
- 
     --accent: hsl(60 4.8% 95.9%);
     --accent-foreground: hsl(24 9.8% 10%);
- 
     --destructive: hsl(0 84.2% 60.2%);
     --destructive-foreground: hsl(60 9.1% 97.8%);
- 
     --border: hsl(20 5.9% 90%);
     --input: hsl(20 5.9% 90%);
-    --ring: hsl(45 93% 47%); /* Gold Ring */
- 
+    --ring: hsl(45 93% 47%);
     --radius: 0.75rem;
   }
  
-  /* Force Dark Mode aesthetic by default or refined dark mode */
   .dark {
-    --background: hsl(240 5% 3%); /* Deep Rich Black (Almost #000) */
-    --foreground: hsl(45 20% 90%); /* Off-white with hint of gold */
- 
-    --card: hsl(240 4% 8%); /* Slightly lighter black for cards */
+    --background: hsl(240 5% 3%);
+    --foreground: hsl(45 20% 90%);
+    --card: hsl(240 4% 8%);
     --card-foreground: hsl(45 20% 90%);
- 
     --popover: hsl(240 5% 5%);
     --popover-foreground: hsl(45 20% 90%);
- 
-    /* GOLD Primary - Shining in Dark */
     --primary: hsl(46 100% 50%); 
     --primary-foreground: hsl(0 0% 0%);
- 
     --secondary: hsl(240 4% 12%);
     --secondary-foreground: hsl(0 0% 98%);
- 
     --muted: hsl(240 4% 12%);
     --muted-foreground: hsl(240 5% 60%);
- 
-    --accent: hsl(45 100% 50%); /* Gold Accent */
+    --accent: hsl(45 100% 50%);
     --accent-foreground: hsl(0 0% 0%);
- 
     --destructive: hsl(0 62.8% 30.6%);
     --destructive-foreground: hsl(0 0% 98%);
- 
     --border: hsl(240 4% 16%);
     --input: hsl(240 4% 16%);
     --ring: hsl(45 100% 50%);
@@ -114,14 +86,11 @@
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
-
-  :lang(fa) {
-    font-family: var(--font-farsi), var(--font-sans), ui-sans-serif, system-ui, sans-serif;
-  }
 }
 
+/* Custom Utilities for Typography */
 @layer utilities {
   .font-vazirmatn {
-    font-family: var(--font-farsi), var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+    font-family: var(--font-vazirmatn);
   }
 }

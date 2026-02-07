@@ -6,15 +6,20 @@ import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { Truck, Menu, X } from 'lucide-react';
 
+// Use string type for locale since it's passed from server component props
+// or derived from path.
 interface HeaderProps {
-  locale: string; // Changed from Locale type to string for client component simplicity
+  locale: string;
 }
 
 export function Header({ locale }: HeaderProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const isRtl = locale === 'fa';
+  
+  // Close menu when route changes
+  const pathname = usePathname();
 
-  const toggleMenu = () => setIsMobileMenuOpen((prev) => !prev);
+  const toggleMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
   const closeMenu = () => setIsMobileMenuOpen(false);
 
   return (
@@ -22,8 +27,8 @@ export function Header({ locale }: HeaderProps) {
       <div className="container flex h-20 max-w-screen-2xl items-center px-4 md:px-8 mx-auto justify-between">
         
         {/* Logo Section */}
-        <div className="flex items-center gap-8">
-          <Link href={`/${locale}`} className="flex items-center gap-3 group z-50 relative">
+        <div className="flex items-center gap-8 z-50 relative">
+          <Link href={`/${locale}`} className="flex items-center gap-3 group" onClick={closeMenu}>
             <div className="relative h-10 w-10 flex items-center justify-center">
               <div className="absolute inset-0 rounded-xl bg-gradient-to-tr from-yellow-600 to-yellow-400 opacity-80 blur-lg group-hover:opacity-100 transition-opacity duration-500" />
               <div className="relative h-full w-full rounded-xl bg-black border border-yellow-500/30 flex items-center justify-center text-yellow-500">
@@ -43,9 +48,9 @@ export function Header({ locale }: HeaderProps) {
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-1 bg-white/5 px-2 py-1.5 rounded-full border border-white/5">
-            <NavLink href={`/${locale}/products`} text={isRtl ? 'محصولات' : 'Products'} />
-            <NavLink href={`/${locale}/tracking`} text={isRtl ? 'رهگیری' : 'Tracking'} />
-            <NavLink href={`/${locale}/contact`} text={isRtl ? 'تماس' : 'Contact'} />
+            <NavLink href={`/${locale}/products`} text={isRtl ? 'محصولات' : 'Products'} isActive={pathname === `/${locale}/products`} />
+            <NavLink href={`/${locale}/tracking`} text={isRtl ? 'رهگیری' : 'Tracking'} isActive={pathname === `/${locale}/tracking`} />
+            <NavLink href={`/${locale}/contact`} text={isRtl ? 'تماس' : 'Contact'} isActive={pathname === `/${locale}/contact`} />
           </nav>
         </div>
 
@@ -71,12 +76,9 @@ export function Header({ locale }: HeaderProps) {
           
           {/* Mobile Menu Button */}
           <button 
-            type="button"
             className="md:hidden text-white hover:text-yellow-500 transition-colors p-2"
             onClick={toggleMenu}
-            aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
-            aria-expanded={isMobileMenuOpen}
-            aria-controls="mobile-menu"
+            aria-label="Toggle menu"
           >
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -84,53 +86,25 @@ export function Header({ locale }: HeaderProps) {
       </div>
 
       {/* Mobile Menu Overlay */}
-      <div
-        id="mobile-menu"
-        role="dialog"
-        aria-modal="true"
-        aria-hidden={!isMobileMenuOpen}
+      <div 
         className={cn(
-          "fixed inset-0 z-[60] bg-black/95 backdrop-blur-xl transition-opacity duration-300 ease-out md:hidden",
-          isMobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+          "fixed inset-0 bg-black/95 backdrop-blur-xl z-40 transition-all duration-300 ease-in-out md:hidden flex flex-col justify-center px-8",
+          isMobileMenuOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"
         )}
-        onClick={closeMenu}
       >
-        <div
-          className={cn(
-            "relative flex h-full flex-col justify-center px-8 transition-transform duration-300 ease-out",
-            isMobileMenuOpen ? "translate-y-0" : "-translate-y-4"
-          )}
-          onClick={(event) => event.stopPropagation()}
-        >
-          <button
-            type="button"
-            onClick={closeMenu}
-            aria-label="Close menu"
-            className={cn(
-              "absolute top-6 text-white hover:text-yellow-500 transition-colors p-2",
-              isRtl ? "left-6" : "right-6"
-            )}
-          >
-            <X size={28} />
-          </button>
-
-          <nav className="flex flex-col gap-6 text-2xl font-bold text-center">
-            <MobileNavLink href={`/${locale}`} text={isRtl ? 'خانه' : 'Home'} onClick={closeMenu} />
-            <MobileNavLink href={`/${locale}/products`} text={isRtl ? 'محصولات' : 'Products'} onClick={closeMenu} />
-            <MobileNavLink href={`/${locale}/tracking`} text={isRtl ? 'رهگیری مرسوله' : 'Tracking'} onClick={closeMenu} />
-            <MobileNavLink href={`/${locale}/contact`} text={isRtl ? 'تماس با ما' : 'Contact'} onClick={closeMenu} />
-            <MobileNavLink href={`/${locale}/dashboard`} text={isRtl ? 'پنل کاربری' : 'Dashboard'} onClick={closeMenu} className="text-yellow-500" />
-          </nav>
-        </div>
+        <nav className="flex flex-col gap-6 text-2xl font-bold text-center">
+          <MobileNavLink href={`/${locale}`} text={isRtl ? 'خانه' : 'Home'} onClick={closeMenu} />
+          <MobileNavLink href={`/${locale}/products`} text={isRtl ? 'محصولات' : 'Products'} onClick={closeMenu} />
+          <MobileNavLink href={`/${locale}/tracking`} text={isRtl ? 'رهگیری مرسوله' : 'Tracking'} onClick={closeMenu} />
+          <MobileNavLink href={`/${locale}/contact`} text={isRtl ? 'تماس با ما' : 'Contact'} onClick={closeMenu} />
+          <MobileNavLink href={`/${locale}/dashboard`} text={isRtl ? 'پنل کاربری' : 'Dashboard'} onClick={closeMenu} className="text-yellow-500 mt-4" />
+        </nav>
       </div>
     </header>
   );
 }
 
-function NavLink({ href, text }: { href: string; text: string }) {
-  const pathname = usePathname();
-  const isActive = pathname === href;
-
+function NavLink({ href, text, isActive }: { href: string; text: string; isActive: boolean }) {
   return (
     <Link 
       href={href}
@@ -151,7 +125,7 @@ function MobileNavLink({ href, text, onClick, className }: { href: string; text:
     <Link 
       href={href} 
       onClick={onClick}
-      className={cn("hover:text-yellow-500 transition-colors py-2 border-b border-white/5", className)}
+      className={cn("hover:text-yellow-500 transition-colors py-4 border-b border-white/5 block", className)}
     >
       {text}
     </Link>
