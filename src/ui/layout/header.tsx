@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { Globe, Truck, Package, LogIn, LayoutDashboard, Menu, X } from 'lucide-react';
+import { Truck, Menu, X } from 'lucide-react';
 
 interface HeaderProps {
   locale: string; // Changed from Locale type to string for client component simplicity
@@ -14,7 +14,8 @@ export function Header({ locale }: HeaderProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const isRtl = locale === 'fa';
 
-  const toggleMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
+  const toggleMenu = () => setIsMobileMenuOpen((prev) => !prev);
+  const closeMenu = () => setIsMobileMenuOpen(false);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-white/5 bg-black/80 backdrop-blur-xl supports-[backdrop-filter]:bg-black/60 font-vazirmatn">
@@ -70,9 +71,12 @@ export function Header({ locale }: HeaderProps) {
           
           {/* Mobile Menu Button */}
           <button 
+            type="button"
             className="md:hidden text-white hover:text-yellow-500 transition-colors p-2"
             onClick={toggleMenu}
-            aria-label="Toggle menu"
+            aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={isMobileMenuOpen}
+            aria-controls="mobile-menu"
           >
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -80,19 +84,44 @@ export function Header({ locale }: HeaderProps) {
       </div>
 
       {/* Mobile Menu Overlay */}
-      <div 
+      <div
+        id="mobile-menu"
+        role="dialog"
+        aria-modal="true"
+        aria-hidden={!isMobileMenuOpen}
         className={cn(
-          "fixed inset-0 bg-black/95 backdrop-blur-xl z-40 transition-all duration-300 ease-in-out md:hidden flex flex-col justify-center px-8",
-          isMobileMenuOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"
+          "fixed inset-0 z-[60] bg-black/95 backdrop-blur-xl transition-opacity duration-300 ease-out md:hidden",
+          isMobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         )}
+        onClick={closeMenu}
       >
-        <nav className="flex flex-col gap-6 text-2xl font-bold text-center">
-          <MobileNavLink href={`/${locale}`} text={isRtl ? 'خانه' : 'Home'} onClick={toggleMenu} />
-          <MobileNavLink href={`/${locale}/products`} text={isRtl ? 'محصولات' : 'Products'} onClick={toggleMenu} />
-          <MobileNavLink href={`/${locale}/tracking`} text={isRtl ? 'رهگیری مرسوله' : 'Tracking'} onClick={toggleMenu} />
-          <MobileNavLink href={`/${locale}/contact`} text={isRtl ? 'تماس با ما' : 'Contact'} onClick={toggleMenu} />
-          <MobileNavLink href={`/${locale}/dashboard`} text={isRtl ? 'پنل کاربری' : 'Dashboard'} onClick={toggleMenu} className="text-yellow-500" />
-        </nav>
+        <div
+          className={cn(
+            "relative flex h-full flex-col justify-center px-8 transition-transform duration-300 ease-out",
+            isMobileMenuOpen ? "translate-y-0" : "-translate-y-4"
+          )}
+          onClick={(event) => event.stopPropagation()}
+        >
+          <button
+            type="button"
+            onClick={closeMenu}
+            aria-label="Close menu"
+            className={cn(
+              "absolute top-6 text-white hover:text-yellow-500 transition-colors p-2",
+              isRtl ? "left-6" : "right-6"
+            )}
+          >
+            <X size={28} />
+          </button>
+
+          <nav className="flex flex-col gap-6 text-2xl font-bold text-center">
+            <MobileNavLink href={`/${locale}`} text={isRtl ? 'خانه' : 'Home'} onClick={closeMenu} />
+            <MobileNavLink href={`/${locale}/products`} text={isRtl ? 'محصولات' : 'Products'} onClick={closeMenu} />
+            <MobileNavLink href={`/${locale}/tracking`} text={isRtl ? 'رهگیری مرسوله' : 'Tracking'} onClick={closeMenu} />
+            <MobileNavLink href={`/${locale}/contact`} text={isRtl ? 'تماس با ما' : 'Contact'} onClick={closeMenu} />
+            <MobileNavLink href={`/${locale}/dashboard`} text={isRtl ? 'پنل کاربری' : 'Dashboard'} onClick={closeMenu} className="text-yellow-500" />
+          </nav>
+        </div>
       </div>
     </header>
   );
