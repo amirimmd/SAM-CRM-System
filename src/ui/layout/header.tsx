@@ -76,7 +76,7 @@ export function Header({ locale }: HeaderProps) {
           
           {/* Mobile Menu Button */}
           <button 
-            className="md:hidden text-white hover:text-yellow-500 transition-colors p-2"
+            className="md:hidden text-white hover:text-yellow-500 transition-colors p-2 relative z-[60]"
             onClick={toggleMenu}
             aria-label="Toggle menu"
           >
@@ -85,19 +85,22 @@ export function Header({ locale }: HeaderProps) {
         </div>
       </div>
 
-      {/* Mobile Menu Overlay */}
+      {/* Mobile Menu Overlay - Changed background to solid black */}
       <div 
         className={cn(
-          "fixed inset-0 bg-black/95 backdrop-blur-xl z-40 transition-all duration-300 ease-in-out md:hidden flex flex-col justify-center px-8",
-          isMobileMenuOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"
+          "fixed inset-0 bg-black z-40 transition-all duration-300 ease-in-out md:hidden flex flex-col justify-center px-8",
+          isMobileMenuOpen ? "opacity-100 visible translate-y-0" : "opacity-0 invisible -translate-y-full"
         )}
+        style={{ top: 0, height: '100vh' }}
       >
-        <nav className="flex flex-col gap-6 text-2xl font-bold text-center">
+        <div className="absolute top-0 left-0 w-full h-full bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 pointer-events-none" />
+        
+        <nav className="flex flex-col gap-6 text-2xl font-bold text-center relative z-10">
           <MobileNavLink href={`/${locale}`} text={isRtl ? 'خانه' : 'Home'} onClick={closeMenu} />
           <MobileNavLink href={`/${locale}/products`} text={isRtl ? 'محصولات' : 'Products'} onClick={closeMenu} />
           <MobileNavLink href={`/${locale}/tracking`} text={isRtl ? 'رهگیری مرسوله' : 'Tracking'} onClick={closeMenu} />
           <MobileNavLink href={`/${locale}/contact`} text={isRtl ? 'تماس با ما' : 'Contact'} onClick={closeMenu} />
-          <MobileNavLink href={`/${locale}/dashboard`} text={isRtl ? 'پنل کاربری' : 'Dashboard'} onClick={closeMenu} className="text-yellow-500 mt-4" />
+          <MobileNavLink href={`/${locale}/dashboard`} text={isRtl ? 'پنل کاربری' : 'Dashboard'} onClick={closeMenu} className="text-yellow-500 mt-4 border-yellow-500/20" />
         </nav>
       </div>
     </header>
@@ -125,7 +128,7 @@ function MobileNavLink({ href, text, onClick, className }: { href: string; text:
     <Link 
       href={href} 
       onClick={onClick}
-      className={cn("hover:text-yellow-500 transition-colors py-4 border-b border-white/5 block", className)}
+      className={cn("hover:text-yellow-500 text-zinc-300 transition-colors py-4 border-b border-white/10 block", className)}
     >
       {text}
     </Link>
