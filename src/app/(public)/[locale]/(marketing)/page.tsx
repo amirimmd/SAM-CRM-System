@@ -1,244 +1,208 @@
-import type { Locale } from '@/lib/i18n/config';
+'use client';
+
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowRight, ArrowLeft, ShieldCheck, Zap, Globe2, Star } from 'lucide-react';
+import { ArrowRight, ArrowLeft, ShieldCheck, Zap, Globe2, ChevronRight, Star, CheckCircle2, TrendingUp, Anchor } from 'lucide-react';
 import { cn } from '@/lib/utils';
-
-const productImages = {
-  hero: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1600&q=80',
-  subwoofer:
-    'https://images.unsplash.com/photo-1489515217757-5fd1be406fef?auto=format&fit=crop&w=1200&q=80',
-  amplifier:
-    'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1200&q=80',
-};
 
 export default function MarketingPage({
   params,
 }: {
-  params: { locale: Locale };
+  params: { locale: string };
 }) {
   const { locale } = params;
   const isRtl = locale === 'fa';
   const Arrow = isRtl ? ArrowLeft : ArrowRight;
 
   return (
-    <div className="flex flex-col items-center w-full overflow-x-hidden bg-black text-white selection:bg-yellow-500/30 selection:text-yellow-500">
+    <div className="flex flex-col items-center w-full overflow-x-hidden bg-black text-white selection:bg-yellow-500/30 selection:text-yellow-500 font-vazirmatn">
       
       {/* 1. HERO SECTION (Cinematic Dark & Gold) */}
       <section className="relative w-full min-h-[90vh] flex flex-col justify-center overflow-hidden">
         
-        {/* Dynamic Background - Using Local Asset */}
+        {/* Dynamic Background */}
         <div className="absolute inset-0 bg-black">
              <Image 
                 src="/hero/hero-bg.avif"
-                alt="Industrial Background"
+                alt="SAM Guangzhou Trading Headquarters"
                 fill
                 sizes="100vw"
-                className="object-cover opacity-30"
+                // opacity increased from 40 to 60 to show more image
+                className="object-cover opacity-60 scale-105 animate-slow-pan"
                 priority
              />
-             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent" />
-             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,black_100%)]" />
+             {/* Gradient opacity reduced (via-black/60 -> via-black/40) to let image shine through */}
+             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/10" />
+             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,black_100%)] opacity-80" />
         </div>
         
-        {/* Animated Grid */}
+        {/* Animated Grid Overlay */}
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-soft-light" />
 
         <div className="container px-4 md:px-6 mx-auto relative z-10 pt-20">
-          <div className="flex flex-col items-center text-center max-w-5xl mx-auto">
+          <div className="flex flex-col items-center text-center max-w-6xl mx-auto">
             
             {/* Exclusive Badge */}
             <div className="inline-flex items-center gap-2 rounded-full border border-yellow-500/30 bg-yellow-500/10 px-6 py-2 text-sm font-medium text-yellow-400 mb-8 backdrop-blur-md shadow-[0_0_15px_rgba(234,179,8,0.2)] animate-in fade-in slide-in-from-bottom-4 duration-1000">
-              <Star size={14} className="fill-yellow-400 animate-pulse" />
+              <Globe2 size={14} className="fill-yellow-400/20 animate-pulse" />
               <span className="tracking-[0.2em] uppercase text-xs font-bold">
-                {isRtl ? 'استاندارد جهانی صنعت' : 'WORLD CLASS INDUSTRY STANDARDS'}
+                {isRtl ? 'پل ارتباطی تجارت جهانی' : 'GLOBAL TRADING BRIDGE'}
               </span>
             </div>
             
             {/* Main Headline */}
-            <h1 className="text-5xl sm:text-7xl md:text-8xl font-black tracking-tighter text-white mb-8 leading-[1.1] drop-shadow-2xl">
-              {isRtl ? (
-                <>
-                  <span className="block text-zinc-500 text-3xl sm:text-5xl font-bold mb-2 tracking-normal">مهندسی دقیق،</span>
-                  تلفیق <span className="text-transparent bg-clip-text bg-gradient-to-b from-yellow-300 via-yellow-500 to-yellow-700">قدرت و ظرافت</span>
-                </>
-              ) : (
-                <>
-                  <span className="block text-zinc-500 text-3xl sm:text-5xl font-bold mb-2 tracking-normal">Precision Engineering,</span>
-                  The Art of <span className="text-transparent bg-clip-text bg-gradient-to-b from-yellow-300 via-yellow-500 to-yellow-700">Heavy Industry</span>
-                </>
-              )}
+            <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black tracking-tighter text-white mb-8 leading-[1.1] drop-shadow-2xl">
+              <span className="block text-transparent bg-clip-text bg-gradient-to-b from-yellow-200 via-yellow-500 to-yellow-700 mb-2">
+                SAM Guangzhou
+              </span>
+              <span className="block text-white text-3xl sm:text-5xl md:text-6xl font-bold tracking-normal opacity-90">
+                Trading Co.
+              </span>
             </h1>
             
             {/* Subheadline */}
-            <p className="max-w-2xl mx-auto text-zinc-300 text-lg md:text-xl leading-relaxed mb-12 font-light">
+            <p className="max-w-3xl mx-auto text-zinc-300 text-lg md:text-2xl leading-relaxed mb-12 font-light">
               {isRtl 
-                ? 'تولیدکننده سیستم‌های صوتی فوق سنگین صنعتی و ارائه دهنده راهکارهای لجستیک یکپارچه. جایی که تکنولوژی مدرن با سال‌ها تجربه در هم می‌آمیزد.'
-                : 'Manufacturing heavy industrial audio systems and providing integrated logistics solutions. Where modern technology meets decades of expertise.'
+                ? 'تامین، تولید و صادرات قطعات صنعتی و الکترونیک از قلب چین به سراسر جهان. ما شریک تجاری معتمد شما در گوانجو، دبی و تهران هستیم.'
+                : 'Sourcing, manufacturing, and exporting industrial and electronic components from the heart of China to the world. Your trusted trading partner in Guangzhou, Dubai, and Tehran.'
               }
             </p>
             
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-5 w-full sm:w-auto">
               <Link 
-                href={`/${locale}/products`}
-                className="group relative inline-flex h-14 items-center justify-center overflow-hidden rounded-full bg-gradient-to-r from-yellow-600 to-yellow-500 px-10 font-bold text-black shadow-[0_0_20px_rgba(234,179,8,0.4)] transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(234,179,8,0.6)]"
+                href={`/${locale}/contact`}
+                className="group relative inline-flex h-16 items-center justify-center overflow-hidden rounded-full bg-gradient-to-r from-yellow-600 to-yellow-500 px-12 font-bold text-black text-lg shadow-[0_0_20px_rgba(234,179,8,0.4)] transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(234,179,8,0.6)]"
               >
-                <span className="relative z-10 flex items-center gap-2">
-                   {isRtl ? 'کاتالوگ محصولات' : 'View Catalog'} 
-                   <Arrow className="transition-transform group-hover:translate-x-1" size={20} />
+                <span className="relative z-10 flex items-center gap-3">
+                   {isRtl ? 'شروع تجارت' : 'Start Trading'} 
+                   <Arrow className="transition-transform group-hover:translate-x-1" size={24} />
                 </span>
                 <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
               </Link>
               
               <Link 
-                href={`/${locale}/contact`}
-                className="inline-flex h-14 items-center justify-center rounded-full border border-white/10 bg-white/5 px-10 font-bold text-white transition-all hover:bg-white/10 hover:border-white/20 backdrop-blur-sm"
+                href={`/${locale}/products`}
+                className="inline-flex h-16 items-center justify-center rounded-full border border-white/20 bg-white/5 px-10 font-bold text-white text-lg transition-all hover:bg-white/10 hover:border-white/40 backdrop-blur-sm"
               >
-                {isRtl ? 'مشاوره فنی' : 'Technical Consult'}
+                {isRtl ? 'مشاهده محصولات' : 'View Products'}
               </Link>
+            </div>
+
+            {/* Stats Row */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-16 mt-20 pt-10 border-t border-white/10 w-full max-w-4xl">
+               <StatItem value="15+" label={isRtl ? 'سال تجربه' : 'Years Experience'} />
+               <StatItem value="3" label={isRtl ? 'دفتر بین‌المللی' : 'Global Offices'} />
+               <StatItem value="500+" label={isRtl ? 'شریک تجاری' : 'Partners'} />
+               <StatItem value="24/7" label={isRtl ? 'پشتیبانی' : 'Support'} />
             </div>
           </div>
         </div>
-        
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50 animate-bounce">
-            <span className="text-[10px] uppercase tracking-widest text-zinc-500">Scroll</span>
-            <div className="w-px h-12 bg-gradient-to-b from-yellow-500 to-transparent" />
-        </div>
       </section>
 
-      {/* 2. PRODUCT SHOWCASE (Immersive Gallery) */}
+      {/* 2. SERVICES & CAPABILITIES (Dark Bento Grid) */}
       <section className="w-full py-32 bg-zinc-950 relative border-t border-white/5">
-        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-yellow-500/50 to-transparent" />
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-900/10 rounded-full blur-[120px] pointer-events-none" />
         
-        <div className="container px-4 mx-auto">
+        <div className="container px-4 mx-auto relative z-10">
           <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-6">
             <div className="max-w-2xl">
               <span className="text-yellow-500 font-bold tracking-widest uppercase text-sm mb-2 block">
-                 {isRtl ? 'محصولات انحصاری' : 'EXCLUSIVE PRODUCTS'}
+                 {isRtl ? 'خدمات ما' : 'OUR SERVICES'}
               </span>
               <h2 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
-                {isRtl ? 'شاهکارهای خط تولید' : 'Production Masterpieces'}
+                {isRtl ? 'راهکارهای جامع تجاری' : 'Comprehensive Trading Solutions'}
               </h2>
               <p className="text-zinc-400 text-lg">
                 {isRtl 
-                  ? 'هر قطعه با دقت میکرونی تراشیده شده و تحت سخت‌ترین آزمون‌های کیفیت قرار گرفته است.'
-                  : 'Each component is machined with micron-level precision and subjected to the most rigorous quality tests.'}
+                  ? 'از منبع‌یابی و کنترل کیفیت در چین تا حمل و ترخیص در مقصد، ما زنجیره تامین شما را مدیریت می‌کنیم.'
+                  : 'From sourcing and QC in China to shipping and clearance at destination, we manage your entire supply chain.'}
               </p>
             </div>
-            <Link href={`/${locale}/products`} className="group flex items-center gap-3 text-white font-bold border-b border-yellow-500/50 pb-1 hover:text-yellow-400 hover:border-yellow-400 transition-all">
-              {isRtl ? 'مشاهده همه محصولات' : 'View All Products'} 
-              <Arrow size={20} className="transition-transform group-hover:translate-x-1" />
-            </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 h-auto md:h-[600px]">
-            {/* Hero Product (Large) - UPDATED TO AUDIO SYSTEM */}
-            <div className="md:col-span-7 h-[400px] md:h-full">
-                <ProductCard 
-                  size="large"
-                  tag={isRtl ? 'تولید ویژه' : 'Signature Series'}
-                  title={isRtl ? 'سیستم صوتی حرفه‌ای گلد' : 'Professional Gold Audio System'}
-                  desc={isRtl ? 'کیفیت صدای بی‌نظیر با طراحی صنعتی لوکس و قطعات طلاکاری شده برای دوام ابدی.' : 'Unmatched sound quality with luxury industrial design and gold-plated components for eternal durability.'}
-                  image={productImages.hero}
-                  price="$Custom Quote"
-                />
-            </div>
-
-            <div className="md:col-span-5 flex flex-col gap-6 h-full">
-                {/* Secondary Product 1 */}
-                <div className="flex-1 min-h-[250px]">
-                    <ProductCard 
-                      size="small"
-                      tag={isRtl ? 'دقت بالا' : 'High Precision'}
-                      title={isRtl ? 'ساب‌ووفر صنعتی' : 'Industrial Subwoofer'}
-                      image={productImages.subwoofer}
-                      price="$2,450"
-                    />
-                </div>
-                {/* Secondary Product 2 */}
-                <div className="flex-1 min-h-[250px]">
-                     <ProductCard 
-                      size="small"
-                      tag={isRtl ? 'جدید' : 'New Arrival'}
-                      title={isRtl ? 'آمپلی‌فایر کلاس A' : 'Class-A Amplifier'}
-                      image={productImages.amplifier}
-                      price="$1,890"
-                    />
-                </div>
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Service 1: Sourcing */}
+            <ServiceCard 
+               icon={<SearchGlobe size={40} className="text-blue-400" />}
+               title={isRtl ? 'منبع‌یابی تخصصی' : 'Professional Sourcing'}
+               desc={isRtl ? 'دسترسی مستقیم به هزاران کارخانه معتبر در چین با بهترین قیمت.' : 'Direct access to thousands of verified factories in China with best prices.'}
+               gradient="from-blue-500/20 to-transparent"
+            />
+             {/* Service 2: Quality Control */}
+             <ServiceCard 
+               icon={<ShieldCheck size={40} className="text-emerald-400" />}
+               title={isRtl ? 'کنترل کیفیت (QC)' : 'Quality Control'}
+               desc={isRtl ? 'بازرسی دقیق کالا قبل از بارگیری برای تضمین کیفیت.' : 'Rigorous pre-shipment inspection to guarantee product quality.'}
+               gradient="from-emerald-500/20 to-transparent"
+            />
+             {/* Service 3: Logistics */}
+             <ServiceCard 
+               icon={<Anchor size={40} className="text-yellow-400" />}
+               title={isRtl ? 'حمل و نقل دریایی و هوایی' : 'Sea & Air Freight'}
+               desc={isRtl ? 'ارسال سریع و مطمئن بار از بنادر چین به دبی و ایران.' : 'Fast and secure shipping from China ports to Dubai and Iran.'}
+               gradient="from-yellow-500/20 to-transparent"
+            />
           </div>
         </div>
       </section>
 
-      {/* 3. LOGISTICS CAPABILITIES (Bento Grid) */}
-      <section className="w-full py-32 bg-black relative">
+      {/* 3. FEATURED PRODUCT (Highlight) */}
+      <section className="w-full py-32 bg-black relative overflow-hidden">
         <div className="container px-4 mx-auto">
-          <div className="text-center mb-20 max-w-3xl mx-auto">
-            <span className="text-zinc-500 font-bold tracking-widest uppercase text-sm mb-4 block">
-                {isRtl ? 'لجستیک هوشمند' : 'SMART LOGISTICS'}
-            </span>
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-              {isRtl ? 'فراتر از مرزهای جغرافیایی' : 'Beyond Geographic Borders'}
-            </h2>
-            <p className="text-zinc-400">
-                {isRtl 
-                 ? 'شبکه لجستیک ما با استفاده از هوش مصنوعی، سریع‌ترین و امن‌ترین مسیر را برای محموله‌های شما انتخاب می‌کند.' 
-                 : 'Our AI-powered logistics network selects the fastest and safest routes for your shipments globally.'}
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 auto-rows-[250px]">
-             {/* Feature 1: Global Coverage (Wide) */}
-             <div className="md:col-span-2 md:row-span-2 relative group overflow-hidden rounded-3xl bg-zinc-900 border border-white/5 p-8 flex flex-col justify-end">
-                <div className="absolute top-0 right-0 p-40 bg-blue-500/10 rounded-full blur-[100px] group-hover:bg-blue-500/20 transition-all" />
-                <Globe2 size={48} className="text-blue-500 mb-6 relative z-10" />
-                <h3 className="text-2xl font-bold text-white mb-2 relative z-10">{isRtl ? 'پوشش جهانی' : 'Global Coverage'}</h3>
-                <p className="text-zinc-400 relative z-10 max-w-sm">
-                    {isRtl ? 'ارسال به ۱۸۰+ کشور با شرکای تجاری در ۵ قاره.' : 'Shipping to 180+ countries with partners across 5 continents.'}
-                </p>
-             </div>
-
-             {/* Feature 2: Speed */}
-             <div className="md:col-span-1 md:row-span-2 relative group overflow-hidden rounded-3xl bg-zinc-900 border border-white/5 p-8 flex flex-col justify-end">
-                 <div className="absolute top-0 left-0 p-40 bg-yellow-500/10 rounded-full blur-[100px] group-hover:bg-yellow-500/20 transition-all" />
-                 <Zap size={48} className="text-yellow-500 mb-6 relative z-10" />
-                 <h3 className="text-2xl font-bold text-white mb-2 relative z-10">{isRtl ? 'اکسپرس هوایی' : 'Air Express'}</h3>
-                 <p className="text-zinc-400 relative z-10">
-                     {isRtl ? 'تحویل ۲۴ ساعته.' : '24h Delivery.'}
-                 </p>
-             </div>
-
-             {/* Feature 3: Security */}
-             <div className="md:col-span-1 md:row-span-1 relative group overflow-hidden rounded-3xl bg-zinc-900 border border-white/5 p-8 flex flex-col justify-center">
-                 <ShieldCheck size={32} className="text-emerald-500 mb-4" />
-                 <h3 className="text-xl font-bold text-white">{isRtl ? 'بیمه کامل' : 'Full Insurance'}</h3>
-             </div>
-
-             {/* Feature 4: Tech */}
-             <div className="md:col-span-1 md:row-span-1 relative group overflow-hidden rounded-3xl bg-gradient-to-br from-zinc-800 to-zinc-900 border border-white/5 p-8 flex flex-col justify-center">
-                 <div className="flex items-center gap-2 mb-2">
-                     <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                     <span className="text-xs font-mono text-green-500">SYSTEM ONLINE</span>
+           <div className="relative rounded-[3rem] overflow-hidden bg-zinc-900 border border-white/10">
+              <div className="absolute inset-0 bg-[url('/hero/hero-bg.avif')] bg-cover bg-center opacity-30 mix-blend-overlay" />
+              <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent" />
+              
+              <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 p-12 lg:p-20 items-center">
+                 <div className="space-y-8">
+                    <div className="inline-block px-4 py-1 rounded-full bg-yellow-500 text-black font-bold text-sm uppercase tracking-wider">
+                       {isRtl ? 'محصول ویژه' : 'Featured Product'}
+                    </div>
+                    <h2 className="text-4xl md:text-6xl font-black text-white leading-tight">
+                       {isRtl ? 'سیستم صوتی حرفه‌ای' : 'Professional Audio System'} <br />
+                       <span className="text-yellow-500">Gold Edition</span>
+                    </h2>
+                    <p className="text-zinc-300 text-lg leading-relaxed max-w-md">
+                       {isRtl 
+                         ? 'جدیدترین شاهکار مهندسی ما. ترکیبی از قدرت، شفافیت صدا و طراحی لوکس صنعتی. موجود برای سفارش عمده.'
+                         : 'Our latest engineering masterpiece. A blend of power, clarity, and luxury industrial design. Available for bulk orders.'}
+                    </p>
+                    <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                       <Link href={`/${locale}/products`} className="flex items-center justify-center h-14 px-8 bg-white text-black rounded-xl font-bold hover:bg-zinc-200 transition-colors">
+                          {isRtl ? 'اطلاعات بیشتر' : 'Learn More'}
+                       </Link>
+                       <Link href={`/${locale}/contact`} className="flex items-center justify-center h-14 px-8 border border-white/20 text-white rounded-xl font-bold hover:bg-white/10 transition-colors">
+                          {isRtl ? 'استعلام قیمت' : 'Get Quote'}
+                       </Link>
+                    </div>
                  </div>
-                 <h3 className="text-xl font-bold text-white">{isRtl ? 'رهگیری زنده' : 'Live Tracking'}</h3>
-             </div>
-          </div>
+                 
+                 {/* Product Image */}
+                 <div className="relative h-[400px] lg:h-[500px] w-full rounded-2xl overflow-hidden border border-white/10 shadow-2xl shadow-yellow-900/20 group">
+                    <Image 
+                       src="/products/audio-system.webp" 
+                       alt="Gold Audio System"
+                       fill
+                       sizes="(min-width: 1024px) 50vw, 100vw"
+                       className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                 </div>
+              </div>
+           </div>
         </div>
       </section>
 
       {/* 4. TRUST SECTION */}
-      <section className="w-full py-20 border-t border-white/5 bg-zinc-950/50">
+      <section className="w-full py-24 bg-zinc-950/50 border-t border-white/5">
           <div className="container px-4 mx-auto text-center">
-              <p className="text-zinc-500 text-sm font-bold tracking-widest uppercase mb-10">
-                  {isRtl ? 'مورد اعتماد بزرگان صنعت' : 'TRUSTED BY INDUSTRY LEADERS'}
+              <p className="text-zinc-500 text-sm font-bold tracking-widest uppercase mb-12">
+                  {isRtl ? 'شرکای تجاری ما در سراسر جهان' : 'TRUSTED BY GLOBAL PARTNERS'}
               </p>
-              <div className="flex flex-wrap justify-center gap-12 md:gap-24 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
-                  <span className="text-2xl font-black text-white">SIEMENS</span>
-                  <span className="text-2xl font-black text-white">GE</span>
-                  <span className="text-2xl font-black text-white">BOSCH</span>
-                  <span className="text-2xl font-black text-white">CAT</span>
+              <div className="flex flex-wrap justify-center gap-12 md:gap-24 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
+                  <span className="text-3xl font-black text-white flex items-center gap-2"><Globe2 /> CHINA SHIP</span>
+                  <span className="text-3xl font-black text-white flex items-center gap-2"><Anchor /> DUBAI PORT</span>
+                  <span className="text-3xl font-black text-white flex items-center gap-2"><Zap /> TEHRAN ELECTRONIC</span>
               </div>
           </div>
       </section>
@@ -247,66 +211,52 @@ export default function MarketingPage({
   );
 }
 
-type ProductCardSize = 'small' | 'large';
-
-interface ProductCardProps {
-  title: string;
-  desc?: string;
-  price: string;
-  image: string;
-  tag: string;
-  size?: ProductCardSize;
-}
-
-function ProductCard({ title, desc, price, image, tag, size = 'small' }: ProductCardProps) {
-  const imageSizes =
-    size === 'large'
-      ? '(min-width: 1024px) 60vw, 100vw'
-      : '(min-width: 1024px) 30vw, 100vw';
+// Helper Components
+function StatItem({ value, label }: { value: string; label: string }) {
   return (
-    <div className="group relative w-full h-full overflow-hidden rounded-3xl bg-zinc-900 border border-white/5 transition-all duration-500 hover:border-yellow-500/30 hover:shadow-2xl hover:shadow-yellow-900/20">
-      
-      {/* Background Image with Zoom Effect */}
-      <div className="absolute inset-0 z-0">
-         <Image 
-            src={image} 
-            alt={title}
-            fill
-            sizes={imageSizes}
-            className="object-cover transition-transform duration-700 group-hover:scale-110"
-         />
-         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-90 group-hover:opacity-80 transition-opacity" />
-      </div>
-      
-      {/* Content Overlay */}
-      <div className="absolute inset-0 z-10 p-8 flex flex-col justify-end">
-        
-        {/* Top Tag */}
-        <div className="absolute top-6 right-6">
-             <span className="inline-block px-3 py-1 bg-yellow-500/90 text-black text-[10px] font-bold uppercase tracking-wider backdrop-blur-sm rounded-full shadow-lg">
-              {tag}
-            </span>
-        </div>
-
-        <div className="transform transition-transform duration-500 translate-y-2 group-hover:translate-y-0">
-            <h3 className={cn("font-bold text-white mb-2 leading-tight drop-shadow-lg", size === 'large' ? 'text-3xl md:text-4xl' : 'text-xl')}>
-                {title}
-            </h3>
-            
-            {size === 'large' && (
-                <p className="text-zinc-300 mb-4 max-w-md line-clamp-2 text-sm md:text-base font-light">
-                    {desc}
-                </p>
-            )}
-            
-            <div className="flex items-center justify-between border-t border-white/10 pt-4 mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
-                 <p className="text-yellow-400 font-mono font-bold">{price}</p>
-                 <span className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center backdrop-blur-md text-white hover:bg-yellow-500 hover:text-black transition-colors">
-                    <ArrowRight size={14} />
-                 </span>
-            </div>
-        </div>
-      </div>
+    <div className="flex flex-col items-center justify-center space-y-2 group cursor-default">
+      <span className="text-4xl md:text-5xl font-black text-white tracking-tight group-hover:text-yellow-500 transition-colors duration-300">{value}</span>
+      <span className="text-xs md:text-sm text-zinc-500 font-bold uppercase tracking-widest group-hover:text-zinc-300 transition-colors">{label}</span>
     </div>
   );
+}
+
+function ServiceCard({ icon, title, desc, gradient }: any) {
+    return (
+      <div className="group relative overflow-hidden rounded-3xl bg-zinc-900 border border-white/10 p-8 transition-all duration-500 hover:border-white/30 hover:-translate-y-2">
+         <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+         <div className="relative z-10">
+            <div className="w-16 h-16 rounded-2xl bg-black border border-white/10 flex items-center justify-center mb-6 text-white group-hover:scale-110 transition-transform duration-300">
+               {icon}
+            </div>
+            <h3 className="text-2xl font-bold text-white mb-4">{title}</h3>
+            <p className="text-zinc-400 leading-relaxed group-hover:text-zinc-300 transition-colors">
+               {desc}
+            </p>
+         </div>
+      </div>
+    );
+}
+
+// Custom Icon for Sourcing
+function SearchGlobe(props: any) {
+    return (
+        <svg
+        {...props}
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <circle cx="11" cy="11" r="8" />
+        <path d="m21 21-4.3-4.3" />
+        <path d="M2 12h20" />
+        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+      </svg>
+    )
 }
