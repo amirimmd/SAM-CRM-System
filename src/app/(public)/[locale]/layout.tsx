@@ -4,6 +4,7 @@ import "../../globals.css";
 import { siteConfig } from "@/lib/config/site";
 import { cn } from "@/lib/utils";
 import { Header } from '@/ui/layout/header';
+import { ChatWidget } from "@/ui/chat/chat-widget"; // اضافه شدن ویجت چت
 import { generateOrganizationSchema } from '@/lib/seo/schema';
 import { Mail, MapPin, Phone, Globe2, ArrowUpRight, Linkedin, Twitter, Instagram } from 'lucide-react';
 import Link from 'next/link';
@@ -81,6 +82,9 @@ export default async function PublicLayout({
       <main className="flex-1">
         {children}
       </main>
+
+      {/* ویجت چت آنلاین (شناور در همه صفحات) */}
+      <ChatWidget locale={locale} />
       
       {/* --- PROFESSIONAL GLOBAL FOOTER --- */}
       <footer className="relative bg-[#080808] text-white pt-24 pb-12 overflow-hidden border-t border-white/5">

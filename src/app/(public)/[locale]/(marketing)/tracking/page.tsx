@@ -1,148 +1,178 @@
-'use client';
+import { Search, Package, Ship, Truck, MapPin, CheckCircle2, Clock, AlertCircle } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-import { useState } from 'react';
-import { Search, MapPin, Truck, Calendar, CheckCircle2, AlertCircle, Container } from 'lucide-react';
-import { getShipmentByTrackingCode, type Shipment } from '@/lib/data/mock-db';
+export default async function TrackingPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  const isRtl = locale === 'fa';
 
-export default function TrackingPage({
-  params,
-}: {
-  params: { locale: string };
-}) {
-  // Hardcoded for demo/client component simplicity
-  const isRtl = true; 
-
-  const [searchQuery, setSearchQuery] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [result, setResult] = useState<Shipment | null>(null);
-  const [error, setError] = useState('');
-  const [hasSearched, setHasSearched] = useState(false);
-
-  const handleSearch = async () => {
-    if (!searchQuery) return;
-    
-    setIsLoading(true);
-    setError('');
-    setResult(null);
-    setHasSearched(true);
-
-    try {
-      // درخواست به دیتابیس مجازی
-      const data = await getShipmentByTrackingCode(searchQuery);
-      if (data) {
-        setResult(data);
-      } else {
-        setError('شماره رهگیری یافت نشد. لطفا کد TRK-2026 را امتحان کنید.');
-      }
-    } catch (err) {
-      setError('خطایی در ارتباط با سرور رخ داد.');
-    } finally {
-      setIsLoading(false);
+  const texts = {
+    fa: {
+      hero: {
+        title: "رهگیری آنلاین مرسولات",
+        subtitle: "از وضعیت لحظه‌ای محموله خود مطلع شوید",
+        placeholder: "شماره بارنامه یا کد رهگیری (مثال: SAM-8842)",
+        btn: "جستجوی وضعیت",
+      },
+      result: {
+        title: "وضعیت فعلی: در حال حمل دریایی",
+        id: "شماره سفارش: SAM-8842",
+        eta: "زمان تخمینی رسیدن: ۳ روز دیگر",
+        origin: "گوانگجو، چین",
+        destination: "بندرعباس، ایران",
+      },
+      steps: [
+        { title: "ثبت سفارش", date: "۱۰ مهر ۱۴۰۲", time: "۰۹:۳۰", status: "completed", icon: Package },
+        { title: "بسته‌بندی و بارگیری", date: "۱۲ مهر ۱۴۰۲", time: "۱۴:۱۵", status: "completed", icon: CheckCircle2 },
+        { title: "تحویل به بندر مبدا", date: "۱۵ مهر ۱۴۰۲", time: "۰۸:۰۰", status: "completed", icon: Ship },
+        { title: "حرکت کشتی", date: "۱۶ مهر ۱۴۰۲", time: "۲۳:۴۵", status: "active", icon: Ship },
+        { title: "رسیدن به بندر مقصد", date: "تخمین: ۲۰ مهر", time: "--:--", status: "pending", icon: MapPin },
+        { title: "ترخیص و تحویل", date: "-", time: "-", status: "pending", icon: Truck },
+      ],
+      alert: "توجه: اطلاعات نمایش داده شده ممکن است با تاخیر ۴ ساعته به‌روزرسانی شود."
+    },
+    en: {
+      hero: {
+        title: "Track Your Shipment",
+        subtitle: "Get real-time updates on your cargo status",
+        placeholder: "Bill of Lading or Tracking ID (e.g. SAM-8842)",
+        btn: "Track Now",
+      },
+      result: {
+        title: "Current Status: On Vessel",
+        id: "Order ID: SAM-8842",
+        eta: "ETA: 3 Days",
+        origin: "Guangzhou, CN",
+        destination: "Bandar Abbas, IR",
+      },
+      steps: [
+        { title: "Order Placed", date: "Oct 02, 2023", time: "09:30", status: "completed", icon: Package },
+        { title: "Packing & Loading", date: "Oct 04, 2023", time: "14:15", status: "completed", icon: CheckCircle2 },
+        { title: "Port Departure", date: "Oct 07, 2023", time: "08:00", status: "completed", icon: Ship },
+        { title: "On Vessel", date: "Oct 08, 2023", time: "23:45", status: "active", icon: Ship },
+        { title: "Arrival at Dest.", date: "Est: Oct 12", time: "--:--", status: "pending", icon: MapPin },
+        { title: "Clearance & Delivery", date: "-", time: "-", status: "pending", icon: Truck },
+      ],
+      alert: "Note: Displayed information may have a 4-hour update delay."
     }
   };
 
+  const t = isRtl ? texts.fa : texts.en;
+
   return (
-    <div className="relative flex flex-col items-center w-full min-h-screen bg-[#050505] text-white pt-32 pb-20 px-4 font-vazirmatn overflow-hidden">
+    <div className="min-h-screen bg-black text-white font-vazirmatn pt-28 pb-20">
       
-      {/* Background FX */}
-      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-soft-light pointer-events-none" />
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-yellow-600/5 rounded-full blur-[120px] pointer-events-none" />
+      {/* Background Effect */}
+      <div className="fixed inset-0 pointer-events-none">
+         <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-blue-600/10 rounded-full blur-[120px]" />
+      </div>
 
-      <div className="relative z-10 w-full max-w-4xl mx-auto flex flex-col items-center">
+      <div className="container mx-auto px-4 md:px-8 relative z-10 max-w-4xl">
         
-        {/* Header Badge */}
-        <div className="inline-flex items-center gap-3 rounded-full border border-yellow-500/20 bg-yellow-500/5 pl-2 pr-4 py-1.5 backdrop-blur-md mb-8">
-             <span className="relative flex h-2 w-2">
-               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span>
-               <span className="relative inline-flex rounded-full h-2 w-2 bg-yellow-500"></span>
-             </span>
-             <span className="text-xs font-bold tracking-widest text-yellow-500 uppercase">
-                سامانه هوشمند رهگیری بار
-             </span>
-        </div>
+        {/* 1. Search Section */}
+        <div className="text-center mb-12">
+          <h1 className="text-3xl md:text-5xl font-black mb-4 tracking-tight">
+             {t.hero.title}
+          </h1>
+          <p className="text-zinc-400 text-lg mb-8">
+             {t.hero.subtitle}
+          </p>
 
-        <h1 className="text-4xl md:text-6xl font-black text-center mb-6">
-           رهگیری لحظه‌ای <span className="text-yellow-500">مرسوله</span>
-        </h1>
-
-        {/* Search Box */}
-        <div className="w-full mt-8 relative group max-w-2xl">
-             <div className="absolute -inset-0.5 bg-gradient-to-r from-yellow-600 to-yellow-300 rounded-2xl opacity-30 group-focus-within:opacity-100 transition duration-500 blur group-focus-within:blur-md" />
-             <div className="relative flex items-center bg-[#0a0a0a] rounded-2xl border border-white/10 p-2 shadow-2xl">
+          <div className="bg-zinc-900/80 backdrop-blur-xl border border-white/10 p-2 rounded-2xl md:rounded-full shadow-2xl shadow-blue-900/20 flex flex-col md:flex-row gap-2">
+             <div className="relative flex-1">
+                <Search className={cn("absolute top-1/2 -translate-y-1/2 text-zinc-500", isRtl ? "right-4" : "left-4")} />
                 <input 
                   type="text" 
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                  placeholder="شماره رهگیری (مثلا: TRK-2026)"
-                  className="flex-1 bg-transparent border-none focus:outline-none text-white px-4 h-14 text-lg placeholder:text-zinc-600 font-mono tracking-wide text-right"
+                  placeholder={t.hero.placeholder}
+                  className={cn(
+                    "w-full h-14 bg-transparent border-none outline-none text-white placeholder:text-zinc-600 font-mono text-lg",
+                    isRtl ? "pr-12 pl-4" : "pl-12 pr-4"
+                  )}
                   dir="ltr"
                 />
-                <button 
-                  onClick={handleSearch}
-                  disabled={isLoading}
-                  className="h-14 px-8 rounded-xl bg-yellow-500 text-black font-bold text-lg hover:bg-yellow-400 transition-all flex items-center gap-2"
-                >
-                   {isLoading ? <span className="animate-spin w-5 h-5 border-2 border-black border-t-transparent rounded-full" /> : <Search size={20} />}
-                   <span className="hidden md:inline">رهگیری</span>
-                </button>
              </div>
-        </div>
-        <p className="mt-4 text-zinc-500 text-sm">برای تست از کد <span className="text-zinc-300 font-mono">TRK-2026</span> استفاده کنید.</p>
-
-        {/* Result Area */}
-        {hasSearched && (
-          <div className="w-full mt-16 animate-in fade-in slide-in-from-bottom-8 duration-700">
-            {error ? (
-              <div className="p-6 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 flex items-center justify-center gap-3 text-right" dir="rtl">
-                <AlertCircle />
-                {error}
-              </div>
-            ) : result ? (
-              <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-zinc-900/40 backdrop-blur-xl shadow-2xl p-8 md:p-10" dir="rtl">
-                 
-                 {/* Top Status */}
-                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-white/5 pb-8 mb-8 gap-6">
-                    <div>
-                       <span className="text-zinc-500 text-xs font-bold tracking-widest uppercase mb-1 block">کانتینر</span>
-                       <div className="flex items-center gap-3">
-                          <Container className="text-yellow-500" />
-                          <span className="text-3xl font-mono font-bold text-white tracking-wider">{result.containerNo}</span>
-                       </div>
-                    </div>
-                    <div className="flex items-center gap-3 bg-green-500/10 px-4 py-2 rounded-full border border-green-500/20">
-                        <span className="relative flex h-3 w-3">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-                        </span>
-                        <span className="text-green-400 font-bold text-sm">
-                            {result.status === 'in_transit' ? 'در حال حمل' : 'رسیده به مقصد'}
-                        </span>
-                    </div>
-                 </div>
-
-                 {/* Timeline */}
-                 <div className="space-y-8 relative before:absolute before:right-[19px] before:top-2 before:bottom-2 before:w-0.5 before:bg-white/10">
-                    {result.history.map((item, idx) => (
-                      <div key={idx} className="relative flex gap-6 items-start text-right pr-14 group">
-                        <div className="absolute right-0 top-0 z-10 w-10 h-10 rounded-full flex items-center justify-center border-4 border-black bg-zinc-800 text-zinc-400 group-first:bg-yellow-500 group-first:text-black group-first:shadow-[0_0_20px_rgba(234,179,8,0.4)]">
-                            {idx === 0 ? <Truck size={18} /> : <CheckCircle2 size={18} />}
-                        </div>
-                        <div className="flex-1">
-                            <h4 className="text-lg font-bold text-white mb-1">{item.status}</h4>
-                            <p className="text-zinc-400 text-sm mb-2">{item.description}</p>
-                            <div className="flex items-center gap-4 text-xs text-zinc-500">
-                                <span className="flex items-center gap-1"><Calendar size={12} /> {item.date}</span>
-                                <span className="flex items-center gap-1"><MapPin size={12} /> {item.location}</span>
-                            </div>
-                        </div>
-                      </div>
-                    ))}
-                 </div>
-              </div>
-            ) : null}
+             <button className="h-14 px-8 rounded-xl md:rounded-full bg-blue-600 hover:bg-blue-500 text-white font-bold transition-all shadow-lg shadow-blue-600/20 active:scale-95">
+                {t.hero.btn}
+             </button>
           </div>
-        )}
+        </div>
+
+        {/* 2. Mock Result Card (Demo State) */}
+        <div className="bg-zinc-900/50 backdrop-blur-md border border-white/5 rounded-3xl overflow-hidden">
+          
+          {/* Status Header */}
+          <div className="p-6 md:p-8 bg-white/5 border-b border-white/5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+             <div>
+                <div className="flex items-center gap-2 mb-2">
+                   <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                   <span className="text-emerald-400 font-bold text-sm uppercase tracking-wider">{t.result.title}</span>
+                </div>
+                <h2 className="text-2xl font-black text-white font-mono tracking-tight">{t.result.id}</h2>
+             </div>
+             <div className="text-left md:text-right">
+                <span className="block text-zinc-500 text-xs font-bold uppercase mb-1">{t.result.eta}</span>
+                <div className="flex items-center gap-2 text-zinc-300 text-sm">
+                   <span>{t.result.origin}</span>
+                   <div className="w-8 h-px bg-zinc-600" />
+                   <span>{t.result.destination}</span>
+                </div>
+             </div>
+          </div>
+
+          {/* Timeline */}
+          <div className="p-6 md:p-10">
+             <div className="relative">
+                {/* Vertical Line */}
+                <div className={cn("absolute top-2 bottom-0 w-0.5 bg-zinc-800", isRtl ? "right-[27px]" : "left-[27px]")} />
+
+                <div className="space-y-8">
+                   {t.steps.map((step, idx) => {
+                     const Icon = step.icon;
+                     const isCompleted = step.status === 'completed';
+                     const isActive = step.status === 'active';
+                     
+                     return (
+                       <div key={idx} className="relative flex items-start gap-6 group">
+                          {/* Icon Circle */}
+                          <div className={cn(
+                             "relative z-10 w-14 h-14 rounded-full flex items-center justify-center border-4 transition-all duration-300 shrink-0",
+                             isCompleted ? "bg-zinc-900 border-blue-600 text-blue-500" :
+                             isActive ? "bg-blue-600 border-blue-600/30 text-white shadow-[0_0_20px_rgba(37,99,235,0.5)]" :
+                             "bg-zinc-900 border-zinc-800 text-zinc-600"
+                          )}>
+                             <Icon size={20} />
+                          </div>
+
+                          {/* Content */}
+                          <div className={cn(
+                             "flex-1 pt-2 p-4 rounded-2xl transition-all",
+                             isActive ? "bg-white/5 border border-white/10" : ""
+                          )}>
+                             <div className="flex flex-col md:flex-row md:items-center justify-between gap-1 mb-1">
+                                <h3 className={cn("font-bold text-lg", isActive ? "text-white" : isCompleted ? "text-zinc-300" : "text-zinc-600")}>
+                                   {step.title}
+                                </h3>
+                                <span className="text-xs font-mono text-zinc-500">{step.date} • {step.time}</span>
+                             </div>
+                             {isActive && (
+                                <div className="text-xs text-blue-400 animate-pulse mt-2">
+                                   در حال پردازش...
+                                </div>
+                             )}
+                          </div>
+                       </div>
+                     );
+                   })}
+                </div>
+             </div>
+          </div>
+
+          {/* Footer Warning */}
+          <div className="bg-blue-500/5 p-4 flex items-center justify-center gap-2 text-blue-300/80 text-xs text-center">
+             <AlertCircle size={14} />
+             <span>{t.alert}</span>
+          </div>
+
+        </div>
 
       </div>
     </div>

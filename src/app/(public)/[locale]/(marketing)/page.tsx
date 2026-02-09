@@ -64,7 +64,9 @@ export default async function MarketingPage({ params }: { params: Promise<{ loca
           icon: Hammer,
           features: ["آلیاژ فولاد S3", "روکش تیتانیوم طلایی", "رینگ مغناطیسی قوی", "مقاوم در برابر سایش"]
         }
-      ]
+      ],
+      partnersTitle: "همکاران تجاری و تامین‌کنندگان",
+      partnersSubtitle: "همکاری مستقیم با برترین برندهای تکنولوژی و لجستیک چین"
     },
     en: {
       logisticsCard: {
@@ -111,12 +113,26 @@ export default async function MarketingPage({ params }: { params: Promise<{ loca
           icon: Hammer,
           features: ["S3 Steel Alloy", "Gold Titanium Coating", "Strong Magnetic Ring", "Wear Resistant"]
         }
-      ]
+      ],
+      partnersTitle: "Trusted Partners & Suppliers",
+      partnersSubtitle: "Collaborating with Top Chinese Tech & Logistics Brands"
     }
   };
 
   const t = isRtl ? texts.fa : texts.en;
   const Arrow = isRtl ? ArrowLeft : ArrowRight;
+
+  // List of major partners with brand colors
+  const partnerBrands = [
+    { name: "COSCO", type: "Shipping", color: "hover:text-blue-500" },
+    { name: "Alibaba", type: "Trade", color: "hover:text-orange-500" },
+    { name: "Xiaomi", type: "Tech", color: "hover:text-orange-600" },
+    { name: "DJI", type: "Drone", color: "hover:text-sky-400" },
+    { name: "SF Express", type: "Logistics", color: "hover:text-red-600" },
+    { name: "HUAWEI", type: "Tech", color: "hover:text-red-500" },
+    { name: "Edifier", type: "Audio", color: "hover:text-white" },
+    { name: "Anker", type: "Electronics", color: "hover:text-blue-300" },
+  ];
 
   return (
     <div className="min-h-screen bg-black text-white font-vazirmatn pb-20">
@@ -155,18 +171,15 @@ export default async function MarketingPage({ params }: { params: Promise<{ loca
 
       <div className="container mx-auto px-4 md:px-8 -mt-24 relative z-20 space-y-8">
         
-        {/* 2. LOGISTICS CARD (Responsive Image Logic) */}
+        {/* 2. LOGISTICS CARD */}
         <div className="group relative w-full rounded-[2.5rem] overflow-hidden bg-gradient-to-br from-blue-950 to-black border border-white/10 shadow-2xl shadow-blue-900/20">
-          
           <div className="absolute inset-0 z-0">
-             {/* Desktop Image: Shows only on medium screens and up */}
              <Image 
                src="/services/logistics.webp" 
                alt="Smart Logistics Desktop"
                fill
                className="hidden md:block object-cover opacity-40 mix-blend-overlay transition-transform duration-[2s] group-hover:scale-105"
              />
-             {/* Mobile Image: Shows only on small screens */}
              <Image 
                src="/services/logistics-mobile.webp" 
                alt="Smart Logistics Mobile"
@@ -182,7 +195,6 @@ export default async function MarketingPage({ params }: { params: Promise<{ loca
                    <Globe size={14} />
                    {t.logisticsCard.badge}
                 </div>
-                
                 <div>
                   <h2 className="text-3xl md:text-5xl font-black text-white mb-2">
                       {t.logisticsCard.title}
@@ -191,11 +203,9 @@ export default async function MarketingPage({ params }: { params: Promise<{ loca
                       {t.logisticsCard.subtitle}
                   </h3>
                 </div>
-
                 <p className="text-zinc-300 text-lg leading-relaxed max-w-xl mx-auto md:mx-0">
                    {t.logisticsCard.desc}
                 </p>
-
                 <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start pt-4">
                    <Link href={`/${locale}/tracking`} className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl bg-blue-600 text-white font-bold hover:bg-blue-500 hover:scale-105 transition-all shadow-lg shadow-blue-600/20">
                       <Search size={20} />
@@ -207,13 +217,10 @@ export default async function MarketingPage({ params }: { params: Promise<{ loca
                    </Link>
                 </div>
              </div>
-
-             {/* Animated Icon (Desktop Only) */}
              <div className="hidden md:flex items-center justify-center w-1/3">
                 <div className="relative w-64 h-64 flex items-center justify-center rounded-full bg-blue-500/5 border border-blue-500/20 animate-[spin_60s_linear_infinite]">
                    <div className="absolute inset-0 rounded-full border border-dashed border-blue-500/30" />
                    <Ship size={80} className="text-blue-400 drop-shadow-[0_0_30px_rgba(59,130,246,0.5)]" />
-                   
                    <div className="absolute top-0 left-1/2 w-3 h-3 bg-emerald-400 rounded-full shadow-[0_0_10px_#34d399]" />
                    <div className="absolute bottom-10 right-10 w-2 h-2 bg-blue-400 rounded-full shadow-[0_0_10px_#60a5fa]" />
                 </div>
@@ -223,38 +230,39 @@ export default async function MarketingPage({ params }: { params: Promise<{ loca
 
         {/* 3. AUDIO SYSTEM CARD */}
         <div className="group relative w-full rounded-[2.5rem] overflow-hidden bg-zinc-900 border border-white/5 shadow-2xl shadow-black/50">
-          
           <div className="absolute inset-0 z-0">
              <Image 
                src="/products/audio-system.webp" 
                alt="Professional Audio System"
                fill
-               className="object-cover transition-transform duration-[2s] group-hover:scale-105"
+               className="hidden md:block object-cover transition-transform duration-[2s] group-hover:scale-105"
+             />
+             <Image 
+               src="/products/audio-system.webp" 
+               alt="Professional Audio System"
+               fill
+               className="md:hidden object-cover transition-transform duration-[2s] group-hover:scale-105"
              />
              <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-transparent md:via-black/40" />
              <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80" />
           </div>
 
           <div className="relative z-10 p-8 md:p-16 max-w-3xl flex flex-col h-full justify-center min-h-[500px]">
-             
              <div className="flex items-center gap-3 mb-6">
                 <div className="px-4 py-1.5 rounded-full bg-yellow-500 text-black font-bold text-xs uppercase tracking-wider shadow-[0_0_15px_rgba(234,179,8,0.6)]">
                    {t.audioCard.badge}
                 </div>
                 <div className="h-px w-12 bg-white/20" />
              </div>
-
              <h2 className="text-3xl md:text-5xl font-black text-white mb-2 tracking-tight">
                 {t.audioCard.title}
              </h2>
              <h3 className="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-yellow-500 to-yellow-700 font-serif italic mb-6 drop-shadow-sm">
                 {t.audioCard.subtitle}
              </h3>
-
              <p className="text-zinc-300 text-lg md:text-xl leading-relaxed max-w-xl mb-10 border-r-2 border-yellow-500/50 pr-6 mr-1 backdrop-blur-sm bg-black/10 p-4 rounded-l-xl">
                 {t.audioCard.desc}
              </p>
-
              <div>
                 <Link href={`/${locale}/products`} className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-white text-black font-bold text-sm hover:bg-yellow-400 hover:scale-105 transition-all duration-300 shadow-lg group-hover:shadow-white/20">
                    {t.audioCard.cta}
@@ -274,7 +282,6 @@ export default async function MarketingPage({ params }: { params: Promise<{ loca
                 className="group relative p-6 rounded-3xl bg-zinc-900/50 backdrop-blur-md border border-white/5 hover:border-yellow-500/30 hover:bg-zinc-800/80 transition-all duration-500 overflow-hidden"
               >
                 <div className="absolute top-0 right-0 w-24 h-24 bg-yellow-500/10 blur-[50px] rounded-full group-hover:bg-yellow-500/20 transition-all" />
-                
                 <div className="relative z-10 flex flex-col h-full">
                    <div className="flex justify-between items-start mb-4">
                       <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 group-hover:text-yellow-500 transition-colors">
@@ -284,14 +291,12 @@ export default async function MarketingPage({ params }: { params: Promise<{ loca
                         <Icon size={20} />
                       </div>
                    </div>
-
                    <h4 className="text-lg font-bold text-white mb-2 leading-tight group-hover:text-yellow-100 transition-colors">
                      {product.title}
                    </h4>
                    <p className="text-xs text-zinc-400 mb-6 leading-relaxed line-clamp-3">
                      {product.desc}
                    </p>
-
                    <ul className="mt-auto space-y-2">
                      {product.features.map((feature, fIdx) => (
                        <li key={fIdx} className="flex items-center gap-2 text-[10px] text-zinc-300">
@@ -307,14 +312,28 @@ export default async function MarketingPage({ params }: { params: Promise<{ loca
         </div>
       </div>
 
-      {/* 5. PARTNERS */}
-      <section className="container mx-auto px-6 py-24 text-center">
-         <h2 className="text-2xl font-bold text-zinc-800 dark:text-zinc-200">
-           {isRtl ? 'همکاران تجاری ما' : 'Our Business Partners'}
+      {/* 5. PARTNERS (Updated with Real Brands) */}
+      <section className="container mx-auto px-6 py-24 text-center border-t border-white/5 mt-12">
+         <h2 className="text-2xl font-bold text-white mb-2">
+           {t.partnersTitle}
          </h2>
-         <div className="flex flex-wrap justify-center gap-8 mt-10 opacity-30 grayscale hover:grayscale-0 transition-all duration-500">
-            {[1,2,3,4,5].map((i) => (
-              <div key={i} className="w-24 h-12 bg-white/10 rounded-lg animate-pulse" />
+         <p className="text-zinc-500 text-sm mb-12">
+           {t.partnersSubtitle}
+         </p>
+         
+         <div className="flex flex-wrap justify-center gap-6 md:gap-8">
+            {partnerBrands.map((brand, i) => (
+              <div 
+                key={i} 
+                className="group w-36 h-20 md:w-44 md:h-24 flex items-center justify-center bg-zinc-900/40 border border-white/5 rounded-2xl hover:bg-white/5 hover:border-white/10 transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-xl"
+              >
+                 <span className={cn(
+                   "text-xl md:text-2xl font-black text-zinc-600 transition-colors duration-300 select-none font-sans tracking-tight",
+                   brand.color
+                 )}>
+                   {brand.name}
+                 </span>
+              </div>
             ))}
          </div>
       </section>

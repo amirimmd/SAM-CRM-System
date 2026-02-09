@@ -1,199 +1,248 @@
-'use client';
+import { Mail, MapPin, Phone, Send, Clock, Building2, Globe2 } from "lucide-react";
+import { cn } from "@/lib/utils";
+import Image from "next/image";
 
-import { Mail, MapPin, Phone, Clock, Send, Globe2 } from 'lucide-react';
-import { useState } from 'react';
+export default async function ContactPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  const isRtl = locale === 'fa';
 
-export default function ContactPage({
-  params,
-}: {
-  params: { locale: string };
-}) {
-  const isRtl = true; // Hardcoded for demo, ensuring Persian layout
-  const [formStatus, setFormStatus] = useState<'idle' | 'submitting' | 'success'>('idle');
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setFormStatus('submitting');
-    setTimeout(() => setFormStatus('success'), 1500);
+  const texts = {
+    fa: {
+      header: {
+        badge: "پشتیبانی ۲۴/۷",
+        title: "تماس با ما",
+        subtitle: "ارتباط مستقیم با کارشناسان",
+        desc: "تیم متخصص سام لجستیک در دفاتر چین و ایران، آماده پاسخگویی به سوالات شما و ارائه مشاوره تخصصی در زمینه حمل و نقل بین‌المللی است.",
+      },
+      form: {
+        title: "ارسال پیام آنلاین",
+        name: "نام و نام خانوادگی",
+        email: "آدرس ایمیل",
+        subject: "موضوع پیام",
+        message: "متن پیام شما...",
+        btn: "ارسال پیام",
+        placeholder_name: "مثال: علی محمدی",
+        placeholder_email: "name@example.com",
+        placeholder_subject: "مثال: استعلام قیمت کانتینر",
+      },
+      info: {
+        china: {
+          badge: "دفتر مرکزی",
+          country: "چین",
+          city: "گوانگجو",
+          address: "منطقه تیانه، خیابان تجاری بین‌المللی، برج سام لجستیک، طبقه ۲۴",
+        },
+        iran: {
+          badge: "دفتر نمایندگی",
+          country: "ایران",
+          city: "تهران",
+          address: "خیابان ولیعصر، بالاتر از پارک ساعی، برج نگین، واحد ۴۰۲",
+        },
+        contact: {
+          title: "اطلاعات تماس",
+          email: "ایمیل سازمانی",
+          work_hours: "ساعات کاری",
+          hours_val: "شنبه تا پنج‌شنبه: ۹ صبح تا ۶ عصر"
+        }
+      }
+    },
+    en: {
+      header: {
+        badge: "24/7 Support",
+        title: "Contact Us",
+        subtitle: "Get in Touch with Experts",
+        desc: "SAM Logistics expert team in China and Iran offices is ready to answer your questions and provide professional consultation on international shipping.",
+      },
+      form: {
+        title: "Send Online Message",
+        name: "Full Name",
+        email: "Email Address",
+        subject: "Subject",
+        message: "Your message...",
+        btn: "Send Message",
+        placeholder_name: "e.g. John Doe",
+        placeholder_email: "name@example.com",
+        placeholder_subject: "e.g. Container Rate Inquiry",
+      },
+      info: {
+        china: {
+          badge: "Headquarters",
+          country: "China",
+          city: "Guangzhou",
+          address: "24th Floor, SAM Logistics Tower, Int'l Trade St, Tianhe District",
+        },
+        iran: {
+          badge: "Representative",
+          country: "Iran",
+          city: "Tehran",
+          address: "Unit 402, Negin Tower, Above Saei Park, Valiasr St",
+        },
+        contact: {
+          title: "Contact Info",
+          email: "Corporate Email",
+          work_hours: "Working Hours",
+          hours_val: "Mon - Sat: 9:00 AM - 6:00 PM"
+        }
+      }
+    }
   };
 
-  return (
-    <div className="relative flex flex-col items-center w-full min-h-screen bg-[#050505] text-white pt-32 pb-20 px-4 font-vazirmatn overflow-hidden">
-      
-      {/* Background FX */}
-      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-soft-light pointer-events-none" />
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-yellow-600/5 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-blue-900/5 rounded-full blur-[120px] pointer-events-none" />
+  const t = isRtl ? texts.fa : texts.en;
 
-      <div className="relative z-10 w-full max-w-6xl mx-auto">
+  return (
+    <div className="min-h-screen bg-black text-white font-vazirmatn pt-24 pb-20">
+      
+      {/* Background Gradients */}
+      <div className="fixed inset-0 pointer-events-none">
+         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-yellow-500/5 rounded-full blur-[100px]" />
+         <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-500/5 rounded-full blur-[100px]" />
+      </div>
+
+      <div className="container mx-auto px-4 md:px-8 relative z-10">
         
         {/* Header Section */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 rounded-full border border-yellow-500/20 bg-yellow-500/5 px-4 py-1.5 backdrop-blur-md mb-6">
-             <span className="w-2 h-2 rounded-full bg-yellow-500 animate-pulse"></span>
-             <span className="text-xs font-bold tracking-widest text-yellow-500 uppercase">
-                ارتباط مستقیم
-             </span>
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-yellow-500 text-xs font-bold mb-6 backdrop-blur-sm">
+             <span className="w-2 h-2 rounded-full bg-yellow-500 animate-pulse" />
+             {t.header.badge}
           </div>
-          <h1 className="text-4xl md:text-6xl font-black mb-6">
-            <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-zinc-500">
-               شبکه جهانی ما
-            </span>
+          <h1 className="text-4xl md:text-5xl font-black mb-4">
+             {t.header.title}
           </h1>
-          <p className="text-zinc-400 max-w-2xl mx-auto text-lg leading-relaxed">
-             با دفاتر ما در گوانجو، دبی و ایران در تماس باشید. تیم پشتیبانی سام لجستیک آماده پاسخگویی به نیازهای تجاری شماست.
+          <p className="text-xl md:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-zinc-200 to-zinc-500 font-bold mb-6">
+             {t.header.subtitle}
+          </p>
+          <p className="text-zinc-400 leading-relaxed">
+             {t.header.desc}
           </p>
         </div>
 
-        {/* Office Locations Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20" dir="rtl">
-           
-           {/* Guangzhou Office */}
-           <OfficeCard 
-             title="دفتر مرکزی چین (گوانجو)"
-             company="SAM Guangzhou Trading"
-             address="No 55. Bin bin electronic new city, Liwan Lu, Guangzhou, China"
-             phone="+86 136 1027 1731"
-             icon={<Globe2 className="text-blue-500" />}
-             gradient="from-blue-500/10 to-transparent"
-           />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          
+          {/* Contact Info Cards (Left Side) */}
+          <div className="space-y-6 lg:col-span-1">
+             
+             {/* China Office */}
+             <div className="p-6 rounded-3xl bg-zinc-900/50 border border-white/5 hover:border-yellow-500/30 transition-colors group">
+                <div className="flex items-start justify-between mb-4">
+                   <div className="p-3 rounded-2xl bg-yellow-500/10 text-yellow-500 group-hover:bg-yellow-500 group-hover:text-black transition-all">
+                      <Building2 size={24} />
+                   </div>
+                   <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 border border-white/5 px-2 py-1 rounded-lg">
+                      {t.info.china.badge}
+                   </span>
+                </div>
+                <h3 className="text-lg font-bold text-white mb-1">{t.info.china.city}، {t.info.china.country}</h3>
+                <p className="text-sm text-zinc-400 leading-relaxed mb-4">
+                   {t.info.china.address}
+                </p>
+                <div className="flex items-center gap-2 text-zinc-300 font-mono text-sm">
+                   <Phone size={14} className="text-yellow-500" />
+                   <span dir="ltr">+86 123 4567 8900</span>
+                </div>
+             </div>
 
-           {/* Dubai Office */}
-           <OfficeCard 
-             title="دفتر دبی (امارات)"
-             company="SAWAT ALMASAR Trading Co. L.L.C"
-             address="Dubai, UAE (Office Address)"
-             phone="+971 50 103 4008"
-             icon={<MapPin className="text-yellow-500" />}
-             gradient="from-yellow-500/10 to-transparent"
-             isMain
-           />
+             {/* Iran Office */}
+             <div className="p-6 rounded-3xl bg-zinc-900/50 border border-white/5 hover:border-blue-500/30 transition-colors group">
+                <div className="flex items-start justify-between mb-4">
+                   <div className="p-3 rounded-2xl bg-blue-500/10 text-blue-500 group-hover:bg-blue-500 group-hover:text-white transition-all">
+                      <Globe2 size={24} />
+                   </div>
+                   <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 border border-white/5 px-2 py-1 rounded-lg">
+                      {t.info.iran.badge}
+                   </span>
+                </div>
+                <h3 className="text-lg font-bold text-white mb-1">{t.info.iran.city}، {t.info.iran.country}</h3>
+                <p className="text-sm text-zinc-400 leading-relaxed mb-4">
+                   {t.info.iran.address}
+                </p>
+                <div className="flex items-center gap-2 text-zinc-300 font-mono text-sm">
+                   <Phone size={14} className="text-blue-500" />
+                   <span dir="ltr">021 8888 9999</span>
+                </div>
+             </div>
 
-           {/* Iran Office */}
-           <OfficeCard 
-             title="دفتر ایران"
-             company="تجارت خلیج فارس الکترونیک"
-             address="تهران، ایران"
-             phone="+98 912 195 5663"
-             icon={<Phone className="text-green-500" />}
-             gradient="from-green-500/10 to-transparent"
-           />
+             {/* General Info */}
+             <div className="p-6 rounded-3xl bg-gradient-to-br from-zinc-900 to-black border border-white/5">
+                <h3 className="font-bold text-white mb-4">{t.info.contact.title}</h3>
+                <ul className="space-y-4">
+                   <li className="flex items-center gap-3">
+                      <Mail size={18} className="text-zinc-500" />
+                      <div className="flex flex-col">
+                         <span className="text-xs text-zinc-500">{t.info.contact.email}</span>
+                         <span className="text-sm text-zinc-300 font-mono">info@sam-logistics.com</span>
+                      </div>
+                   </li>
+                   <li className="flex items-center gap-3">
+                      <Clock size={18} className="text-zinc-500" />
+                      <div className="flex flex-col">
+                         <span className="text-xs text-zinc-500">{t.info.contact.work_hours}</span>
+                         <span className="text-sm text-zinc-300">{t.info.contact.hours_val}</span>
+                      </div>
+                   </li>
+                </ul>
+             </div>
+
+          </div>
+
+          {/* Contact Form (Right Side - Bigger) */}
+          <div className="lg:col-span-2">
+             <div className="h-full p-8 md:p-10 rounded-[2.5rem] bg-zinc-900/30 backdrop-blur-md border border-white/10 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-full h-1 bg-gradient-to-r from-transparent via-yellow-500 to-transparent opacity-20" />
+                
+                <h2 className="text-2xl font-bold text-white mb-8 flex items-center gap-3">
+                   <Send className="text-yellow-500" />
+                   {t.form.title}
+                </h2>
+
+                <form className="space-y-6">
+                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                         <label className="text-xs font-bold text-zinc-400 px-1">{t.form.name}</label>
+                         <input 
+                           type="text" 
+                           placeholder={t.form.placeholder_name}
+                           className="w-full h-12 bg-black/40 border border-white/10 rounded-xl px-4 text-white placeholder:text-zinc-700 focus:outline-none focus:border-yellow-500/50 transition-colors"
+                         />
+                      </div>
+                      <div className="space-y-2">
+                         <label className="text-xs font-bold text-zinc-400 px-1">{t.form.email}</label>
+                         <input 
+                           type="email" 
+                           placeholder={t.form.placeholder_email}
+                           className="w-full h-12 bg-black/40 border border-white/10 rounded-xl px-4 text-white placeholder:text-zinc-700 focus:outline-none focus:border-yellow-500/50 transition-colors dir-ltr"
+                         />
+                      </div>
+                   </div>
+
+                   <div className="space-y-2">
+                      <label className="text-xs font-bold text-zinc-400 px-1">{t.form.subject}</label>
+                      <input 
+                        type="text" 
+                        placeholder={t.form.placeholder_subject}
+                        className="w-full h-12 bg-black/40 border border-white/10 rounded-xl px-4 text-white placeholder:text-zinc-700 focus:outline-none focus:border-yellow-500/50 transition-colors"
+                      />
+                   </div>
+
+                   <div className="space-y-2">
+                      <label className="text-xs font-bold text-zinc-400 px-1">{t.form.message}</label>
+                      <textarea 
+                        rows={6}
+                        placeholder={t.form.message}
+                        className="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-white placeholder:text-zinc-700 focus:outline-none focus:border-yellow-500/50 transition-colors resize-none"
+                      />
+                   </div>
+
+                   <button className="w-full h-14 bg-gradient-to-r from-yellow-600 to-yellow-500 text-black font-bold text-lg rounded-xl hover:shadow-[0_0_20px_rgba(234,179,8,0.3)] transition-all active:scale-[0.99] mt-4">
+                      {t.form.btn}
+                   </button>
+                </form>
+
+             </div>
+          </div>
 
         </div>
-
-        {/* Contact Form Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start" dir="rtl">
-           
-           {/* Contact Info */}
-           <div className="space-y-8">
-              <h2 className="text-3xl font-bold text-white">پیام به مدیریت</h2>
-              <p className="text-zinc-400 leading-relaxed">
-                 برای استعلام قیمت، مشاوره واردات یا پیگیری سفارشات خاص، می‌توانید از طریق فرم روبرو با ما در ارتباط باشید. کارشناسان ما در سریع‌ترین زمان ممکن پاسخگوی شما خواهند بود.
-              </p>
-              
-              <div className="space-y-6">
-                 <div className="flex items-center gap-4 text-zinc-300">
-                    <div className="w-12 h-12 rounded-xl bg-zinc-900 border border-white/5 flex items-center justify-center text-yellow-500">
-                       <Clock size={20} />
-                    </div>
-                    <div>
-                       <span className="block text-sm text-zinc-500">ساعات کاری</span>
-                       <span className="font-bold">شنبه تا چهارشنبه: ۹ صبح تا ۵ عصر</span>
-                    </div>
-                 </div>
-                 
-                 <div className="flex items-center gap-4 text-zinc-300">
-                    <div className="w-12 h-12 rounded-xl bg-zinc-900 border border-white/5 flex items-center justify-center text-yellow-500">
-                       <Mail size={20} />
-                    </div>
-                    <div>
-                       <span className="block text-sm text-zinc-500">ایمیل سازمانی</span>
-                       <span className="font-bold dir-ltr">info@saminto.com</span>
-                    </div>
-                 </div>
-              </div>
-           </div>
-
-           {/* Form */}
-           <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-yellow-500/20 to-blue-500/20 blur-3xl opacity-20 -z-10" />
-              
-              <form onSubmit={handleSubmit} className="bg-zinc-900/50 border border-white/10 backdrop-blur-xl p-8 rounded-3xl shadow-2xl">
-                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                    <div className="space-y-2">
-                       <label className="text-sm font-medium text-zinc-400">نام و نام خانوادگی</label>
-                       <input type="text" className="w-full h-12 bg-black/50 border border-white/10 rounded-xl px-4 text-white focus:border-yellow-500/50 focus:outline-none transition-colors" placeholder="مثلا: علی محمدی" />
-                    </div>
-                    <div className="space-y-2">
-                       <label className="text-sm font-medium text-zinc-400">شماره تماس</label>
-                       <input type="text" className="w-full h-12 bg-black/50 border border-white/10 rounded-xl px-4 text-white focus:border-yellow-500/50 focus:outline-none transition-colors" placeholder="مثلا: 0912..." dir="ltr" />
-                    </div>
-                 </div>
-                 
-                 <div className="space-y-2 mb-6">
-                    <label className="text-sm font-medium text-zinc-400">موضوع پیام</label>
-                    <select className="w-full h-12 bg-black/50 border border-white/10 rounded-xl px-4 text-white focus:border-yellow-500/50 focus:outline-none transition-colors">
-                       <option>استعلام قیمت حمل</option>
-                       <option>مشاوره واردات</option>
-                       <option>پیگیری سفارش</option>
-                       <option>سایر موارد</option>
-                    </select>
-                 </div>
-
-                 <div className="space-y-2 mb-8">
-                    <label className="text-sm font-medium text-zinc-400">متن پیام</label>
-                    <textarea rows={4} className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-yellow-500/50 focus:outline-none transition-colors resize-none" placeholder="توضیحات خود را بنویسید..." />
-                 </div>
-
-                 <button 
-                   type="submit" 
-                   disabled={formStatus === 'submitting' || formStatus === 'success'}
-                   className={`w-full h-14 rounded-xl font-bold text-lg flex items-center justify-center gap-2 transition-all duration-300
-                     ${formStatus === 'success' ? 'bg-green-500 text-white' : 'bg-yellow-500 text-black hover:bg-yellow-400'}
-                   `}
-                 >
-                    {formStatus === 'submitting' ? (
-                       <span className="animate-spin w-5 h-5 border-2 border-black border-t-transparent rounded-full" />
-                    ) : formStatus === 'success' ? (
-                       'پیام ارسال شد ✓'
-                    ) : (
-                       <>ارسال پیام <Send size={18} /></>
-                    )}
-                 </button>
-              </form>
-           </div>
-
-        </div>
-
       </div>
-    </div>
-  );
-}
-
-function OfficeCard({ title, company, address, phone, icon, gradient, isMain }: any) {
-  return (
-    <div className={`relative group overflow-hidden rounded-3xl border border-white/10 bg-zinc-900/40 p-8 transition-all duration-500 hover:border-white/20 ${isMain ? 'shadow-[0_0_50px_-12px_rgba(234,179,8,0.2)] border-yellow-500/20' : ''}`}>
-       <div className={`absolute inset-0 bg-gradient-to-b ${gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
-       
-       <div className="relative z-10 flex flex-col h-full">
-          <div className="w-14 h-14 rounded-2xl bg-black/50 border border-white/10 flex items-center justify-center mb-6 text-2xl">
-             {icon}
-          </div>
-          
-          <h3 className="text-xl font-bold text-white mb-2">{title}</h3>
-          <p className="text-yellow-500 text-sm font-medium mb-4">{company}</p>
-          
-          <div className="mt-auto space-y-4">
-             <div className="flex items-start gap-3 text-zinc-400 text-sm">
-                <MapPin size={16} className="shrink-0 mt-1" />
-                <span className="leading-relaxed">{address}</span>
-             </div>
-             <div className="flex items-center gap-3 text-white font-mono text-lg bg-white/5 p-3 rounded-xl border border-white/5">
-                <Phone size={16} className="text-zinc-500" />
-                <a href={`tel:${phone.replace(/\s/g, '')}`} className="hover:text-yellow-500 transition-colors" dir="ltr">{phone}</a>
-             </div>
-          </div>
-       </div>
     </div>
   );
 }
