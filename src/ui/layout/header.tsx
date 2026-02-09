@@ -37,9 +37,10 @@ export function Header({ locale }: HeaderProps) {
     <header className="sticky top-0 z-50 w-full border-b border-white/5 bg-black/80 backdrop-blur-xl supports-[backdrop-filter]:bg-black/60 font-vazirmatn">
       <div className="container flex h-20 max-w-screen-2xl items-center px-4 md:px-8 mx-auto justify-between">
         
-        {/* Logo Section */}
+        {/* --- Logo Section (Graphic Style) --- */}
         <div className="flex items-center gap-8 relative z-50">
           <Link href={`/${locale}`} className="flex items-center gap-3 group" onClick={closeMenu}>
+            {/* لوگوی گرافیکی کامیون با افکت طلایی */}
             <div className="relative h-10 w-10 flex items-center justify-center">
               <div className="absolute inset-0 rounded-xl bg-gradient-to-tr from-yellow-600 to-yellow-400 opacity-80 blur-lg group-hover:opacity-100 transition-opacity duration-500" />
               <div className="relative h-full w-full rounded-xl bg-black border border-yellow-500/30 flex items-center justify-center text-yellow-500">
@@ -57,15 +58,15 @@ export function Header({ locale }: HeaderProps) {
             </div>
           </Link>
 
-          {/* Desktop Nav */}
+          {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-1 bg-white/5 px-2 py-1.5 rounded-full border border-white/5">
-            <NavLink href={`/${locale}/products`} text={isRtl ? 'محصولات' : 'Products'} isActive={pathname === `/${locale}/products`} />
-            <NavLink href={`/${locale}/tracking`} text={isRtl ? 'رهگیری' : 'Tracking'} isActive={pathname === `/${locale}/tracking`} />
-            <NavLink href={`/${locale}/contact`} text={isRtl ? 'تماس' : 'Contact'} isActive={pathname === `/${locale}/contact`} />
+            <NavLink href={`/${locale}/products`} text={isRtl ? 'محصولات' : 'Products'} isActive={pathname.includes('/products')} />
+            <NavLink href={`/${locale}/tracking`} text={isRtl ? 'رهگیری' : 'Tracking'} isActive={pathname.includes('/tracking')} />
+            <NavLink href={`/${locale}/contact`} text={isRtl ? 'تماس' : 'Contact'} isActive={pathname.includes('/contact')} />
           </nav>
         </div>
 
-        {/* Actions & Mobile Toggle */}
+        {/* --- Actions & Mobile Toggle --- */}
         <div className="flex items-center gap-4 relative z-50">
           <Link 
             href={isRtl ? '/en' : '/fa'} 
@@ -77,18 +78,17 @@ export function Header({ locale }: HeaderProps) {
           <div className="h-6 w-px bg-white/10 hidden sm:block" />
 
           <Link 
-            href={`/${locale}/dashboard`}
+            href={`/${locale}/auth/login`}
             className={cn(
               "hidden sm:inline-flex h-10 items-center justify-center rounded-lg bg-gradient-to-r from-yellow-600 to-yellow-500 px-6 text-sm font-bold text-black shadow-lg shadow-yellow-500/20 transition-all hover:brightness-110 hover:shadow-yellow-500/40 hover:-translate-y-0.5"
             )}
           >
-            {isRtl ? 'داشبورد' : 'Dashboard'}
+            {isRtl ? 'ورود / داشبورد' : 'Login / Dashboard'}
           </Link>
           
-          {/* Mobile Menu Button */}
-          {/* z-index increased to ensure it's always clickable above the overlay */}
+          {/* Mobile Menu Button (High Z-Index) */}
           <button 
-            className="md:hidden text-white hover:text-yellow-500 transition-colors p-2 relative z-[60]"
+            className="md:hidden text-white hover:text-yellow-500 transition-colors p-2 relative z-[101]"
             onClick={toggleMenu}
             aria-label="Toggle menu"
           >
@@ -97,16 +97,16 @@ export function Header({ locale }: HeaderProps) {
         </div>
       </div>
 
-      {/* Mobile Menu Overlay */}
+      {/* --- Mobile Menu Overlay (Solid Black) --- */}
       <div 
         className={cn(
-          "fixed inset-0 z-40 transition-all duration-300 ease-in-out md:hidden flex flex-col justify-center px-8",
-          // Changed to solid dark color (bg-[#050505]) instead of transparent black
-          isMobileMenuOpen ? "opacity-100 visible translate-y-0" : "opacity-0 invisible -translate-y-full"
+          "fixed inset-0 z-[100] transition-all duration-300 ease-in-out md:hidden flex flex-col justify-center px-8",
+          // استفاده از رنگ مشکی خالص برای جلوگیری از دیده شدن محتوای زیرین
+          isMobileMenuOpen ? "opacity-100 visible translate-y-0 bg-[#050505]" : "opacity-0 invisible -translate-y-full"
         )}
-        style={{ top: 0, minHeight: '100vh', backgroundColor: '#050505' }}
+        style={{ top: 0, minHeight: '100vh' }}
       >
-        {/* Background Texture for aesthetic */}
+        {/* Background Texture */}
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 pointer-events-none mix-blend-soft-light" />
         <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-yellow-600/10 rounded-full blur-[80px] pointer-events-none" />
         
@@ -116,11 +116,11 @@ export function Header({ locale }: HeaderProps) {
           <MobileNavLink href={`/${locale}/tracking`} text={isRtl ? 'رهگیری مرسوله' : 'Tracking'} onClick={closeMenu} />
           <MobileNavLink href={`/${locale}/contact`} text={isRtl ? 'تماس با ما' : 'Contact'} onClick={closeMenu} />
           
-          <div className="w-full h-px bg-white/10 my-2" />
+          <div className="w-full h-px bg-white/10 my-4" />
           
           <MobileNavLink 
-            href={`/${locale}/dashboard`} 
-            text={isRtl ? 'ورود به پنل' : 'Login / Dashboard'} 
+            href={`/${locale}/auth/login`} 
+            text={isRtl ? 'ورود به پنل کاربری' : 'Login to Dashboard'} 
             onClick={closeMenu} 
             className="text-yellow-500" 
           />
