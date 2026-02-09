@@ -1,13 +1,11 @@
-'use client'; // Client Component for interactivity
+'use client';
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { Truck, Menu, X } from 'lucide-react';
 
-// Use string type for locale since it's passed from server component props
-// or derived from path.
 interface HeaderProps {
   locale: string;
 }
@@ -15,9 +13,22 @@ interface HeaderProps {
 export function Header({ locale }: HeaderProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const isRtl = locale === 'fa';
-  
-  // Close menu when route changes
   const pathname = usePathname();
+
+  // بستن منو هنگام تغییر مسیر
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [pathname]);
+
+  // جلوگیری از اسکرول صفحه وقتی منو باز است
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => { document.body.style.overflow = 'unset'; };
+  }, [isMobileMenuOpen]);
 
   const toggleMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
   const closeMenu = () => setIsMobileMenuOpen(false);
@@ -27,7 +38,7 @@ export function Header({ locale }: HeaderProps) {
       <div className="container flex h-20 max-w-screen-2xl items-center px-4 md:px-8 mx-auto justify-between">
         
         {/* Logo Section */}
-        <div className="flex items-center gap-8 z-50 relative">
+        <div className="flex items-center gap-8 relative z-50">
           <Link href={`/${locale}`} className="flex items-center gap-3 group" onClick={closeMenu}>
             <div className="relative h-10 w-10 flex items-center justify-center">
               <div className="absolute inset-0 rounded-xl bg-gradient-to-tr from-yellow-600 to-yellow-400 opacity-80 blur-lg group-hover:opacity-100 transition-opacity duration-500" />
@@ -55,7 +66,7 @@ export function Header({ locale }: HeaderProps) {
         </div>
 
         {/* Actions & Mobile Toggle */}
-        <div className="flex items-center gap-4 z-50 relative">
+        <div className="flex items-center gap-4 relative z-50">
           <Link 
             href={isRtl ? '/en' : '/fa'} 
             className="text-xs font-bold text-zinc-500 hover:text-yellow-500 transition-colors uppercase tracking-wider"
@@ -75,6 +86,7 @@ export function Header({ locale }: HeaderProps) {
           </Link>
           
           {/* Mobile Menu Button */}
+          {/* z-index increased to ensure it's always clickable above the overlay */}
           <button 
             className="md:hidden text-white hover:text-yellow-500 transition-colors p-2 relative z-[60]"
             onClick={toggleMenu}
@@ -85,22 +97,33 @@ export function Header({ locale }: HeaderProps) {
         </div>
       </div>
 
-      {/* Mobile Menu Overlay - Changed background to solid black */}
+      {/* Mobile Menu Overlay */}
       <div 
         className={cn(
-          "fixed inset-0 bg-black z-40 transition-all duration-300 ease-in-out md:hidden flex flex-col justify-center px-8",
+          "fixed inset-0 z-40 transition-all duration-300 ease-in-out md:hidden flex flex-col justify-center px-8",
+          // Changed to solid dark color (bg-[#050505]) instead of transparent black
           isMobileMenuOpen ? "opacity-100 visible translate-y-0" : "opacity-0 invisible -translate-y-full"
         )}
-        style={{ top: 0, height: '100vh' }}
+        style={{ top: 0, minHeight: '100vh', backgroundColor: '#050505' }}
       >
-        <div className="absolute top-0 left-0 w-full h-full bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 pointer-events-none" />
+        {/* Background Texture for aesthetic */}
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 pointer-events-none mix-blend-soft-light" />
+        <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-yellow-600/10 rounded-full blur-[80px] pointer-events-none" />
         
         <nav className="flex flex-col gap-6 text-2xl font-bold text-center relative z-10">
           <MobileNavLink href={`/${locale}`} text={isRtl ? 'خانه' : 'Home'} onClick={closeMenu} />
           <MobileNavLink href={`/${locale}/products`} text={isRtl ? 'محصولات' : 'Products'} onClick={closeMenu} />
           <MobileNavLink href={`/${locale}/tracking`} text={isRtl ? 'رهگیری مرسوله' : 'Tracking'} onClick={closeMenu} />
           <MobileNavLink href={`/${locale}/contact`} text={isRtl ? 'تماس با ما' : 'Contact'} onClick={closeMenu} />
-          <MobileNavLink href={`/${locale}/dashboard`} text={isRtl ? 'پنل کاربری' : 'Dashboard'} onClick={closeMenu} className="text-yellow-500 mt-4 border-yellow-500/20" />
+          
+          <div className="w-full h-px bg-white/10 my-2" />
+          
+          <MobileNavLink 
+            href={`/${locale}/dashboard`} 
+            text={isRtl ? 'ورود به پنل' : 'Login / Dashboard'} 
+            onClick={closeMenu} 
+            className="text-yellow-500" 
+          />
         </nav>
       </div>
     </header>
