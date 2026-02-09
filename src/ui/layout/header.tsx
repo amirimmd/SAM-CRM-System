@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
-import { Truck, Menu, X, ChevronDown, Phone, Globe, User } from 'lucide-react';
+import { Truck, Menu, X, ChevronDown, Globe, User } from 'lucide-react';
 
 interface HeaderProps {
   locale: string;
@@ -13,10 +13,29 @@ interface HeaderProps {
 export function Header({ locale }: HeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const pathname = usePathname();
+  const pathname = usePathname(); // دریافت آدرس فعلی
   const isRtl = locale === 'fa';
 
-  // تشخیص اسکرول برای تغییر استایل هدر
+  // --- منطق تغییر زبان هوشمند ---
+  const targetLocale = isRtl ? 'en' : 'fa'; // زبانی که می‌خواهیم به آن برویم
+  
+  const getSwitchLanguageUrl = () => {
+    if (!pathname) return `/${targetLocale}`;
+    
+    const segments = pathname.split('/');
+    // معمولاً سگمنت دوم همان زبان است (مثلاً ['', 'fa', 'login'])
+    if (segments[1] === locale) {
+      segments[1] = targetLocale; // جایگزینی زبان فعلی با زبان جدید
+      return segments.join('/');
+    }
+    
+    // حالت اطمینان: اگر ساختار آدرس متفاوت بود
+    return `/${targetLocale}`;
+  };
+
+  const switchLanguageUrl = getSwitchLanguageUrl();
+  // -----------------------------
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
@@ -63,9 +82,7 @@ export function Header({ locale }: HeaderProps) {
               <Link href={`/${locale}`} className="group flex items-center gap-3" onClick={closeMenu}>
                 <div className="relative flex items-center justify-center w-11 h-11 md:w-12 md:h-12 rounded-2xl bg-gradient-to-tr from-yellow-600 to-yellow-400 shadow-lg shadow-yellow-500/20 group-hover:shadow-yellow-500/40 transition-all duration-300 overflow-hidden ring-1 ring-white/10">
                    <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors" />
-                   {/* Shine Effect */}
                    <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
-                   
                    <Truck className={cn("text-white w-5 h-5 md:w-6 md:h-6 relative z-10 transition-transform duration-500 group-hover:scale-110 drop-shadow-md", isRtl && "scale-x-[-1]")} strokeWidth={2.5} />
                 </div>
                 <div className="flex flex-col">
@@ -99,9 +116,9 @@ export function Header({ locale }: HeaderProps) {
 
             {/* Actions Area */}
             <div className="hidden md:flex items-center gap-3 z-50">
-              {/* Language Switcher */}
+              {/* Language Switcher (Desktop) */}
               <Link
-                href={isRtl ? '/en' : '/fa'}
+                href={switchLanguageUrl} // لینک هوشمند
                 className="flex items-center gap-2 px-3 py-2 rounded-xl text-zinc-400 hover:text-white hover:bg-white/10 transition-all duration-300 text-xs font-bold uppercase tracking-wider border border-white/5 hover:border-white/20 bg-white/5"
               >
                 <Globe size={16} className="text-yellow-500" />
@@ -110,7 +127,7 @@ export function Header({ locale }: HeaderProps) {
 
               {/* Dashboard Button */}
               <Link
-                href={`/${locale}/dashboard`}
+                href={`/${locale}/login`}
                 className="relative group overflow-hidden px-5 py-2.5 rounded-xl bg-zinc-900 border border-white/10 text-white font-bold text-sm transition-all duration-300 hover:border-yellow-500/50 hover:shadow-[0_0_20px_rgba(234,179,8,0.15)]"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-yellow-600/10 to-yellow-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -140,7 +157,6 @@ export function Header({ locale }: HeaderProps) {
           isMobileMenuOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-full pointer-events-none"
         )}
       >
-        {/* Background Decorative Elements */}
         <div className="absolute top-0 right-0 w-80 h-80 bg-yellow-500/10 rounded-full blur-[120px] pointer-events-none animate-pulse" />
         <div className="absolute bottom-0 left-0 w-80 h-80 bg-blue-500/10 rounded-full blur-[120px] pointer-events-none" />
 
@@ -168,8 +184,9 @@ export function Header({ locale }: HeaderProps) {
              <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent w-full" />
              
              <div className="grid grid-cols-2 gap-4">
+                {/* Language Switcher (Mobile) */}
                 <Link
-                   href={isRtl ? '/en' : '/fa'}
+                   href={switchLanguageUrl} // لینک هوشمند
                    onClick={closeMenu}
                    className="flex flex-col items-center justify-center gap-2 p-4 rounded-2xl bg-zinc-900/80 border border-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-all active:scale-95"
                 >
@@ -178,7 +195,7 @@ export function Header({ locale }: HeaderProps) {
                 </Link>
 
                 <Link
-                   href={`/${locale}/dashboard`}
+                   href={`/${locale}/login`}
                    onClick={closeMenu}
                    className="flex flex-col items-center justify-center gap-2 p-4 rounded-2xl bg-gradient-to-br from-yellow-600 to-yellow-500 text-black font-bold shadow-lg shadow-yellow-500/20 active:scale-95 transition-transform"
                 >
