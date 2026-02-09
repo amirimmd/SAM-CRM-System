@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useParams } from 'next/navigation'; // تغییر مهم برای نسخه ۱۵
 import { 
   ShieldCheck, 
   Users, 
@@ -17,7 +18,10 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-export default function LoginPage({ params }: { params: { locale: string } }) {
+export default function LoginPage() {
+  const params = useParams(); // دریافت پارامترها به روش استاندارد کلاینت
+  const locale = params?.locale as string || 'fa'; // هندل کردن زبان
+  
   const [activeRole, setActiveRole] = useState<'admin' | 'staff' | 'partner'>('partner');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -25,8 +29,11 @@ export default function LoginPage({ params }: { params: { locale: string } }) {
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // Simulate login delay
-    setTimeout(() => setIsLoading(false), 2000);
+    // شبیه‌سازی ورود
+    setTimeout(() => {
+        setIsLoading(false);
+        console.log("Logged in as", activeRole);
+    }, 2000);
   };
 
   const roles = [
@@ -54,11 +61,10 @@ export default function LoginPage({ params }: { params: { locale: string } }) {
   ] as const;
 
   return (
-    <div className="flex min-h-screen w-full overflow-hidden bg-black selection:bg-yellow-500/30">
+    <div className="flex min-h-[calc(100vh-80px)] mt-[80px] w-full overflow-hidden bg-black selection:bg-yellow-500/30">
       
-      {/* RIGHT SIDE: Visuals (Hidden on Mobile) */}
+      {/* بخش راست: تصویر و برند */}
       <div className="hidden lg:flex w-1/2 relative flex-col justify-between p-12 overflow-hidden">
-        {/* Animated Background */}
         <div className="absolute inset-0 z-0">
           <Image
             src="/hero/hero-bg.avif"
@@ -71,7 +77,6 @@ export default function LoginPage({ params }: { params: { locale: string } }) {
           <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-soft-light" />
         </div>
 
-        {/* Brand Content */}
         <div className="relative z-10">
            <div className="flex items-center gap-3 mb-8">
               <div className="w-12 h-12 rounded-xl bg-yellow-500 flex items-center justify-center text-black shadow-[0_0_25px_rgba(234,179,8,0.4)]">
@@ -89,7 +94,7 @@ export default function LoginPage({ params }: { params: { locale: string } }) {
              </span>
            </h1>
            <p className="text-zinc-400 text-lg leading-relaxed mb-8">
-             به سامانه یکپارچه سام لجستیک خوش آمدید. ما با بهره‌گیری از تکنولوژی روز، امنیت و سرعت تجارت شما را از مبدا چین تا مقصد نهایی تضمین می‌کنیم.
+             به سامانه یکپارچه سام لجستیک خوش آمدید. امنیت و سرعت تجارت شما را تضمین می‌کنیم.
            </p>
            
            <div className="flex gap-4">
@@ -109,13 +114,11 @@ export default function LoginPage({ params }: { params: { locale: string } }) {
         </div>
       </div>
 
-      {/* LEFT SIDE: Login Form */}
+      {/* بخش چپ: فرم ورود */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-6 lg:p-12 relative">
-         {/* Mobile BG */}
          <div className="absolute inset-0 lg:hidden bg-[url('/hero/hero-bg.avif')] bg-cover bg-center opacity-10" />
          
          <div className="w-full max-w-md relative z-10">
-            
             <div className="text-center mb-10 lg:hidden">
                <Truck size={40} className="mx-auto text-yellow-500 mb-4" />
                <h2 className="text-2xl font-bold text-white">SAM LOGISTICS</h2>
@@ -126,7 +129,6 @@ export default function LoginPage({ params }: { params: { locale: string } }) {
                <p className="text-zinc-400 text-sm">لطفا سطح دسترسی خود را انتخاب کنید</p>
             </div>
 
-            {/* Role Selector Tabs */}
             <div className="grid grid-cols-3 gap-2 mb-8 p-1 bg-zinc-900/50 border border-white/5 rounded-2xl">
                {roles.map((role) => {
                  const Icon = role.icon;
@@ -144,8 +146,6 @@ export default function LoginPage({ params }: { params: { locale: string } }) {
                    >
                      <Icon size={20} className={cn("transition-colors", isActive ? `text-${role.id === 'admin' ? 'yellow' : role.id === 'staff' ? 'emerald' : 'blue'}-500` : "")} />
                      <span className="text-[10px] font-bold">{role.title}</span>
-                     
-                     {/* Active Indicator Dot */}
                      {isActive && (
                        <span className={cn("absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-gradient-to-r", role.color)} />
                      )}
@@ -154,9 +154,7 @@ export default function LoginPage({ params }: { params: { locale: string } }) {
                })}
             </div>
 
-            {/* Login Form */}
             <form onSubmit={handleLogin} className="space-y-6">
-               
                <div className="space-y-4">
                   <div className="relative group">
                      <label className="text-xs font-bold text-zinc-400 mb-1.5 block pr-1">ایمیل یا نام کاربری</label>
@@ -216,27 +214,23 @@ export default function LoginPage({ params }: { params: { locale: string } }) {
                     </>
                  )}
                </button>
-
             </form>
 
             <div className="mt-8 text-center">
                <p className="text-zinc-500 text-sm">
                   هنوز حساب کاربری ندارید؟{' '}
-                  <Link href={`/${params.locale}/contact`} className="text-white font-bold hover:underline decoration-yellow-500 underline-offset-4">
+                  <Link href={`/${locale}/contact`} className="text-white font-bold hover:underline decoration-yellow-500 underline-offset-4">
                      درخواست عضویت
                   </Link>
                </p>
             </div>
 
-            {/* Security Note */}
             <div className="mt-12 flex items-center justify-center gap-2 text-[10px] text-zinc-600 bg-zinc-900/30 py-2 rounded-lg border border-white/5">
                <Lock size={10} />
                <span>اتصال امن با رمزنگاری ۲۵۶ بیتی برقرار است</span>
             </div>
-
          </div>
       </div>
-
     </div>
   );
 }
