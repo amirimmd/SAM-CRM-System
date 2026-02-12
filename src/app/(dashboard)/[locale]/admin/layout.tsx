@@ -1,4 +1,8 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { usePathname, useRouter, useParams } from 'next/navigation';
 import { 
   LayoutDashboard, 
   Users, 
@@ -10,19 +14,38 @@ import {
   Search,
   Package,
   ShieldCheck,
-  Briefcase // آیکون جدید برای CRM
+  Briefcase,
+  X,
+  Globe
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-export default async function AdminLayout({
+export default function AdminLayout({
   children,
-  params,
 }: {
   children: React.ReactNode;
-  params: Promise<{ locale: string }>;
 }) {
-  const { locale } = await params;
+  const params = useParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  
+  const locale = (params?.locale as string) || 'fa';
   const isRtl = locale === 'fa';
+
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // بستن منوی موبایل هنگام تغییر مسیر (تغییر صفحه)
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [pathname]);
+
+  // تابع تغییر زبان کل پنل
+  const toggleLanguage = () => {
+    const newLocale = locale === 'fa' ? 'en' : 'fa';
+    // جایگزینی زبان فعلی در آدرس با زبان جدید
+    const newPathname = pathname.replace(`/${locale}`, `/${newLocale}`);
+    router.push(newPathname);
+  };
 
   const menuItems = [
     { 
@@ -35,7 +58,6 @@ export default async function AdminLayout({
       href: `/${locale}/admin/users`, 
       icon: Users 
     },
-    // گزینه جدید CRM
     { 
       title: isRtl ? 'پنل CRM و فروش' : 'CRM & Sales', 
       href: `/${locale}/admin/crm`, 
@@ -61,8 +83,32 @@ export default async function AdminLayout({
   return (
     <div className="min-h-screen bg-[#050505] text-white flex font-vazirmatn selection:bg-yellow-500/30">
       
-      {/* Sidebar - Desktop */}
-      <aside className="w-72 bg-[#0a0a0a] border-r border-white/5 hidden lg:flex flex-col fixed h-full z-50 shadow-2xl">
+      {/* Mobile Menu Overlay */}
+      {isMobileMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-black/80 z-[60] lg:hidden backdrop-blur-sm transition-opacity" 
+          onClick={() => setIsMobileMenuOpen(false)} 
+        />
+      )}
+
+      {/* Sidebar */}
+      <aside className={cn(
+        "w-72 bg-[#0a0a0a] border-white/5 flex flex-col fixed h-full z-[70] shadow-2xl transition-transform duration-300 ease-in-out",
+        isRtl ? "border-l right-0" : "border-r left-0",
+        // کنترل نمایش در موبایل و دسکتاپ
+        isMobileMenuOpen 
+          ? "translate-x-0" 
+          : (isRtl ? "translate-x-full lg:translate-x-0" : "-translate-x-full lg:translate-x-0")
+      )}>
+        
+        {/* دکمه بستن منو در موبایل */}
+        <button 
+          onClick={() => setIsMobileMenuOpen(false)}
+          className={cn("lg:hidden absolute top-6 text-zinc-400 hover:text-white z-50", isRtl ? "left-6" : "right-6")}
+        >
+          <X size={24} />
+        </button>
+
         {/* Brand Header */}
         <div className="h-24 flex flex-col items-center justify-center border-b border-white/5 bg-[url('/hero/hero-bg.avif')] bg-cover bg-center relative">
           <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" />
@@ -113,18 +159,22 @@ export default async function AdminLayout({
       <div className={cn("flex-1 flex flex-col min-h-screen transition-all", isRtl ? "lg:mr-72" : "lg:ml-72")}>
         
         {/* Top Header Bar */}
-        <header className="h-20 bg-[#0a0a0a]/80 backdrop-blur-xl border-b border-white/5 sticky top-0 z-40 px-8 flex items-center justify-between shadow-sm">
-          <div className="flex items-center gap-6">
-            <button className="lg:hidden p-2 rounded-xl bg-white/5 text-zinc-400 hover:text-white">
+        <header className="h-20 bg-[#0a0a0a]/80 backdrop-blur-xl border-b border-white/5 sticky top-0 z-40 px-6 lg:px-8 flex items-center justify-between shadow-sm">
+          <div className="flex items-center gap-4 lg:gap-6">
+            {/* Hamburger Button */}
+            <button 
+              onClick={() => setIsMobileMenuOpen(true)}
+              className="lg:hidden p-2 rounded-xl bg-white/5 text-zinc-400 hover:text-white transition-colors"
+            >
               <Menu size={24} />
             </button>
             
-            {/* Breadcrumb / Search */}
-            <div className="relative hidden md:block group">
+            {/* Search (Desktop only) */}
+            <div className="relative hidden lg:block group">
               <Search size={18} className={cn("absolute top-1/2 -translate-y-1/2 text-zinc-600 group-focus-within:text-yellow-500 transition-colors", isRtl ? "right-4" : "left-4")} />
               <input 
                 type="text" 
-                placeholder={isRtl ? "جستجو در شماره سفارشات، کاربران..." : "Search orders, users..."}
+                placeholder={isRtl ? "جستجو در سیستم..." : "Search system..."}
                 className={cn(
                    "w-80 h-11 bg-zinc-900 border border-white/5 rounded-xl text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-yellow-500/30 focus:bg-zinc-800 transition-all",
                    isRtl ? "pr-11 pl-4" : "pl-11 pr-4"
@@ -133,30 +183,42 @@ export default async function AdminLayout({
             </div>
           </div>
 
-          <div className="flex items-center gap-4 md:gap-6">
-            <button className="relative p-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-all">
-              <Bell size={20} />
-              <span className="absolute top-2 right-2.5 w-2 h-2 bg-red-500 rounded-full ring-2 ring-[#0a0a0a]" />
+          <div className="flex items-center gap-3 lg:gap-6">
+            
+            {/* 🌐 Language Switcher Button */}
+            <button 
+              onClick={toggleLanguage}
+              className="flex items-center gap-2 px-3 py-1.5 lg:px-4 lg:py-2 rounded-xl bg-zinc-900 border border-white/5 hover:bg-white/5 hover:border-white/10 text-zinc-300 transition-all font-bold text-xs lg:text-sm shadow-sm"
+              title={isRtl ? 'تغییر زبان' : 'Change Language'}
+            >
+              <Globe size={16} className="text-yellow-500" />
+              <span>{locale === 'fa' ? 'English' : 'فارسی'}</span>
+            </button>
+
+            <button className="hidden sm:block relative p-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-all">
+              <Bell size={18} />
+              <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full ring-2 ring-[#0a0a0a]" />
             </button>
             
-            <div className="h-8 w-px bg-white/10 hidden md:block" />
+            <div className="h-8 w-px bg-white/10 hidden lg:block" />
             
             <div className="flex items-center gap-3">
-              <div className="text-end hidden md:block">
-                <div className="text-sm font-bold text-white">مدیریت ارشد</div>
+              <div className="text-end hidden sm:block">
+                <div className="text-sm font-bold text-white">{isRtl ? 'مدیریت ارشد' : 'Admin'}</div>
                 <div className="text-[10px] text-emerald-500 font-mono bg-emerald-500/10 px-1.5 py-0.5 rounded ml-auto w-fit">Super Admin</div>
               </div>
-              <div className="w-11 h-11 rounded-full p-0.5 bg-gradient-to-br from-yellow-500 to-transparent">
+              <div className="w-10 h-10 lg:w-11 lg:h-11 rounded-full p-0.5 bg-gradient-to-br from-yellow-500 to-transparent shrink-0">
                  <div className="w-full h-full rounded-full bg-zinc-900 flex items-center justify-center overflow-hidden">
-                    <span className="font-bold text-yellow-500">AD</span>
+                    <span className="font-bold text-yellow-500 text-xs lg:text-sm">AD</span>
                  </div>
               </div>
             </div>
+
           </div>
         </header>
 
         {/* Scrollable Content */}
-        <main className="flex-1 p-6 md:p-10 overflow-x-hidden">
+        <main className="flex-1 p-4 sm:p-6 md:p-10 overflow-x-hidden">
           {children}
         </main>
 
