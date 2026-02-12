@@ -3,27 +3,26 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation'; // اضافه شدن useRouter
 import { 
   ShieldCheck, 
   Users, 
   Briefcase, 
   ArrowLeft, 
+  ArrowRight, // اضافه شد برای پشتیبانی RTL
   Mail, 
   Lock, 
   Eye, 
   EyeOff, 
   Truck,
-  Globe2,
-  ArrowRight
+  Globe2
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-// دیکشنری کلمات برای دو زبان
+// دیکشنری کلمات (بدون تغییر)
 const translations = {
   fa: {
     brandName: "سام لجستیک",
-    brandSubtitle: "حمل و نقل بین‌المللی",
     loginTitle: "ورود به حساب کاربری",
     loginSubtitle: "لطفا سطح دسترسی خود را انتخاب کنید",
     emailLabel: "ایمیل یا نام کاربری",
@@ -48,7 +47,6 @@ const translations = {
   },
   en: {
     brandName: "SAM Logistics",
-    brandSubtitle: "Global Freight",
     loginTitle: "Login to Account",
     loginSubtitle: "Please select your access level",
     emailLabel: "Email or Username",
@@ -75,10 +73,10 @@ const translations = {
 
 export default function LoginPage() {
   const params = useParams();
+  const router = useRouter(); // هوک برای ناوبری
   const locale = (params?.locale as string) || 'fa';
   const isRtl = locale === 'fa';
   
-  // انتخاب متن‌ها بر اساس زبان
   const t = translations[locale as 'fa' | 'en'] || translations.fa;
 
   const [activeRole, setActiveRole] = useState<'admin' | 'staff' | 'partner'>('partner');
@@ -88,10 +86,20 @@ export default function LoginPage() {
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    
+    // شبیه‌سازی لاگین و هدایت به پنل مربوطه
     setTimeout(() => {
         setIsLoading(false);
-        console.log("Logged in as", activeRole);
-    }, 2000);
+        
+        // منطق هدایت بر اساس نقش انتخاب شده
+        if (activeRole === 'admin') {
+            router.push(`/${locale}/admin`);
+        } else if (activeRole === 'staff') {
+            router.push(`/${locale}/staff`);
+        } else {
+            router.push(`/${locale}/partner`);
+        }
+    }, 1500);
   };
 
   const roles = [
