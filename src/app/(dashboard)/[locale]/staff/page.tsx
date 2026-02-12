@@ -1,109 +1,147 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Package, UserCheck, MessageSquare, AlertTriangle, Clock, ScanBarcode, X, Camera, CheckCircle2, ChevronRight, ChevronLeft, Check } from 'lucide-react';
+import { Package, UserCheck, MessageSquare, AlertTriangle, Clock, ScanBarcode, X, Camera, CheckCircle2, ChevronRight, ChevronLeft, Check, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 
-// --- کامپوننت واقعی اسکنر دوربین ---
+// --- کامپوننت واقعی و قدرتمند اسکنر دوربین (سازگار با تمامی گوشی‌ها) ---
 function ScannerModal({ onClose, onScan, t, isRtl }: any) {
-  const videoRef = useRef<HTMLVideoElement>(null);
   const [error, setError] = useState('');
   const [manualCode, setManualCode] = useState('');
+  const [isLibLoaded, setIsLibLoaded] = useState(false);
+  const scannerRef = useRef<any>(null);
 
+  // ۱. بارگذاری داینامیک کتابخانه قدرتمند html5-qrcode
   useEffect(() => {
-    let stream: MediaStream | null = null;
-    let scanInterval: any;
+    if ((window as any).Html5Qrcode) {
+      setIsLibLoaded(true);
+      return;
+    }
+    
+    const script = document.createElement('script');
+    script.src = 'https://unpkg.com/html5-qrcode';
+    script.async = true;
+    script.onload = () => setIsLibLoaded(true);
+    document.body.appendChild(script);
+  }, []);
 
-    const startScanner = async () => {
-      try {
-        // ۱. درخواست دسترسی به دوربین پشت گوشی
-        stream = await navigator.mediaDevices.getUserMedia({ 
-          video: { facingMode: 'environment' } 
-        });
-        
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-          videoRef.current.setAttribute('playsinline', 'true'); // ضروری برای iOS
-          videoRef.current.play();
-        }
+  // ۲. راه‌اندازی دوربین و اسکنر پس از لود شدن کتابخانه
+  useEffect(() => {
+    if (!isLibLoaded) return;
 
-        // ۲. استفاده از API بومی مرورگر برای پردازش تصویر
-        // @ts-ignore
-        if ('BarcodeDetector' in window) {
-          // @ts-ignore
-          const detector = new window.BarcodeDetector();
-          scanInterval = setInterval(async () => {
-            if (videoRef.current && videoRef.current.readyState === 4) {
-              try {
-                const barcodes = await detector.detect(videoRef.current);
-                if (barcodes.length > 0) {
-                  onScan(barcodes[0].rawValue);
-                }
-              } catch (e) {
-                // نادیده گرفتن خطاهای فریم‌های تار
-              }
-            }
-          }, 500);
-        } else {
-          setError(t.notSupported);
+    let html5QrCode: any;
+
+    try {
+      // @ts-ignore
+      html5QrCode = new window.Html5Qrcode("barcode-reader");
+      scannerRef.current = html5QrCode;
+
+      html5QrCode.start(
+        { facingMode: "environment" }, // درخواست دوربین پشت گوشی
+        {
+          fps: 10,
+          qrbox: { width: 250, height: 120 } // تنظیم کادر اسکن متناسب با بارکد کالا
+        },
+        (decodedText: string) => {
+          // موفقیت در اسکن
+          if (html5QrCode.isScanning) {
+            html5QrCode.stop().then(() => {
+              onScan(decodedText);
+            }).catch(console.error);
+          } else {
+            onScan(decodedText);
+          }
+        },
+        (errorMessage: string) => {
+          // خطاهای خواندن فریم (طبیعی است، چون مدام در حال تلاش برای یافتن بارکد است)
         }
-      } catch (err) {
+      ).catch((err: any) => {
+        console.error("Camera Access Error: ", err);
         setError(t.noAccess);
-      }
-    };
-
-    startScanner();
+      });
+    } catch (err) {
+      console.error("Scanner Init Error: ", err);
+      setError(t.notSupported);
+    }
 
     return () => {
-      if (stream) stream.getTracks().forEach(track => track.stop());
-      if (scanInterval) clearInterval(scanInterval);
+      // خاموش کردن دوربین هنگام بستن مودال
+      if (html5QrCode && html5QrCode.isScanning) {
+        html5QrCode.stop().catch(console.error);
+      }
     };
-  }, [onScan, t]);
+  }, [isLibLoaded, onScan, t]);
 
   return (
-    <div className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-md flex flex-col items-center justify-center p-4">
+    <div className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-md flex flex-col items-center justify-center p-4 font-vazirmatn" dir={isRtl ? 'rtl' : 'ltr'}>
       <div className="w-full max-w-sm flex flex-col items-center">
         
+        {/* هدر دوربین */}
         <div className="flex justify-between items-center w-full mb-6">
-           <h3 className="text-white font-bold flex items-center gap-2">
-             <Camera size={20} className="text-emerald-500" />
+           <h3 className="text-white font-bold flex items-center gap-2 text-lg">
+             <Camera size={22} className="text-emerald-500" />
              {t.title}
            </h3>
-           <button onClick={onClose} className="p-2 bg-white/10 rounded-full text-zinc-400 hover:text-white">
+           <button onClick={onClose} className="p-2.5 bg-white/10 rounded-xl text-zinc-400 hover:text-white hover:bg-red-500/20 transition-colors">
               <X size={20} />
            </button>
         </div>
 
         {/* ناحیه دوربین */}
-        <div className="relative w-full aspect-[3/4] bg-zinc-900 rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
-           <video 
-             ref={videoRef} 
-             className="absolute inset-0 w-full h-full object-cover"
+        <div className="relative w-full aspect-[3/4] bg-zinc-900 rounded-3xl overflow-hidden border border-white/10 shadow-2xl flex flex-col items-center justify-center">
+           
+           {/* انیمیشن لودینگ تا زمان باز شدن دوربین */}
+           {!isLibLoaded && (
+              <div className="text-emerald-500 flex flex-col items-center gap-3 animate-pulse">
+                 <Loader2 size={32} className="animate-spin" />
+                 <span className="text-sm font-bold text-zinc-400">در حال اتصال به دوربین...</span>
+              </div>
+           )}
+
+           {/* ویدیو دوربین */}
+           <div 
+             id="barcode-reader" 
+             className="absolute inset-0 w-full h-full [&>video]:object-cover [&>video]:w-full [&>video]:h-full [&>canvas]:hidden" 
            />
+           
            {/* لایه اسکن (گرافیک لیزر) */}
-           <div className="absolute inset-0 bg-black/40" />
-           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 border-2 border-emerald-500 rounded-2xl">
-              <div className="absolute top-0 left-0 right-0 h-0.5 bg-emerald-500 shadow-[0_0_15px_#10b981] animate-[scan_2s_ease-in-out_infinite]" />
+           <div className="absolute inset-0 pointer-events-none z-10 flex items-center justify-center">
+              <div className="absolute inset-0 bg-black/40" /> {/* تیره کردن اطراف */}
+              <div className="relative w-64 h-32 border-2 border-emerald-500/80 rounded-2xl overflow-hidden shadow-[0_0_0_999px_rgba(0,0,0,0.5)]">
+                 <div className="absolute top-0 left-0 right-0 h-0.5 bg-emerald-400 shadow-[0_0_20px_#34d399] animate-[scan_2s_ease-in-out_infinite]" />
+                 {/* نشانگرهای گوشه */}
+                 <div className="absolute top-0 left-0 w-4 h-4 border-t-4 border-l-4 border-emerald-500 rounded-tl-xl" />
+                 <div className="absolute top-0 right-0 w-4 h-4 border-t-4 border-r-4 border-emerald-500 rounded-tr-xl" />
+                 <div className="absolute bottom-0 left-0 w-4 h-4 border-b-4 border-l-4 border-emerald-500 rounded-bl-xl" />
+                 <div className="absolute bottom-0 right-0 w-4 h-4 border-b-4 border-r-4 border-emerald-500 rounded-br-xl" />
+              </div>
            </div>
 
+           {/* نمایش خطا و ورود دستی */}
            {error && (
-             <div className="absolute inset-0 bg-zinc-900/90 flex items-center justify-center p-6 text-center z-20">
-                <div>
-                   <AlertTriangle className="text-yellow-500 mx-auto mb-3" size={32} />
-                   <p className="text-sm text-zinc-300 mb-4">{error}</p>
-                   {/* ورود دستی به عنوان بک‌آپ */}
-                   <div className="flex gap-2">
-                      <input 
-                        type="text" 
-                        value={manualCode}
-                        onChange={(e) => setManualCode(e.target.value)}
-                        placeholder="SAM-XXXX"
-                        className="h-10 bg-black border border-white/10 rounded-lg px-3 text-white text-sm w-full text-center"
-                      />
-                      <button onClick={() => onScan(manualCode)} className="px-4 bg-emerald-600 text-black font-bold rounded-lg text-sm">OK</button>
-                   </div>
+             <div className="absolute inset-0 bg-zinc-950/95 flex flex-col items-center justify-center p-8 text-center z-20 backdrop-blur-sm">
+                <AlertTriangle className="text-yellow-500 mb-4" size={40} />
+                <p className="text-sm text-zinc-300 mb-6 leading-relaxed font-medium">{error}</p>
+                
+                {/* ورود دستی */}
+                <div className="w-full space-y-3">
+                   <input 
+                     type="text" 
+                     value={manualCode}
+                     onChange={(e) => setManualCode(e.target.value)}
+                     placeholder="SAM-XXXX"
+                     className="h-14 bg-black border border-white/10 rounded-xl px-4 text-white text-lg w-full text-center font-mono focus:border-emerald-500/50 outline-none transition-colors"
+                     dir="ltr"
+                   />
+                   <button 
+                     onClick={() => onScan(manualCode)} 
+                     disabled={!manualCode.trim()}
+                     className="w-full h-14 bg-emerald-600 text-white font-bold rounded-xl text-lg hover:bg-emerald-500 disabled:opacity-50 transition-colors"
+                   >
+                      OK
+                   </button>
                 </div>
              </div>
            )}
@@ -147,7 +185,7 @@ export default function StaffDashboardPage() {
     fa: {
       title: 'میز کار شما',
       desc: 'خلاصه وضعیت عملیات انبار و کارهای در انتظار انجام',
-      scanBtn: 'اسکن سریع دوربین',
+      scanBtn: 'اسکن سریع بارکد',
       stats: { pending: 'بارهای منتظر تخصیص', kyc: 'تایید هویت‌های جدید', tickets: 'پیام‌های خوانده نشده' },
       tasksTitle: 'کارهای فوری امروز',
       tasksEmpty: 'تمام کارهای امروز انجام شده است. عالی بود! 🎉',
@@ -158,16 +196,16 @@ export default function StaffDashboardPage() {
       recent: 'بارهای اخیراً ثبت شده',
       cargoType: 'تیپ',
       camera: {
-        title: 'اسکنر بارکد بومی',
-        instruction: 'دوربین را روی بارکد روی کارتن قرار دهید',
-        notSupported: 'مرورگر شما از Barcode API بومی پشتیبانی نمی‌کند. لطفا کد را دستی وارد کنید.',
-        noAccess: 'دسترسی به دوربین داده نشد. لطفا دسترسی را در تنظیمات مرورگر فعال کنید.'
+        title: 'اسکنر هوشمند کالا',
+        instruction: 'بارکد روی کارتن را در کادر سبز قرار دهید',
+        notSupported: 'مرورگر شما قادر به اجرای موتور اسکنر نیست. لطفاً کد را به صورت دستی وارد کنید.',
+        noAccess: 'دسترسی به دوربین مسدود شده است. لطفاً در تنظیمات مرورگر اجازه استفاده از دوربین را بدهید، یا کد را دستی وارد کنید.'
       }
     },
     en: {
       title: 'Your Workspace',
       desc: 'Overview of warehouse operations and pending tasks',
-      scanBtn: 'Quick Camera Scan',
+      scanBtn: 'Quick Barcode Scan',
       stats: { pending: 'Pending Shipments', kyc: 'Pending KYC Approvals', tickets: 'Unread Messages' },
       tasksTitle: 'Urgent Tasks Today',
       tasksEmpty: 'All tasks completed for today. Great job! 🎉',
@@ -178,10 +216,10 @@ export default function StaffDashboardPage() {
       recent: 'Recently Logged Cargo',
       cargoType: 'Tier',
       camera: {
-        title: 'Native Barcode Scanner',
-        instruction: 'Point the camera at the carton barcode',
-        notSupported: 'Your browser does not support Native Barcode API. Please enter code manually.',
-        noAccess: 'Camera access denied. Please enable it in browser settings.'
+        title: 'Smart Cargo Scanner',
+        instruction: 'Align the barcode within the green frame',
+        notSupported: 'Your browser cannot run the scanner engine. Please enter the code manually.',
+        noAccess: 'Camera access blocked. Please allow camera permissions in browser settings or enter code manually.'
       }
     }
   };
@@ -204,7 +242,7 @@ export default function StaffDashboardPage() {
   return (
     <div className="space-y-8 animate-in fade-in duration-500 font-vazirmatn pb-20">
       
-      {/* 📷 Modal اسکنر واقعی */}
+      {/* 📷 Modal اسکنر قدرتمند */}
       {isScanning && (
         <ScannerModal 
           onClose={() => setIsScanning(false)}
