@@ -68,9 +68,8 @@ export function Header({ locale }: HeaderProps) {
       <header
         className={cn(
           "fixed top-0 left-0 right-0 transition-all duration-500 ease-in-out font-vazirmatn will-change-transform",
-          // Lower z-index for the header container so the menu overlay can sit on top if needed, 
-          // but content inside (logo, buttons) will be raised higher.
-          "z-[50]", 
+          // Use extremely high z-index to ensure it is above everything
+          "z-[9999]", 
           isScrolled
             ? "bg-black/90 backdrop-blur-xl border-b border-white/10 py-3 shadow-lg"
             : "bg-transparent py-6 border-b border-transparent"
@@ -79,9 +78,9 @@ export function Header({ locale }: HeaderProps) {
         <div className="container mx-auto px-4 md:px-8 max-w-7xl relative">
           <div className="flex items-center justify-between">
 
-            {/* Logo Area - High Z-Index to stay above mobile menu */}
-            <div className="flex items-center gap-2 z-[1000] relative">
-              <Link href={`/${locale}`} className="group flex items-center gap-3 relative" onClick={closeMenu}>
+            {/* Logo Area */}
+            <div className="flex items-center gap-2 relative z-[10000]">
+              <Link href={`/${locale}`} className="group flex items-center gap-3 relative" onClick={closeMenu} prefetch={false}>
                 <div className="relative flex items-center justify-center w-11 h-11 md:w-12 md:h-12 rounded-2xl bg-gradient-to-tr from-yellow-600 to-yellow-400 shadow-lg shadow-yellow-500/20 group-hover:shadow-yellow-500/40 transition-all duration-300 overflow-hidden ring-1 ring-white/10">
                    <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors" />
                    <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
@@ -99,7 +98,7 @@ export function Header({ locale }: HeaderProps) {
             </div>
 
             {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center gap-1 p-1.5 rounded-full bg-white/5 border border-white/5 backdrop-blur-sm shadow-inner shadow-black/20 relative z-[1000]">
+            <nav className="hidden lg:flex items-center gap-1 p-1.5 rounded-full bg-white/5 border border-white/5 backdrop-blur-sm shadow-inner shadow-black/20 relative z-[10000]">
               {navLinks.map((link) => {
                 const Icon = link.icon;
                 const isActive = pathname === link.href;
@@ -110,6 +109,7 @@ export function Header({ locale }: HeaderProps) {
                   <Link
                     key={link.href}
                     href={link.href}
+                    prefetch={false} // Disable prefetch to avoid 404 errors on some routes
                     className={cn(
                       "px-5 py-2.5 rounded-full text-sm font-bold transition-all duration-300 relative overflow-hidden group flex items-center gap-2",
                       isActive
@@ -130,10 +130,11 @@ export function Header({ locale }: HeaderProps) {
             </nav>
 
             {/* Actions Area */}
-            <div className="hidden md:flex items-center gap-3 z-[1000] relative">
+            <div className="hidden md:flex items-center gap-3 relative z-[10000]">
               {/* Language Switcher */}
               <Link
                 href={switchLanguageUrl}
+                prefetch={false}
                 className="flex items-center gap-2 px-3 py-2 rounded-xl text-zinc-400 hover:text-white hover:bg-white/10 transition-all duration-300 text-xs font-bold uppercase tracking-wider border border-white/5 hover:border-white/20 bg-white/5"
               >
                 <Globe size={16} className="text-yellow-500" />
@@ -143,6 +144,7 @@ export function Header({ locale }: HeaderProps) {
               {/* Dashboard Button */}
               <Link
                 href={`/${locale}/login`}
+                prefetch={false}
                 className="relative group overflow-hidden px-5 py-2.5 rounded-xl bg-zinc-900 border border-white/10 text-white font-bold text-sm transition-all duration-300 hover:border-yellow-500/50 hover:shadow-[0_0_20px_rgba(234,179,8,0.15)]"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-yellow-600/10 to-yellow-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -156,7 +158,7 @@ export function Header({ locale }: HeaderProps) {
             {/* Mobile Menu Button - High Z-Index */}
             <button
               onClick={toggleMenu}
-              className="lg:hidden relative z-[1000] p-2.5 rounded-xl bg-white/5 border border-white/5 text-white hover:text-yellow-400 hover:bg-white/10 transition-all active:scale-95"
+              className="lg:hidden relative z-[10000] p-2.5 rounded-xl bg-white/5 border border-white/5 text-white hover:text-yellow-400 hover:bg-white/10 transition-all active:scale-95"
             >
               {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -165,10 +167,10 @@ export function Header({ locale }: HeaderProps) {
         </div>
       </header>
 
-      {/* Mobile Menu Overlay - High Z-Index (999) to cover page content but sit below header buttons (1000) */}
+      {/* Mobile Menu Overlay - High Z-Index (9998) to cover page content but sit below header buttons (10000) */}
       <div
         className={cn(
-          "fixed inset-0 z-[999] bg-black/95 backdrop-blur-3xl transition-all duration-500 lg:hidden flex flex-col font-vazirmatn",
+          "fixed inset-0 z-[9998] bg-black/95 backdrop-blur-3xl transition-all duration-500 lg:hidden flex flex-col font-vazirmatn",
           isMobileMenuOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-full pointer-events-none"
         )}
       >
@@ -185,6 +187,7 @@ export function Header({ locale }: HeaderProps) {
                   key={link.href}
                   href={link.href}
                   onClick={closeMenu}
+                  prefetch={false} // Disable prefetch here too
                   className="group flex items-center justify-between p-5 rounded-2xl bg-zinc-900/50 border border-white/5 hover:bg-white/10 hover:border-yellow-500/30 transition-all duration-300 active:scale-[0.98]"
                   style={{ transitionDelay: `${idx * 50}ms` }}
                 >
@@ -207,6 +210,7 @@ export function Header({ locale }: HeaderProps) {
                 <Link
                    href={switchLanguageUrl}
                    onClick={closeMenu}
+                   prefetch={false}
                    className="flex flex-col items-center justify-center gap-2 p-4 rounded-2xl bg-zinc-900/80 border border-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-all active:scale-95"
                 >
                    <Globe size={20} className="text-blue-400" />
@@ -216,6 +220,7 @@ export function Header({ locale }: HeaderProps) {
                 <Link
                    href={`/${locale}/login`}
                    onClick={closeMenu}
+                   prefetch={false}
                    className="flex flex-col items-center justify-center gap-2 p-4 rounded-2xl bg-gradient-to-br from-yellow-600 to-yellow-500 text-black font-bold shadow-lg shadow-yellow-500/20 active:scale-95 transition-transform"
                 >
                    <User size={20} />
