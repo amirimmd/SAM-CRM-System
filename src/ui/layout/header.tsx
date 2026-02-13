@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { Truck, Menu, X, Globe, User, Calculator, Phone, PackageSearch, Box, ChevronDown } from 'lucide-react';
@@ -14,6 +14,7 @@ export function Header({ locale }: HeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter(); // استفاده از روتر برای ناوبری مطمئن
   const isRtl = locale === 'fa';
 
   // --- Logic for switching language ---
@@ -22,12 +23,10 @@ export function Header({ locale }: HeaderProps) {
   const getSwitchLanguageUrl = () => {
     if (!pathname) return `/${targetLocale}`;
     const segments = pathname.split('/');
-    // Usually the second segment is the locale (e.g. ['', 'fa', 'login'])
     if (segments[1] === locale) {
       segments[1] = targetLocale;
       return segments.join('/');
     }
-    // Fallback
     return `/${targetLocale}`;
   };
 
@@ -55,10 +54,15 @@ export function Header({ locale }: HeaderProps) {
     setIsMobileMenuOpen(false);
   };
 
+  // تابع ناوبری دستی برای موبایل (حل مشکل کلیک نکردن)
+  const handleMobileNav = (href: string) => {
+    closeMenu();
+    router.push(href);
+  };
+
   const navLinks = [
     { href: `/${locale}/products`, label: isRtl ? 'محصولات' : 'Products', icon: Box },
     { href: `/${locale}/tracking`, label: isRtl ? 'رهگیری بار' : 'Tracking', icon: PackageSearch },
-    // Calculator Link
     { href: `/${locale}/calculator`, label: isRtl ? 'استعلام قیمت' : 'Get Quote', icon: Calculator },
     { href: `/${locale}/contact`, label: isRtl ? 'تماس با ما' : 'Contact', icon: Phone },
   ];
@@ -67,9 +71,10 @@ export function Header({ locale }: HeaderProps) {
     <>
       <header
         className={cn(
-          "fixed top-0 left-0 right-0 transition-all duration-500 ease-in-out font-vazirmatn will-change-transform",
-          // Use extremely high z-index to ensure it is above everything
-          "z-[9999]", 
+          "fixed top-0 left-0 right-0 transition-all duration-500 ease-in-out font-vazirmatn",
+          // حذف will-change-transform برای جلوگیری از باگ‌های لایه‌بندی در موبایل
+          // افزایش شدید z-index وقتی منو باز است
+          isMobileMenuOpen ? "z-[99999]" : "z-[100]",
           isScrolled
             ? "bg-black/90 backdrop-blur-xl border-b border-white/10 py-3 shadow-lg"
             : "bg-transparent py-6 border-b border-transparent"
@@ -102,14 +107,13 @@ export function Header({ locale }: HeaderProps) {
               {navLinks.map((link) => {
                 const Icon = link.icon;
                 const isActive = pathname === link.href;
-                // Detect if current link is calculator for golden style
                 const isCalculator = link.href.includes('calculator');
                 
                 return (
                   <Link
                     key={link.href}
                     href={link.href}
-                    prefetch={false} // Disable prefetch to avoid 404 errors on some routes
+                    prefetch={false}
                     className={cn(
                       "px-5 py-2.5 rounded-full text-sm font-bold transition-all duration-300 relative overflow-hidden group flex items-center gap-2",
                       isActive
@@ -131,7 +135,6 @@ export function Header({ locale }: HeaderProps) {
 
             {/* Actions Area */}
             <div className="hidden md:flex items-center gap-3 relative z-[10000]">
-              {/* Language Switcher */}
               <Link
                 href={switchLanguageUrl}
                 prefetch={false}
@@ -141,7 +144,6 @@ export function Header({ locale }: HeaderProps) {
                 <span>{isRtl ? 'EN' : 'فا'}</span>
               </Link>
 
-              {/* Dashboard Button */}
               <Link
                 href={`/${locale}/login`}
                 prefetch={false}
@@ -167,10 +169,10 @@ export function Header({ locale }: HeaderProps) {
         </div>
       </header>
 
-      {/* Mobile Menu Overlay - High Z-Index (9998) to cover page content but sit below header buttons (10000) */}
+      {/* Mobile Menu Overlay */}
       <div
         className={cn(
-          "fixed inset-0 z-[9998] bg-black/95 backdrop-blur-3xl transition-all duration-500 lg:hidden flex flex-col font-vazirmatn",
+          "fixed inset-0 z-[99998] bg-black/95 backdrop-blur-3xl transition-all duration-500 lg:hidden flex flex-col font-vazirmatn",
           isMobileMenuOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-full pointer-events-none"
         )}
       >
@@ -183,12 +185,11 @@ export function Header({ locale }: HeaderProps) {
               const Icon = link.icon;
               const isCalculator = link.href.includes('calculator');
               return (
-                <Link
+                // استفاده از دکمه و router.push به جای Link برای حل مشکل 404 و کلیک نشدن در موبایل
+                <button
                   key={link.href}
-                  href={link.href}
-                  onClick={closeMenu}
-                  prefetch={false} // Disable prefetch here too
-                  className="group flex items-center justify-between p-5 rounded-2xl bg-zinc-900/50 border border-white/5 hover:bg-white/10 hover:border-yellow-500/30 transition-all duration-300 active:scale-[0.98]"
+                  onClick={() => handleMobileNav(link.href)}
+                  className="group flex items-center justify-between p-5 rounded-2xl bg-zinc-900/50 border border-white/5 hover:bg-white/10 hover:border-yellow-500/30 transition-all duration-300 active:scale-[0.98] w-full text-left"
                   style={{ transitionDelay: `${idx * 50}ms` }}
                 >
                   <span className="text-xl font-bold text-zinc-300 group-hover:text-yellow-400 transition-colors flex items-center gap-3">
@@ -198,7 +199,7 @@ export function Header({ locale }: HeaderProps) {
                   <div className={cn("w-10 h-10 rounded-full flex items-center justify-center bg-black/50 border border-white/5 group-hover:bg-yellow-500 text-zinc-500 group-hover:text-black transition-all duration-300", isRtl ? "rotate-180" : "")}>
                      <ChevronDown size={20} className="-rotate-90" />
                   </div>
-                </Link>
+                </button>
               );
             })}
           </nav>
@@ -207,25 +208,21 @@ export function Header({ locale }: HeaderProps) {
              <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent w-full" />
              
              <div className="grid grid-cols-2 gap-4">
-                <Link
-                   href={switchLanguageUrl}
-                   onClick={closeMenu}
-                   prefetch={false}
+                <button
+                   onClick={() => handleMobileNav(switchLanguageUrl)}
                    className="flex flex-col items-center justify-center gap-2 p-4 rounded-2xl bg-zinc-900/80 border border-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-all active:scale-95"
                 >
                    <Globe size={20} className="text-blue-400" />
                    <span className="text-sm font-bold">{isRtl ? 'English' : 'فارسی'}</span>
-                </Link>
+                </button>
 
-                <Link
-                   href={`/${locale}/login`}
-                   onClick={closeMenu}
-                   prefetch={false}
+                <button
+                   onClick={() => handleMobileNav(`/${locale}/login`)}
                    className="flex flex-col items-center justify-center gap-2 p-4 rounded-2xl bg-gradient-to-br from-yellow-600 to-yellow-500 text-black font-bold shadow-lg shadow-yellow-500/20 active:scale-95 transition-transform"
                 >
                    <User size={20} />
                    <span className="text-sm">{isRtl ? 'پنل کاربری' : 'Dashboard'}</span>
-                </Link>
+                </button>
              </div>
              
              <div className="text-center">
