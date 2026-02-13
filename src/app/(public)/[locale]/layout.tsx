@@ -4,7 +4,7 @@ import "../../globals.css";
 import { siteConfig } from "@/lib/config/site";
 import { cn } from "@/lib/utils";
 import { Header } from '@/ui/layout/header';
-import { ChatWidget } from "@/ui/chat/chat-widget"; // اضافه شدن ویجت چت
+import { ChatWidget } from "@/ui/chat/chat-widget"; 
 import { generateOrganizationSchema } from '@/lib/seo/schema';
 import { Mail, MapPin, Phone, Globe2, ArrowUpRight, Linkedin, Twitter, Instagram } from 'lucide-react';
 import Link from 'next/link';
@@ -202,6 +202,7 @@ export default async function PublicLayout({
                     <span className="w-1 h-1 rounded-full bg-zinc-700"></span>
                     {isRtl ? 'تماس با ما' : 'Contact Us'}
                   </Link>
+                  {/* لینک جدید درباره ما */}
                   <Link href={`/${locale}/about`} className="hover:text-yellow-400 transition-colors flex items-center gap-2">
                     <span className="w-1 h-1 rounded-full bg-zinc-700"></span>
                     {isRtl ? 'درباره شرکت' : 'About Company'}
