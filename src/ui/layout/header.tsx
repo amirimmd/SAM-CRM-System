@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
-import { Truck, Menu, X, ChevronDown, Globe, User } from 'lucide-react';
+import { Truck, Menu, X, ChevronDown, Globe, User, Calculator } from 'lucide-react';
 
 interface HeaderProps {
   locale: string;
@@ -61,6 +61,8 @@ export function Header({ locale }: HeaderProps) {
   const navLinks = [
     { href: `/${locale}/products`, label: isRtl ? 'محصولات' : 'Products' },
     { href: `/${locale}/tracking`, label: isRtl ? 'رهگیری بار' : 'Tracking' },
+    // لینک جدید استعلام قیمت
+    { href: `/${locale}/calculator`, label: isRtl ? 'استعلام قیمت' : 'Get Quote', icon: Calculator },
     { href: `/${locale}/contact`, label: isRtl ? 'تماس با ما' : 'Contact' },
   ];
 
@@ -103,7 +105,7 @@ export function Header({ locale }: HeaderProps) {
                   key={link.href}
                   href={link.href}
                   className={cn(
-                    "px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300 relative overflow-hidden group",
+                    "px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300 relative overflow-hidden group flex items-center gap-2",
                     pathname === link.href
                       ? "text-black bg-yellow-400 shadow-[0_0_20px_rgba(250,204,21,0.4)] ring-2 ring-yellow-400/50"
                       : "text-zinc-400 hover:text-white hover:bg-white/10"
@@ -116,9 +118,9 @@ export function Header({ locale }: HeaderProps) {
 
             {/* Actions Area */}
             <div className="hidden md:flex items-center gap-3 z-50">
-              {/* Language Switcher (Desktop) */}
+              {/* Language Switcher */}
               <Link
-                href={switchLanguageUrl} // لینک هوشمند
+                href={switchLanguageUrl}
                 className="flex items-center gap-2 px-3 py-2 rounded-xl text-zinc-400 hover:text-white hover:bg-white/10 transition-all duration-300 text-xs font-bold uppercase tracking-wider border border-white/5 hover:border-white/20 bg-white/5"
               >
                 <Globe size={16} className="text-yellow-500" />
@@ -170,7 +172,7 @@ export function Header({ locale }: HeaderProps) {
                 className="group flex items-center justify-between p-5 rounded-2xl bg-zinc-900/50 border border-white/5 hover:bg-white/10 hover:border-yellow-500/30 transition-all duration-300 active:scale-[0.98]"
                 style={{ transitionDelay: `${idx * 50}ms` }}
               >
-                <span className="text-xl font-bold text-zinc-300 group-hover:text-yellow-400 transition-colors">
+                <span className="text-xl font-bold text-zinc-300 group-hover:text-yellow-400 transition-colors flex items-center gap-3">
                   {link.label}
                 </span>
                 <div className={cn("w-10 h-10 rounded-full flex items-center justify-center bg-black/50 border border-white/5 group-hover:bg-yellow-500 text-zinc-500 group-hover:text-black transition-all duration-300", isRtl ? "rotate-180" : "")}>
@@ -184,9 +186,8 @@ export function Header({ locale }: HeaderProps) {
              <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent w-full" />
              
              <div className="grid grid-cols-2 gap-4">
-                {/* Language Switcher (Mobile) */}
                 <Link
-                   href={switchLanguageUrl} // لینک هوشمند
+                   href={switchLanguageUrl}
                    onClick={closeMenu}
                    className="flex flex-col items-center justify-center gap-2 p-4 rounded-2xl bg-zinc-900/80 border border-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-all active:scale-95"
                 >
