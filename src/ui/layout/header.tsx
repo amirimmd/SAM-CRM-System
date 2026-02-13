@@ -68,8 +68,9 @@ export function Header({ locale }: HeaderProps) {
       <header
         className={cn(
           "fixed top-0 left-0 right-0 transition-all duration-500 ease-in-out font-vazirmatn will-change-transform",
-          // z-index to 100 to stay on top
-          "z-[100]", 
+          // Lower z-index for the header container so the menu overlay can sit on top if needed, 
+          // but content inside (logo, buttons) will be raised higher.
+          "z-[50]", 
           isScrolled
             ? "bg-black/90 backdrop-blur-xl border-b border-white/10 py-3 shadow-lg"
             : "bg-transparent py-6 border-b border-transparent"
@@ -78,8 +79,8 @@ export function Header({ locale }: HeaderProps) {
         <div className="container mx-auto px-4 md:px-8 max-w-7xl relative">
           <div className="flex items-center justify-between">
 
-            {/* Logo Area */}
-            <div className="flex items-center gap-2 z-[101] relative">
+            {/* Logo Area - High Z-Index to stay above mobile menu */}
+            <div className="flex items-center gap-2 z-[1000] relative">
               <Link href={`/${locale}`} className="group flex items-center gap-3 relative" onClick={closeMenu}>
                 <div className="relative flex items-center justify-center w-11 h-11 md:w-12 md:h-12 rounded-2xl bg-gradient-to-tr from-yellow-600 to-yellow-400 shadow-lg shadow-yellow-500/20 group-hover:shadow-yellow-500/40 transition-all duration-300 overflow-hidden ring-1 ring-white/10">
                    <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors" />
@@ -98,7 +99,7 @@ export function Header({ locale }: HeaderProps) {
             </div>
 
             {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center gap-1 p-1.5 rounded-full bg-white/5 border border-white/5 backdrop-blur-sm shadow-inner shadow-black/20 relative z-[101]">
+            <nav className="hidden lg:flex items-center gap-1 p-1.5 rounded-full bg-white/5 border border-white/5 backdrop-blur-sm shadow-inner shadow-black/20 relative z-[1000]">
               {navLinks.map((link) => {
                 const Icon = link.icon;
                 const isActive = pathname === link.href;
@@ -129,7 +130,7 @@ export function Header({ locale }: HeaderProps) {
             </nav>
 
             {/* Actions Area */}
-            <div className="hidden md:flex items-center gap-3 z-[101] relative">
+            <div className="hidden md:flex items-center gap-3 z-[1000] relative">
               {/* Language Switcher */}
               <Link
                 href={switchLanguageUrl}
@@ -152,10 +153,10 @@ export function Header({ locale }: HeaderProps) {
               </Link>
             </div>
 
-            {/* Mobile Menu Button */}
+            {/* Mobile Menu Button - High Z-Index */}
             <button
               onClick={toggleMenu}
-              className="lg:hidden relative z-[101] p-2.5 rounded-xl bg-white/5 border border-white/5 text-white hover:text-yellow-400 hover:bg-white/10 transition-all active:scale-95"
+              className="lg:hidden relative z-[1000] p-2.5 rounded-xl bg-white/5 border border-white/5 text-white hover:text-yellow-400 hover:bg-white/10 transition-all active:scale-95"
             >
               {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -164,10 +165,10 @@ export function Header({ locale }: HeaderProps) {
         </div>
       </header>
 
-      {/* Mobile Menu Overlay */}
+      {/* Mobile Menu Overlay - High Z-Index (999) to cover page content but sit below header buttons (1000) */}
       <div
         className={cn(
-          "fixed inset-0 z-[90] bg-black/95 backdrop-blur-3xl transition-all duration-500 lg:hidden flex flex-col font-vazirmatn",
+          "fixed inset-0 z-[999] bg-black/95 backdrop-blur-3xl transition-all duration-500 lg:hidden flex flex-col font-vazirmatn",
           isMobileMenuOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-full pointer-events-none"
         )}
       >
