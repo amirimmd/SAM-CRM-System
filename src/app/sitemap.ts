@@ -1,27 +1,34 @@
-import type { MetadataRoute } from 'next';
-import { siteConfig } from '@/lib/config/site';
-import { SUPPORTED_LOCALES } from '@/lib/i18n/config';
-
-const ROUTES = ['', '/calculator'];
+import { MetadataRoute } from 'next';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const now = new Date();
-  return SUPPORTED_LOCALES.flatMap((locale) =>
-    ROUTES.map<MetadataRoute.Sitemap[number]>((route) => {
-      const url = `${siteConfig.seo.baseUrl}/${locale}${route}`;
-      const languages = Object.fromEntries(
-        SUPPORTED_LOCALES.map((code) => [code, `${siteConfig.seo.baseUrl}/${code}${route}`]),
-      );
+  const baseUrl = 'https://www.saminto.com';
+  
+  // لیست تمام صفحات عمومی سایت
+  const routes = [
+    '',
+    '/about',
+    '/contact',
+    '/products',
+    '/tracking',
+    '/calculator',
+  ];
 
-      return {
-        url,
-        lastModified: now,
-        changeFrequency: 'weekly',
-        priority: route === '' ? 1 : 0.8,
-        alternates: {
-          languages,
-        },
-      };
-    }),
-  );
+  // لیست زبان‌های سایت
+  const locales = ['fa', 'en'];
+
+  const sitemapEntries: MetadataRoute.Sitemap = [];
+
+  // ایجاد لینک برای هر مسیر در هر زبان
+  routes.forEach((route) => {
+    locales.forEach((locale) => {
+      sitemapEntries.push({
+        url: `${baseUrl}/${locale}${route}`,
+        lastModified: new Date(),
+        changeFrequency: route === '' ? 'daily' : 'weekly', // صفحه اصلی روزانه، بقیه هفتگی
+        priority: route === '' ? 1 : 0.8, // اولویت صفحه اصلی بالاتر است
+      });
+    });
+  });
+
+  return sitemapEntries;
 }

@@ -1,18 +1,29 @@
-import type { MetadataRoute } from 'next';
-import { siteConfig } from '@/lib/config/site';
-import { SUPPORTED_LOCALES } from '@/lib/i18n/config';
+import { MetadataRoute } from 'next';
 
 export default function robots(): MetadataRoute.Robots {
-  const allowPaths = SUPPORTED_LOCALES.map((locale) => `/${locale}`);
+  const baseUrl = 'https://www.saminto.com';
 
   return {
-    rules: [
-      {
-        userAgent: '*',
-        allow: ['/', ...allowPaths],
-      },
-    ],
-    sitemap: `${siteConfig.seo.baseUrl}/sitemap.xml`,
-    host: siteConfig.seo.baseUrl,
+    rules: {
+      userAgent: '*',
+      allow: [
+        '/', 
+        '/fa', 
+        '/en',
+        '/fa/about', '/en/about',
+        '/fa/contact', '/en/contact',
+        '/fa/products', '/en/products',
+        '/fa/tracking', '/en/tracking',
+        '/fa/calculator', '/en/calculator',
+      ],
+      disallow: [
+        '/api/',      // بستن دسترسی به API ها
+        '/*/admin/',  // بستن پنل ادمین در همه زبان‌ها
+        '/*/staff/',  // بستن پنل کارشناسان
+        '/*/partner/',// بستن پنل شرکا
+        '/_next/',    // فایل‌های داخلی نکست
+      ],
+    },
+    sitemap: `${baseUrl}/sitemap.xml`,
   };
 }
