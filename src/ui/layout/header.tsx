@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
-import { Truck, Menu, X, ChevronDown, Globe, User, Calculator } from 'lucide-react';
+import { Truck, Menu, X, Globe, User, Calculator, Phone, PackageSearch, Box, ChevronDown } from 'lucide-react';
 
 interface HeaderProps {
   locale: string;
@@ -13,28 +13,25 @@ interface HeaderProps {
 export function Header({ locale }: HeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const pathname = usePathname(); // دریافت آدرس فعلی
+  const pathname = usePathname();
   const isRtl = locale === 'fa';
 
-  // --- منطق تغییر زبان هوشمند ---
-  const targetLocale = isRtl ? 'en' : 'fa'; // زبانی که می‌خواهیم به آن برویم
+  // --- Logic for switching language ---
+  const targetLocale = isRtl ? 'en' : 'fa';
   
   const getSwitchLanguageUrl = () => {
     if (!pathname) return `/${targetLocale}`;
-    
     const segments = pathname.split('/');
-    // معمولاً سگمنت دوم همان زبان است (مثلاً ['', 'fa', 'login'])
+    // Usually the second segment is the locale (e.g. ['', 'fa', 'login'])
     if (segments[1] === locale) {
-      segments[1] = targetLocale; // جایگزینی زبان فعلی با زبان جدید
+      segments[1] = targetLocale;
       return segments.join('/');
     }
-    
-    // حالت اطمینان: اگر ساختار آدرس متفاوت بود
+    // Fallback
     return `/${targetLocale}`;
   };
 
   const switchLanguageUrl = getSwitchLanguageUrl();
-  // -----------------------------
 
   useEffect(() => {
     const handleScroll = () => {
@@ -59,29 +56,31 @@ export function Header({ locale }: HeaderProps) {
   };
 
   const navLinks = [
-    { href: `/${locale}/products`, label: isRtl ? 'محصولات' : 'Products' },
-    { href: `/${locale}/tracking`, label: isRtl ? 'رهگیری بار' : 'Tracking' },
-    // لینک جدید استعلام قیمت
+    { href: `/${locale}/products`, label: isRtl ? 'محصولات' : 'Products', icon: Box },
+    { href: `/${locale}/tracking`, label: isRtl ? 'رهگیری بار' : 'Tracking', icon: PackageSearch },
+    // Calculator Link
     { href: `/${locale}/calculator`, label: isRtl ? 'استعلام قیمت' : 'Get Quote', icon: Calculator },
-    { href: `/${locale}/contact`, label: isRtl ? 'تماس با ما' : 'Contact' },
+    { href: `/${locale}/contact`, label: isRtl ? 'تماس با ما' : 'Contact', icon: Phone },
   ];
 
   return (
     <>
       <header
         className={cn(
-          "fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out font-vazirmatn will-change-transform",
+          "fixed top-0 left-0 right-0 transition-all duration-500 ease-in-out font-vazirmatn will-change-transform",
+          // z-index to 100 to stay on top
+          "z-[100]", 
           isScrolled
-            ? "bg-black/80 backdrop-blur-xl border-b border-white/10 py-3 shadow-[0_4px_30px_rgba(0,0,0,0.3)]"
+            ? "bg-black/90 backdrop-blur-xl border-b border-white/10 py-3 shadow-lg"
             : "bg-transparent py-6 border-b border-transparent"
         )}
       >
-        <div className="container mx-auto px-4 md:px-8 max-w-7xl">
+        <div className="container mx-auto px-4 md:px-8 max-w-7xl relative">
           <div className="flex items-center justify-between">
 
             {/* Logo Area */}
-            <div className="flex items-center gap-2 z-50">
-              <Link href={`/${locale}`} className="group flex items-center gap-3" onClick={closeMenu}>
+            <div className="flex items-center gap-2 z-[101] relative">
+              <Link href={`/${locale}`} className="group flex items-center gap-3 relative" onClick={closeMenu}>
                 <div className="relative flex items-center justify-center w-11 h-11 md:w-12 md:h-12 rounded-2xl bg-gradient-to-tr from-yellow-600 to-yellow-400 shadow-lg shadow-yellow-500/20 group-hover:shadow-yellow-500/40 transition-all duration-300 overflow-hidden ring-1 ring-white/10">
                    <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors" />
                    <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
@@ -99,25 +98,38 @@ export function Header({ locale }: HeaderProps) {
             </div>
 
             {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center gap-1 p-1.5 rounded-full bg-white/5 border border-white/5 backdrop-blur-sm shadow-inner shadow-black/20">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={cn(
-                    "px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300 relative overflow-hidden group flex items-center gap-2",
-                    pathname === link.href
-                      ? "text-black bg-yellow-400 shadow-[0_0_20px_rgba(250,204,21,0.4)] ring-2 ring-yellow-400/50"
-                      : "text-zinc-400 hover:text-white hover:bg-white/10"
-                  )}
-                >
-                  <span className="relative z-10">{link.label}</span>
-                </Link>
-              ))}
+            <nav className="hidden lg:flex items-center gap-1 p-1.5 rounded-full bg-white/5 border border-white/5 backdrop-blur-sm shadow-inner shadow-black/20 relative z-[101]">
+              {navLinks.map((link) => {
+                const Icon = link.icon;
+                const isActive = pathname === link.href;
+                // Detect if current link is calculator for golden style
+                const isCalculator = link.href.includes('calculator');
+                
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={cn(
+                      "px-5 py-2.5 rounded-full text-sm font-bold transition-all duration-300 relative overflow-hidden group flex items-center gap-2",
+                      isActive
+                        ? "text-black bg-yellow-400 shadow-[0_0_20px_rgba(250,204,21,0.4)] ring-2 ring-yellow-400/50"
+                        : "text-zinc-400 hover:text-white hover:bg-white/10"
+                    )}
+                  >
+                    <Icon 
+                      size={16} 
+                      className={cn(
+                        isActive ? "text-black" : (isCalculator ? "text-yellow-500" : "text-zinc-500 group-hover:text-white")
+                      )} 
+                    />
+                    <span className="relative z-10">{link.label}</span>
+                  </Link>
+                );
+              })}
             </nav>
 
             {/* Actions Area */}
-            <div className="hidden md:flex items-center gap-3 z-50">
+            <div className="hidden md:flex items-center gap-3 z-[101] relative">
               {/* Language Switcher */}
               <Link
                 href={switchLanguageUrl}
@@ -143,7 +155,7 @@ export function Header({ locale }: HeaderProps) {
             {/* Mobile Menu Button */}
             <button
               onClick={toggleMenu}
-              className="lg:hidden relative z-50 p-2.5 rounded-xl bg-white/5 border border-white/5 text-white hover:text-yellow-400 hover:bg-white/10 transition-all active:scale-95"
+              className="lg:hidden relative z-[101] p-2.5 rounded-xl bg-white/5 border border-white/5 text-white hover:text-yellow-400 hover:bg-white/10 transition-all active:scale-95"
             >
               {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -155,7 +167,7 @@ export function Header({ locale }: HeaderProps) {
       {/* Mobile Menu Overlay */}
       <div
         className={cn(
-          "fixed inset-0 z-40 bg-black/95 backdrop-blur-3xl transition-all duration-500 lg:hidden flex flex-col font-vazirmatn",
+          "fixed inset-0 z-[90] bg-black/95 backdrop-blur-3xl transition-all duration-500 lg:hidden flex flex-col font-vazirmatn",
           isMobileMenuOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-full pointer-events-none"
         )}
       >
@@ -164,22 +176,27 @@ export function Header({ locale }: HeaderProps) {
 
         <div className="flex flex-col h-full pt-32 px-6 pb-10 overflow-y-auto">
           <nav className="flex flex-col gap-4 relative z-10 w-full max-w-md mx-auto flex-1">
-            {navLinks.map((link, idx) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={closeMenu}
-                className="group flex items-center justify-between p-5 rounded-2xl bg-zinc-900/50 border border-white/5 hover:bg-white/10 hover:border-yellow-500/30 transition-all duration-300 active:scale-[0.98]"
-                style={{ transitionDelay: `${idx * 50}ms` }}
-              >
-                <span className="text-xl font-bold text-zinc-300 group-hover:text-yellow-400 transition-colors flex items-center gap-3">
-                  {link.label}
-                </span>
-                <div className={cn("w-10 h-10 rounded-full flex items-center justify-center bg-black/50 border border-white/5 group-hover:bg-yellow-500 text-zinc-500 group-hover:text-black transition-all duration-300", isRtl ? "rotate-180" : "")}>
-                   <ChevronDown size={20} className="-rotate-90" />
-                </div>
-              </Link>
-            ))}
+            {navLinks.map((link, idx) => {
+              const Icon = link.icon;
+              const isCalculator = link.href.includes('calculator');
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={closeMenu}
+                  className="group flex items-center justify-between p-5 rounded-2xl bg-zinc-900/50 border border-white/5 hover:bg-white/10 hover:border-yellow-500/30 transition-all duration-300 active:scale-[0.98]"
+                  style={{ transitionDelay: `${idx * 50}ms` }}
+                >
+                  <span className="text-xl font-bold text-zinc-300 group-hover:text-yellow-400 transition-colors flex items-center gap-3">
+                    <Icon size={20} className={isCalculator ? "text-yellow-500" : "text-zinc-500 group-hover:text-yellow-500"} />
+                    {link.label}
+                  </span>
+                  <div className={cn("w-10 h-10 rounded-full flex items-center justify-center bg-black/50 border border-white/5 group-hover:bg-yellow-500 text-zinc-500 group-hover:text-black transition-all duration-300", isRtl ? "rotate-180" : "")}>
+                     <ChevronDown size={20} className="-rotate-90" />
+                  </div>
+                </Link>
+              );
+            })}
           </nav>
 
           <div className="relative z-10 w-full max-w-md mx-auto mt-auto space-y-4">
