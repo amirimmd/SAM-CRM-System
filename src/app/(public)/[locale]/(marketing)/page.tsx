@@ -10,7 +10,8 @@ import {
   Globe,
   Ship,
   Phone,
-  Search
+  Search,
+  Calculator // اضافه کردن آیکون ماشین حساب
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -27,6 +28,7 @@ export default async function MarketingPage({ params }: { params: Promise<{ loca
         desc: "تمرکز اصلی ما بر روی سرعت و امنیت در ارسال بار است. سامانه جامع ما امکان رهگیری لحظه‌ای مرسولات و ارتباط مستقیم با کارشناسان خبره را برای شما فراهم می‌کند.",
         ctaTracking: "رهگیری مرسوله",
         ctaContact: "ارتباط با کارشناسان",
+        ctaCalculator: "استعلام نرخ حمل", // متن دکمه جدید
       },
       audioCard: {
         badge: "محصول ویژه",
@@ -76,6 +78,7 @@ export default async function MarketingPage({ params }: { params: Promise<{ loca
         desc: "Our main focus is speed and security in shipping. Our comprehensive system enables real-time shipment tracking and direct contact with expert agents.",
         ctaTracking: "Track Shipment",
         ctaContact: "Contact Experts",
+        ctaCalculator: "Get Shipping Quote", // متن دکمه جدید انگلیسی
       },
       audioCard: {
         badge: "Featured Product",
@@ -122,7 +125,6 @@ export default async function MarketingPage({ params }: { params: Promise<{ loca
   const t = isRtl ? texts.fa : texts.en;
   const Arrow = isRtl ? ArrowLeft : ArrowRight;
 
-  // List of major partners with brand colors
   const partnerBrands = [
     { name: "COSCO", type: "Shipping", color: "hover:text-blue-500" },
     { name: "Alibaba", type: "Trade", color: "hover:text-orange-500" },
@@ -171,7 +173,7 @@ export default async function MarketingPage({ params }: { params: Promise<{ loca
 
       <div className="container mx-auto px-4 md:px-8 -mt-24 relative z-20 space-y-8">
         
-        {/* 2. LOGISTICS CARD */}
+        {/* 2. LOGISTICS CARD (دکمه جدید اینجاست) */}
         <div className="group relative w-full rounded-[2.5rem] overflow-hidden bg-gradient-to-br from-blue-950 to-black border border-white/10 shadow-2xl shadow-blue-900/20">
           <div className="absolute inset-0 z-0">
              <Image 
@@ -211,6 +213,13 @@ export default async function MarketingPage({ params }: { params: Promise<{ loca
                       <Search size={20} />
                       {t.logisticsCard.ctaTracking}
                    </Link>
+                   
+                   {/* دکمه جدید: استعلام قیمت */}
+                   <Link href={`/${locale}/calculator`} className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl bg-yellow-500 text-black font-bold hover:bg-yellow-400 hover:scale-105 transition-all shadow-lg shadow-yellow-500/20">
+                      <Calculator size={20} />
+                      {t.logisticsCard.ctaCalculator}
+                   </Link>
+
                    <Link href={`/${locale}/contact`} className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl bg-white/5 border border-white/10 text-white font-bold hover:bg-white/10 transition-all">
                       <Phone size={20} />
                       {t.logisticsCard.ctaContact}
@@ -312,7 +321,7 @@ export default async function MarketingPage({ params }: { params: Promise<{ loca
         </div>
       </div>
 
-      {/* 5. PARTNERS (Updated with Real Brands) */}
+      {/* 5. PARTNERS */}
       <section className="container mx-auto px-6 py-24 text-center border-t border-white/5 mt-12">
          <h2 className="text-2xl font-bold text-white mb-2">
            {t.partnersTitle}
